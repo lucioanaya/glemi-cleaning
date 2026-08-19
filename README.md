@@ -1,12 +1,15 @@
-# GLEMI Cleaning & Building Services Ltd. — Smart Quote Prototype
+# GLEMI Cleaning & Building Services Ltd. — Quote Request Prototype
 
-This version updates the original LIMPIA+ prototype to the GLEMI brand and adds an automatic residential quote calculator.
+This version uses the GLEMI brand and provides a residential quote-request flow without displaying prices or hourly rates to visitors.
 
-## Residential pricing logic
-- Base rate: $45 USD per hour.
-- Regular Cleaning and Deep Cleaning use the time guide supplied by the owner for Kitchen, Bathroom, Bedroom, Living Room, Dining Area and Entry/Hallway.
-- Add-ons: Interior of appliances, interior windows, interior walls, and laundry wash & fold add 25% each to the base cleaning subtotal.
-- Estimates assume general conditions; final price may vary if condition or scope differs.
+## Includes
+- Residential, commercial and post-construction services.
+- Residential request form by room/area and size.
+- Regular Cleaning and Deep Cleaning options.
+- Optional add-on services.
+- Calendar and time selection.
+- Customer contact information and request confirmation.
+- Responsive design for mobile devices.
 
 ## Files
 - `index.html`
@@ -15,4 +18,4 @@ This version updates the original LIMPIA+ prototype to the GLEMI brand and adds 
 - `glemi-logo.png`
 
 ## Production next steps
-This is still a front-end prototype. Real bookings require a database/backend, real availability, email/SMS, payment processing and secure server-side validation of the quote before charging.
+This is still a front-end prototype. To receive real quote requests automatically, connect a backend/database and email or messaging service.
