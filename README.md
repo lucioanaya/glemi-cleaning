@@ -1,20 +1,22 @@
-# GLEMI — Cotizador con IA
+# GLEMI — Cotizador inteligente sin API de pago
 
-Esta versión oculta los precios antes de que el cliente complete la configuración del servicio. El cliente selecciona las áreas, tamaños, tipo de limpieza y add-ons, y luego pulsa **Obtener cotización con IA**.
+Versión lista para Vercel.
 
-## Cómo funciona
-- El navegador NO contiene la tabla de precios.
-- `/api/quote.mjs` calcula el precio en el servidor.
-- Si `OPENAI_API_KEY` está configurada, OpenAI redacta la explicación personalizada de la cotización.
-- La respuesta muestra total y desglose solamente después de pedir la cotización.
-- Nunca se muestra una tarifa por hora en la página pública.
+## Qué hace
+- No muestra una lista pública de precios ni una tarifa por hora.
+- El cliente describe las áreas, tamaños y tipo de limpieza.
+- El precio aparece únicamente después de pulsar **Obtener cotización**.
+- Muestra un desglose por las áreas seleccionadas y el total estimado.
+- Los extras seleccionados se incorporan al total después de cotizar.
+- No requiere `OPENAI_API_KEY` ni una API externa de pago.
 
-## Configuración en Vercel
-1. Sube todos los archivos manteniendo la carpeta `api`.
-2. En Vercel: **Project > Settings > Environment Variables**.
-3. Agrega `OPENAI_API_KEY` con tu API key de OpenAI para Production, Preview y Development según necesites.
-4. Opcional: agrega `OPENAI_MODEL` si quieres elegir otro modelo. Si no, usa `gpt-5.6`.
-5. Haz un nuevo Deploy después de agregar o cambiar variables.
+## Archivos
+- `index.html`
+- `styles.css`
+- `app.js`
+- `glemi-logo.png`
 
-## WhatsApp y correo
-El formulario ya acepta teléfono/WhatsApp o correo. El envío automático de confirmaciones requiere conectar un proveedor de WhatsApp Business y un proveedor de correo; no se incluyen credenciales en este ZIP.
+## Pendiente para una etapa posterior
+- Envío real de confirmaciones por WhatsApp.
+- Envío real de confirmaciones por correo.
+- Base de datos para guardar reservas.
