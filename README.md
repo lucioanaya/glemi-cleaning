@@ -1,21 +1,20 @@
-# GLEMI Cleaning & Building Services Ltd. — Quote Request Prototype
+# GLEMI — Cotizador con IA
 
-This version uses the GLEMI brand and provides a residential quote-request flow without displaying prices or hourly rates to visitors.
+Esta versión oculta los precios antes de que el cliente complete la configuración del servicio. El cliente selecciona las áreas, tamaños, tipo de limpieza y add-ons, y luego pulsa **Obtener cotización con IA**.
 
-## Includes
-- Residential, commercial and post-construction services.
-- Residential request form by room/area and size.
-- Regular Cleaning and Deep Cleaning options.
-- Optional add-on services.
-- Calendar and time selection.
-- Customer contact information and request confirmation.
-- Responsive design for mobile devices.
+## Cómo funciona
+- El navegador NO contiene la tabla de precios.
+- `/api/quote.mjs` calcula el precio en el servidor.
+- Si `OPENAI_API_KEY` está configurada, OpenAI redacta la explicación personalizada de la cotización.
+- La respuesta muestra total y desglose solamente después de pedir la cotización.
+- Nunca se muestra una tarifa por hora en la página pública.
 
-## Files
-- `index.html`
-- `styles.css`
-- `app.js`
-- `glemi-logo.png`
+## Configuración en Vercel
+1. Sube todos los archivos manteniendo la carpeta `api`.
+2. En Vercel: **Project > Settings > Environment Variables**.
+3. Agrega `OPENAI_API_KEY` con tu API key de OpenAI para Production, Preview y Development según necesites.
+4. Opcional: agrega `OPENAI_MODEL` si quieres elegir otro modelo. Si no, usa `gpt-5.6`.
+5. Haz un nuevo Deploy después de agregar o cambiar variables.
 
-## Production next steps
-This is still a front-end prototype. To receive real quote requests automatically, connect a backend/database and email or messaging service.
+## WhatsApp y correo
+El formulario ya acepta teléfono/WhatsApp o correo. El envío automático de confirmaciones requiere conectar un proveedor de WhatsApp Business y un proveedor de correo; no se incluyen credenciales en este ZIP.
