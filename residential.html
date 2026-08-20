@@ -69,6 +69,41 @@
 @media(max-width:650px){.room-accordion-toggle{padding:13px 14px;grid-template-columns:42px 1fr 26px}.room-icon{width:42px;height:42px}.room-name{font-size:17px!important}.room-title-wrap small{font-size:11px}.room-type-label{font-size:10px!important}.room-accordion-list{margin-top:18px}}
 </style>
 
+
+<style>
+/* Illustrated room icons */
+.room-accordion-toggle{
+  grid-template-columns:58px 1fr 28px!important;
+}
+.room-icon{
+  width:58px!important;
+  height:58px!important;
+  border-radius:14px!important;
+  padding:8px!important;
+  display:grid!important;
+  place-items:center!important;
+}
+.room-icon svg{
+  width:100%!important;
+  height:100%!important;
+  display:block!important;
+}
+.room-icon-kitchen{background:#eef4ff!important;color:#1f5fd6!important}
+.room-icon-bathroom{background:#eaf7ff!important;color:#169fe6!important}
+.room-icon-bedroom{background:#eef9ef!important;color:#39a85a!important}
+.room-icon-living{background:#f3edff!important;color:#7b46d8!important}
+@media(max-width:650px){
+  .room-accordion-toggle{
+    grid-template-columns:54px 1fr 26px!important;
+  }
+  .room-icon{
+    width:54px!important;
+    height:54px!important;
+    padding:7px!important;
+  }
+}
+</style>
+
 </head>
 <body data-page="residential">
 <header class="header"><a class="brand-logo" href="index.html"><img src="glemi-logo.png" alt="GLEMI"></a><nav class="nav" id="nav"><a href="index.html">Inicio</a><a href="residential.html" class="active-link">Residential</a><a href="commercial.html">Commercial</a><a href="post-construction.html">Post-Construction</a></nav><a class="btn btn-secondary header-cta" href="index.html#servicios">Cambiar servicio</a><button class="menu-btn" id="menuBtn">☰</button></header>

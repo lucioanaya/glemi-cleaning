@@ -45,8 +45,23 @@ if(bookingForm){
   const goTo=sel=>document.querySelector(sel)?.scrollIntoView({behavior:'smooth'});
 
   function roomIcon(id){
-    const icons={kitchen:'▣',bathroom:'◫',bedroom:'▭',living:'▤'};
-    return icons[id]||'•';
+    const icons={
+      kitchen:`<svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M12 50h40M16 50V31h32v19M21 31v-9h22v9M25 22v-8h14v8M20 38h9v8h-9zM35 36h8M39 36v10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18 18h28M24 18l-4-7M40 18l4-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>`,
+      bathroom:`<svg viewBox="0 0 64 64" aria-hidden="true">
+        <ellipse cx="40" cy="18" rx="10" ry="10" fill="none" stroke="currentColor" stroke-width="2.4"/>
+        <path d="M13 27h14v9c0 5-3 9-7 9s-7-4-7-9v-9zm3 18h8M20 45v7M34 34h13v8H34zM40.5 42v10M34 52h13M36 34v-5c0-3 2-5 5-5s5 2 5 5v5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`,
+      bedroom:`<svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M10 43h44v9H10zM14 43V28h36v15M18 28v-7h12c4 0 6 2 6 7M36 28v-7h10c3 0 4 2 4 7M14 52v4M50 52v4M43 16h9v10h-9zM47.5 26v5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`,
+      living:`<svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M14 37v-6c0-5 4-9 9-9h18c5 0 9 4 9 9v6M12 37h40v13H12zM17 50v5M47 50v5M20 37v-4c0-2 2-4 4-4h16c2 0 4 2 4 4v4M10 21h7M13.5 21v12M8 33h11M43 12h12v9H43z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`
+    };
+    return icons[id]||'';
   }
   function selectedRoomCount(id){
     return Object.values(state.rooms[id]||{}).reduce((sum,n)=>sum+(Number(n)||0),0);
