@@ -80,3 +80,15 @@ body.quote-modal-open{overflow:hidden}
   #commercialForm input, #commercialForm select, #commercialForm textarea { font-size: 17px !important; }
   #commercialForm .btn { font-size: 16px !important; padding: 16px !important; }
 }
+
+/* Compact residential cleaning type cards: remove excessive empty space */
+.cleaning-type-grid{gap:8px!important;margin:8px 0 14px!important}
+.cleaning-type{padding:10px 14px!important;min-height:0!important}
+.cleaning-type.selected{padding:9px 13px!important}
+.cleaning-type strong{margin:0!important;line-height:1.15!important}
+.cleaning-type small{margin-top:3px!important;line-height:1.2!important}
+@media(max-width:650px){
+  .cleaning-type-grid{gap:8px!important;margin:8px 0 14px!important}
+  .cleaning-type{padding:10px 14px!important;min-height:0!important}
+  .cleaning-type.selected{padding:9px 13px!important}
+}
