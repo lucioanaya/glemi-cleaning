@@ -37,12 +37,6 @@ if(bookingForm){
       large:{regular:56.25,deep:78.75}
     }
   };
-  const roomCatalog=[
-    {id:'kitchen',label:'Kitchen',types:[['regular','Regular'],['large','Large']]},
-    {id:'bathroom',label:'Bathroom',types:[['regular','Regular'],['half','Half'],['large','Large / Ensuite']]},
-    {id:'bedroom',label:'Bedroom',types:[['regular','Regular'],['large','Large']]},
-    {id:'living',label:'Living Room',types:[['regular','Regular'],['large','Large']]}
-  ];
   const state={step:1,cleaning:'regular',date:null,time:null,month:new Date().getMonth(),year:new Date().getFullYear(),rooms:{},addons:[],quote:null};
   roomCatalog.forEach(r=>{state.rooms[r.id]={};r.types.forEach(([type])=>state.rooms[r.id][type]=0)});
   const calendarEl=document.getElementById('calendar'),timesEl=document.getElementById('times'),monthTitle=document.getElementById('monthTitle'),steps=document.querySelectorAll('.form-step'),progress=document.querySelectorAll('.progress span');
