@@ -14,13 +14,13 @@ const bookingForm=document.getElementById('bookingForm');
 if(bookingForm){
   const roomCatalog=[
     {id:'kitchen',label:'Kitchen',sizes:{regular:'Regular',large:'Large'}},
-    {id:'bathroom',label:'Bathroom',sizes:{regular:'Regular',large:'Large / Ensuite'}},
+    {id:'bathroom',label:'Bathroom',sizes:{regular:'Regular',large:'Large / Ensuite',half:'Half'}},
     {id:'bedroom',label:'Bedroom',sizes:{regular:'Regular',large:'Large'}},
     {id:'living',label:'Living Room',sizes:{regular:'Regular',large:'Large'}}
   ];
   const quoteRules={
     kitchen:{regular:{regular:67.50,deep:180},large:{regular:135,deep:225}},
-    bathroom:{regular:{regular:67.50,deep:90},large:{regular:90,deep:135}},
+    bathroom:{regular:{regular:67.50,deep:90},large:{regular:90,deep:135},half:{regular:30,deep:45}},
     bedroom:{regular:{regular:22.50,deep:33.75},large:{regular:33.75,deep:45}},
     living:{regular:{regular:33.75,deep:56.25},large:{regular:56.25,deep:78.75}}
   };
