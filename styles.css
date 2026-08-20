@@ -37,3 +37,46 @@ body.quote-modal-open{overflow:hidden}
 @media(max-width:650px){.subpage-icon.subpage-brand{padding:10px}}
 
 .service-img{height:220px;overflow:hidden}.service-img img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
+
+/* 2026-08 mobile readability upgrade: contact + quote flows */
+@media (max-width: 650px) {
+  /* Contact section */
+  .contact-info .eyebrow { font-size: 14px !important; }
+  .contact-info h2 { font-size: 42px !important; line-height: 1.08 !important; }
+  .contact-info p { font-size: 20px !important; line-height: 1.55 !important; }
+  .contact-line { font-size: 18px !important; gap: 12px !important; }
+  .contact-form input,
+  .contact-form textarea { font-size: 18px !important; padding: 18px 16px !important; }
+  .contact-form textarea { min-height: 170px !important; }
+  .contact-form .btn { font-size: 18px !important; padding: 17px 20px !important; }
+
+  /* Residential quote: labels, choices, fields and summaries */
+  .booking-card .eyebrow, .quote-guide .eyebrow { font-size: 13px !important; }
+  .booking-head h2, .modify-card h2 { font-size: 28px !important; }
+  .form-step > label, .field-grid label, .modify-card label,
+  .time-section label, .block-label { font-size: 15px !important; }
+  .cleaning-type strong, .choice span { font-size: 16px !important; }
+  .cleaning-type small, .choice small, .quote-note,
+  .modify-card p, .info-box { font-size: 14px !important; line-height: 1.55 !important; }
+  .room-table-head, .room-row { font-size: 14px !important; }
+  .field-grid input, .modify-card input, .invoice-fields input,
+  .commercial-layout select, .block-label textarea { font-size: 17px !important; padding: 15px !important; }
+  .day { font-size: 14px !important; }
+  .calendar-week span, .legend, .time, .empty { font-size: 12px !important; }
+  .quote-mini span, .final-summary span { font-size: 13px !important; }
+  .quote-mini strong, .final-summary strong { font-size: 16px !important; }
+  .final-price-card span { font-size: 15px !important; }
+  .final-price-card strong { font-size: 38px !important; }
+  .final-price-card small { font-size: 14px !important; line-height: 1.5 !important; }
+  .payment-note b, .payment-note span { font-size: 14px !important; }
+  .ai-badge { font-size: 13px !important; }
+  .ai-price span { font-size: 16px !important; }
+  .form-step[data-step="2"].active .ai-price strong { font-size: 46px !important; }
+  .ai-result > p, .ai-breakdown, .ai-breakdown * { font-size: 15px !important; line-height: 1.55 !important; }
+  .booking-card .btn, .modify-card .btn { font-size: 16px !important; padding: 15px 17px !important; }
+
+  /* Commercial quote */
+  .commercial-layout .field-grid label { font-size: 15px !important; }
+  #commercialForm input, #commercialForm select, #commercialForm textarea { font-size: 17px !important; }
+  #commercialForm .btn { font-size: 16px !important; padding: 16px !important; }
+}
