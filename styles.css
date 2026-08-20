@@ -21,3 +21,10 @@ body.quote-modal-open{overflow:hidden}
 .form-step[data-step="2"].active .ai-price{text-align:center}
 .form-step[data-step="2"].active .ai-price strong{font-size:clamp(32px,9vw,46px)}
 @media(max-width:650px){.form-step[data-step="2"].active{padding:14px}.form-step[data-step="2"].active>.ai-loading,.form-step[data-step="2"].active>.ai-result{max-height:calc(100dvh - 28px);padding:20px;border-radius:20px}.form-step[data-step="2"].active .step-actions{position:sticky;bottom:-20px;background:#fff;padding-top:12px;padding-bottom:4px}}
+
+/* Brand logo replacements for visual placeholders */
+.brand-mini-card{padding:10px 14px;min-width:150px;align-items:center;justify-content:center}
+.brand-mini-card img{display:block;width:138px;max-height:66px;object-fit:contain}
+.brand-placeholder{display:grid!important;place-items:center!important;background:#fff!important;text-shadow:none!important}
+.brand-placeholder img{display:block;width:min(78%,280px);max-height:78%;object-fit:contain}
+@media(max-width:650px){.brand-mini-card img{width:112px}.brand-placeholder img{width:min(82%,220px)}}
