@@ -102,3 +102,14 @@ body.quote-modal-open{overflow:hidden}
   #bookingForm .qty-control span{font-size:20px!important;min-width:48px!important;}
   #bookingForm .room-row{gap:10px!important;padding:16px 0!important;}
 }
+
+/* Room type counters: Regular/Large and Bathroom Regular/Half/Large */
+.room-type-row{display:block!important;padding:20px 0!important}
+.room-type-row .room-name{font-size:20px!important;font-weight:800!important;margin-bottom:14px!important}
+.room-type-counters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.room-type-counter{border:1px solid #e2e8f0;border-radius:14px;padding:12px 14px;background:#fff}
+.room-type-label{display:block;font-size:16px!important;font-weight:700!important;color:#344054;margin-bottom:10px}
+.room-type-counter .qty-control{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.room-type-counter .qty-control button{width:38px!important;height:38px!important;font-size:22px!important;border-radius:10px!important}
+.room-type-counter .qty-control span{min-width:24px;text-align:center;font-size:18px!important;font-weight:800!important}
+@media(max-width:650px){.room-type-counters{grid-template-columns:1fr}.room-type-row{padding:18px 0!important}.room-type-row .room-name{font-size:22px!important}.room-type-label{font-size:17px!important}}

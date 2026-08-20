@@ -13,10 +13,10 @@ if(commercialForm){commercialForm.addEventListener('submit',e=>{e.preventDefault
 const bookingForm=document.getElementById('bookingForm');
 if(bookingForm){
   const roomCatalog=[
-    {id:'kitchen',label:'Kitchen',sizes:{regular:'Regular',large:'Large'}},
-    {id:'bathroom',label:'Bathroom',sizes:{regular:'Regular',large:'Large / Ensuite',half:'Half'}},
-    {id:'bedroom',label:'Bedroom',sizes:{regular:'Regular',large:'Large'}},
-    {id:'living',label:'Living Room',sizes:{regular:'Regular',large:'Large'}}
+    {id:'kitchen',label:'Kitchen',types:[['regular','Regular'],['large','Large']]},
+    {id:'bathroom',label:'Bathroom',types:[['regular','Regular'],['half','Half'],['large','Large / Ensuite']]},
+    {id:'bedroom',label:'Bedroom',types:[['regular','Regular'],['large','Large']]},
+    {id:'living',label:'Living Room',types:[['regular','Regular'],['large','Large']]}
   ];
   const quoteRules={
     kitchen:{regular:{regular:67.50,deep:180},large:{regular:135,deep:225}},
@@ -26,7 +26,7 @@ if(bookingForm){
   };
   const addonLabels={appliances:'Interior of appliances',windows:'Interior windows',walls:'Interior walls',laundry:'Laundry wash & fold'};
   const state={step:1,cleaning:'regular',date:null,time:null,month:new Date().getMonth(),year:new Date().getFullYear(),rooms:{},addons:[],quote:null};
-  roomCatalog.forEach(r=>state.rooms[r.id]={size:'regular',qty:0});
+  roomCatalog.forEach(r=>{state.rooms[r.id]={};r.types.forEach(([type])=>state.rooms[r.id][type]=0)});
   const calendarEl=document.getElementById('calendar'),timesEl=document.getElementById('times'),monthTitle=document.getElementById('monthTitle'),steps=document.querySelectorAll('.form-step'),progress=document.querySelectorAll('.progress span');
   const money=n=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n);
   const round=n=>Math.round((n+Number.EPSILON)*100)/100;
@@ -34,19 +34,21 @@ if(bookingForm){
 
   function renderRooms(){
     const host=document.getElementById('roomRows');host.innerHTML='';
-    roomCatalog.forEach(room=>{const current=state.rooms[room.id],row=document.createElement('div');row.className='room-row';const opts=Object.entries(room.sizes).map(([k,v])=>`<option value="${k}" ${current.size===k?'selected':''}>${v}</option>`).join('');row.innerHTML=`<div class="room-name">${room.label}</div><select data-room-size="${room.id}">${opts}</select><div class="qty-control"><button type="button" data-dec="${room.id}">−</button><span id="qty-${room.id}">${current.qty}</span><button type="button" data-inc="${room.id}">+</button></div>`;host.appendChild(row)});
-    host.querySelectorAll('[data-room-size]').forEach(s=>s.addEventListener('change',e=>{state.rooms[e.target.dataset.roomSize].size=e.target.value;state.quote=null}));
-    host.querySelectorAll('[data-inc]').forEach(b=>b.addEventListener('click',()=>changeQty(b.dataset.inc,1)));
-    host.querySelectorAll('[data-dec]').forEach(b=>b.addEventListener('click',()=>changeQty(b.dataset.dec,-1)));
+    roomCatalog.forEach(room=>{
+      const row=document.createElement('div');row.className='room-row room-type-row';
+      const counters=room.types.map(([type,label])=>`<div class="room-type-counter"><span class="room-type-label">${label}</span><div class="qty-control"><button type="button" data-room="${room.id}" data-type="${type}" data-delta="-1">−</button><span id="qty-${room.id}-${type}">${state.rooms[room.id][type]}</span><button type="button" data-room="${room.id}" data-type="${type}" data-delta="1">+</button></div></div>`).join('');
+      row.innerHTML=`<div class="room-name">${room.label}</div><div class="room-type-counters">${counters}</div>`;host.appendChild(row)
+    });
+    host.querySelectorAll('[data-room][data-type][data-delta]').forEach(b=>b.addEventListener('click',()=>changeQty(b.dataset.room,b.dataset.type,Number(b.dataset.delta))));
   }
-  function changeQty(id,d){state.rooms[id].qty=Math.max(0,Math.min(20,state.rooms[id].qty+d));document.getElementById(`qty-${id}`).textContent=state.rooms[id].qty;state.quote=null}
+  function changeQty(id,type,d){state.rooms[id][type]=Math.max(0,Math.min(20,(Number(state.rooms[id][type])||0)+d));document.getElementById(`qty-${id}-${type}`).textContent=state.rooms[id][type];state.quote=null}
   document.querySelectorAll('[data-cleaning]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-cleaning]').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');state.cleaning=btn.dataset.cleaning;state.quote=null}));
   document.querySelectorAll('.addon input').forEach(i=>i.addEventListener('change',()=>{state.addons=[...document.querySelectorAll('.addon input:checked')].map(x=>x.value);state.quote=null}));
-  const hasRooms=()=>Object.values(state.rooms).some(r=>r.qty>0);
+  const hasRooms=()=>roomCatalog.some(room=>room.types.some(([type])=>(Number(state.rooms[room.id][type])||0)>0));
 
   function calculateQuote(){
     const cleaning=state.cleaning==='deep'?'deep':'regular';let subtotal=0;const breakdown=[];
-    for(const room of roomCatalog){const selected=state.rooms[room.id],qty=Math.max(0,Math.min(20,Number(selected.qty)||0));if(!qty)continue;const size=quoteRules[room.id][selected.size]?selected.size:'regular';const unit=quoteRules[room.id][size][cleaning],amount=round(unit*qty);subtotal=round(subtotal+amount);breakdown.push({item:`${room.label} · ${room.sizes[size]} × ${qty}`,amount})}
+    for(const room of roomCatalog){for(const [type,label] of room.types){const qty=Math.max(0,Math.min(20,Number(state.rooms[room.id][type])||0));if(!qty)continue;const unit=quoteRules[room.id][type][cleaning],amount=round(unit*qty);subtotal=round(subtotal+amount);breakdown.push({item:`${room.label} · ${label} × ${qty}`,amount})}}
     const addons=state.addons.filter(a=>addonLabels[a]),addonsAmount=round(subtotal*(addons.length*0.25)),total=round(subtotal+addonsAmount);
     return {cleaning,breakdown,subtotal,addons,addonsAmount,total,message:'All prices and estimates are subject to verification upon arrival at the property. The final price may be adjusted if the size, condition of the space, or scope of work differs from the information provided when the estimate was requested.'};
   }
