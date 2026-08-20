@@ -92,3 +92,13 @@ body.quote-modal-open{overflow:hidden}
   .cleaning-type{padding:10px 14px!important;min-height:0!important}
   .cleaning-type.selected{padding:9px 13px!important}
 }
+
+
+/* 2026-08-20 residential quote: larger remaining room controls */
+@media(max-width:650px){
+  #bookingForm .room-name{font-size:20px!important;line-height:1.2!important;}
+  #bookingForm .room-row select{font-size:18px!important;padding:15px 14px!important;}
+  #bookingForm .qty-control button{width:54px!important;height:48px!important;font-size:28px!important;}
+  #bookingForm .qty-control span{font-size:20px!important;min-width:48px!important;}
+  #bookingForm .room-row{gap:10px!important;padding:16px 0!important;}
+}

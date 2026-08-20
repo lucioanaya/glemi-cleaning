@@ -16,17 +16,13 @@ if(bookingForm){
     {id:'kitchen',label:'Kitchen',sizes:{regular:'Regular',large:'Large'}},
     {id:'bathroom',label:'Bathroom',sizes:{regular:'Regular',large:'Large / Ensuite'}},
     {id:'bedroom',label:'Bedroom',sizes:{regular:'Regular',large:'Large'}},
-    {id:'living',label:'Living Room',sizes:{regular:'Regular',large:'Large'}},
-    {id:'dining',label:'Dining Area',sizes:{regular:'Regular',large:'Large'}},
-    {id:'entry',label:'Entry / Hallway',sizes:{regular:'Regular'}}
+    {id:'living',label:'Living Room',sizes:{regular:'Regular',large:'Large'}}
   ];
   const quoteRules={
     kitchen:{regular:{regular:67.50,deep:180},large:{regular:135,deep:225}},
     bathroom:{regular:{regular:67.50,deep:90},large:{regular:90,deep:135}},
     bedroom:{regular:{regular:22.50,deep:33.75},large:{regular:33.75,deep:45}},
-    living:{regular:{regular:33.75,deep:56.25},large:{regular:56.25,deep:78.75}},
-    dining:{regular:{regular:22.50,deep:33.75},large:{regular:33.75,deep:45}},
-    entry:{regular:{regular:11.25,deep:22.50}}
+    living:{regular:{regular:33.75,deep:56.25},large:{regular:56.25,deep:78.75}}
   };
   const addonLabels={appliances:'Interior of appliances',windows:'Interior windows',walls:'Interior walls',laundry:'Laundry wash & fold'};
   const state={step:1,cleaning:'regular',date:null,time:null,month:new Date().getMonth(),year:new Date().getFullYear(),rooms:{},addons:[],quote:null};
