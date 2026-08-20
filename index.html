@@ -9,6 +9,41 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+
+<style>
+.home-logo-first .home-main-logo {
+  order: -1;
+}
+@media (max-width: 900px) {
+  .home-logo-first {
+    display: flex !important;
+    flex-direction: column !important;
+    padding-top: 30px !important;
+  }
+  .home-logo-first .home-main-logo {
+    min-height: 330px !important;
+    width: 100% !important;
+    margin: 0 0 34px !important;
+  }
+  .home-logo-first .home-main-logo img {
+    width: min(78vw, 430px) !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+  .home-logo-first .hero-copy {
+    width: 100% !important;
+  }
+}
+@media (max-width: 650px) {
+  .home-logo-first .home-main-logo {
+    min-height: 300px !important;
+  }
+  .home-logo-first .home-main-logo img {
+    width: min(82vw, 360px) !important;
+  }
+}
+</style>
+
 </head>
 <body>
   <header class="header">
@@ -23,7 +58,8 @@
   </header>
 
   <main>
-    <section class="hero section" id="inicio">
+    <section class="hero section home-logo-first" id="inicio">
+      <div class="hero-visual logo-showcase home-main-logo"><img src="glemi-logo.png" alt="GLEMI Cleaning & Building Services Ltd."></div>
       <div class="hero-copy">
         <div class="eyebrow">✦ CLEAN · PROFESSIONAL · RELIABLE</div>
         <h1>Elige el servicio que necesitas.<br><span>Nosotros nos encargamos del resto.</span></h1>
@@ -31,7 +67,6 @@
         <div class="hero-actions"><a class="btn btn-primary" href="#servicios">Ver servicios</a></div>
         <div class="trust-row"><div><b>⌂</b><span>Residential<br>Cleaning</span></div><div><b>▣</b><span>Commercial<br>Cleaning</span></div><div><b>🏗</b><span>Post-Construction<br>Cleaning</span></div><div><b>✓</b><span>Quality<br>You Can Trust</span></div></div>
       </div>
-      <div class="hero-visual logo-showcase"><img src="glemi-logo.png" alt="GLEMI Cleaning & Building Services Ltd."></div>
     </section>
 
     <section class="section services" id="servicios">
