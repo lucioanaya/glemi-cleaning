@@ -12,13 +12,11 @@
 </head>
 <body>
   <header class="header">
-    <a class="brand-logo" href="index.html" aria-label="GLEMI inicio"><img src="glemi-logo.png" alt="GLEMI Cleaning & Building Services Ltd."></a>
+    <a class="brand-logo" href="#inicio" aria-label="GLEMI inicio"><img src="glemi-logo.png" alt="GLEMI Cleaning & Building Services Ltd."></a>
     <nav class="nav" id="nav">
-      <a href="index.html">Inicio</a>
-      <a href="#servicios">Servicios</a>
-      <a href="#nosotros">Nosotros</a>
-      <a href="#contacto">Contacto</a>
+      <a href="#inicio">Inicio</a><a href="#servicios">Servicios</a><a href="#cotizar">Cotización inteligente</a><a href="#nosotros">Nosotros</a><a href="#contacto">Contacto</a>
     </nav>
+    <button class="btn btn-primary header-cta" data-scroll="#cotizar">Cotización inteligente</button>
     <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
   </header>
 
@@ -26,34 +24,70 @@
     <section class="hero section" id="inicio">
       <div class="hero-copy">
         <div class="eyebrow">✦ CLEAN · PROFESSIONAL · RELIABLE</div>
-        <h1>Elige el servicio que necesitas.<br><span>Nosotros nos encargamos del resto.</span></h1>
-        <p>Ahora cada servicio tiene su propia sección para que encuentres exactamente la información que necesitas sin mezclar opciones.</p>
-        <div class="hero-actions"><a class="btn btn-primary" href="#servicios">Ver servicios</a></div>
+        <h1>Cleaning you can trust.<br><span>Built around your space.</span></h1>
+        <p>Servicios profesionales de limpieza residencial, comercial y post-construcción. Cuéntale a nuestro cotizador inteligente cómo es tu espacio y recibe un precio personalizado.</p>
+        <div class="hero-actions"><button class="btn btn-primary" data-scroll="#cotizar">✦ Obtener cotización</button><button class="btn btn-secondary" data-scroll="#servicios">Ver servicios →</button></div>
         <div class="trust-row"><div><b>⌂</b><span>Residential<br>Cleaning</span></div><div><b>▣</b><span>Commercial<br>Cleaning</span></div><div><b>🏗</b><span>Post-Construction<br>Cleaning</span></div><div><b>✓</b><span>Quality<br>You Can Trust</span></div></div>
       </div>
-      <div class="hero-visual logo-showcase"><img src="glemi-logo.png" alt="GLEMI Cleaning & Building Services Ltd."><div class="floating-card"><strong>GLEMI</strong><span>Cleaning & Building Services Ltd.</span></div></div>
+      <div class="hero-visual logo-showcase"><img src="glemi-logo.png" alt="GLEMI Cleaning & Building Services Ltd."><div class="floating-card"><strong>AI Quote</strong><span>Personalized for your home</span></div></div>
     </section>
 
     <section class="section services" id="servicios">
-      <div class="section-heading"><div class="eyebrow">NUESTROS SERVICIOS</div><h2>Selecciona una categoría</h2><p>Cada servicio abre su propia página con información y opciones específicas.</p></div>
+      <div class="section-heading"><div class="eyebrow">NUESTROS SERVICIOS</div><h2>Cleaning & building services</h2><p>Soluciones profesionales para hogares, empresas y espacios recién construidos.</p></div>
       <div class="service-grid">
-        <article class="service-card service-link-card"><div class="service-img residential"></div><div class="service-content"><div class="icon-box">⌂</div><h3>Residential Cleaning</h3><p>Cotiza tu limpieza residencial según áreas, tamaños, tipo de limpieza y extras.</p><a class="service-link" href="residential.html">Ir a Residential Cleaning →</a></div></article>
-        <article class="service-card service-link-card"><div class="service-img commercial"></div><div class="service-content"><div class="icon-box">▣</div><h3>Commercial Cleaning</h3><p>Cuéntanos sobre tu negocio, oficina o espacio comercial para preparar la solución adecuada.</p><a class="service-link" href="commercial.html">Ir a Commercial Cleaning →</a></div></article>
-        <article class="service-card service-link-card"><div class="service-img deep"></div><div class="service-content"><div class="icon-box">🏗</div><h3>Post-Construction</h3><p>Atención personalizada para limpieza después de construcción o remodelación.</p><a class="service-link" href="post-construction.html">Ir a Post-Construction →</a></div></article>
+        <article class="service-card"><div class="service-img residential"></div><div class="service-content"><div class="icon-box">⌂</div><h3>Residential Cleaning</h3><p>Limpieza regular o profunda con cotización personalizada por IA.</p><button data-scroll="#cotizar">Cotización inteligente →</button></div></article>
+        <article class="service-card"><div class="service-img commercial"></div><div class="service-content"><div class="icon-box">▣</div><h3>Commercial Cleaning</h3><p>Oficinas, comercios y espacios de trabajo limpios y profesionales.</p><button data-scroll="#contacto">Solicitar cotización →</button></div></article>
+        <article class="service-card"><div class="service-img deep"></div><div class="service-content"><div class="icon-box">🏗</div><h3>Post-Construction</h3><p>Limpieza especializada después de construcción o remodelación.</p><button data-scroll="#contacto">Solicitar cotización →</button></div></article>
       </div>
     </section>
 
-    <section class="section about" id="nosotros">
-      <div class="about-copy"><div class="eyebrow">SOBRE GLEMI</div><h2>Quality you can trust.</h2><p>Servicios de limpieza profesionales para hogares, empresas y proyectos de construcción, con atención clara y soluciones adaptadas a cada espacio.</p><ul><li>Atención personalizada</li><li>Servicio profesional</li><li>Opciones residenciales y comerciales</li><li>Post-construction cleaning</li></ul></div>
-      <div class="team-image"><div class="team-placeholder">GLEMI</div></div>
-      <div class="certs"><span class="eyebrow">SERVICIO</span><h3>Tres caminos, una misma calidad</h3><p>Selecciona la categoría correcta para ver únicamente la información de ese servicio.</p></div>
+    <section class="section process" id="cotizar">
+      <div class="section-heading"><div class="eyebrow">COTIZADOR INTELIGENTE</div><h2>Recibe tu precio personalizado</h2><p>No mostramos una lista pública de precios. Configura tu espacio y nuestro sistema preparará la cotización para ese servicio.</p></div>
+      <div class="steps"><div class="step"><div class="step-number">1</div><h3>Describe tu espacio</h3><p>Áreas, tamaños y tipo de limpieza.</p></div><div class="step"><div class="step-number">2</div><h3>Cotización</h3><p>El sistema prepara el precio y desglose.</p></div><div class="step"><div class="step-number">3</div><h3>Fecha y datos</h3><p>Elige horario y comparte tu contacto.</p></div><div class="step"><div class="step-number">4</div><h3>Confirmación</h3><p>Revisa y solicita la reserva.</p></div></div>
+
+      <div class="booking-layout quote-layout">
+        <div class="booking-card">
+          <div class="booking-head"><div><span class="eyebrow">RESIDENTIAL QUOTE</span><h2>Cuéntanos sobre tu hogar</h2></div><span class="secure">✦ QUOTE</span></div>
+          <div class="progress"><span class="active"></span><span></span><span></span><span></span></div>
+          <form id="bookingForm">
+            <div class="form-step active" data-step="1">
+              <label>Tipo de limpieza</label>
+              <div class="cleaning-type-grid"><button type="button" class="cleaning-type selected" data-cleaning="regular"><strong>Regular Cleaning</strong><small>Mantenimiento general</small></button><button type="button" class="cleaning-type" data-cleaning="deep"><strong>Deep Cleaning</strong><small>Limpieza más detallada</small></button></div>
+              <div class="room-table-head"><span>Área</span><span>Tamaño</span><span>Cantidad</span></div><div id="roomRows" class="room-rows"></div>
+              <div class="addons-box"><h3>Add-on services</h3><p>Selecciona cualquier servicio adicional que necesites.</p><label class="addon"><input type="checkbox" value="appliances"> Interior of appliances</label><label class="addon"><input type="checkbox" value="windows"> Interior windows</label><label class="addon"><input type="checkbox" value="walls"> Interior walls</label><label class="addon"><input type="checkbox" value="laundry"> Laundry wash & fold</label></div>
+              <button type="button" class="btn btn-primary full" id="generateQuote">✦ Obtener cotización</button>
+              <p class="quote-note">La cotización es un estimado para las condiciones descritas. Si el alcance real cambia, el precio final puede ajustarse.</p>
+            </div>
+
+            <div class="form-step" data-step="2">
+              <div id="aiLoading" class="ai-loading hidden"><div class="ai-spinner"></div><strong>Preparando tu cotización…</strong><span>Analizando áreas, tipo de limpieza y servicios adicionales.</span></div>
+              <div id="aiResult" class="ai-result hidden">
+                <div class="ai-badge">✦ COTIZACIÓN PERSONALIZADA</div><div class="ai-price"><span>Total estimado</span><strong id="aiTotal">—</strong></div><p id="aiMessage"></p><div id="aiBreakdown" class="ai-breakdown"></div><div class="payment-note"><b>Estimado personalizado</b><span>Este precio se genera después de analizar la configuración que seleccionaste; no se muestran tarifas internas.</span></div>
+                <div class="step-actions"><button type="button" class="btn btn-secondary back">← Cambiar detalles</button><button type="button" class="btn btn-primary next">Continuar →</button></div>
+              </div>
+            </div>
+
+            <div class="form-step" data-step="3">
+              <div class="quote-mini"><span>Tu cotización</span><strong id="calendarQuote">—</strong></div>
+              <div class="calendar-header"><button type="button" id="prevMonth">‹</button><strong id="monthTitle"></strong><button type="button" id="nextMonth">›</button></div><div class="calendar-week"><span>Dom</span><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span></div><div class="calendar" id="calendar"></div><div class="legend"><span><i class="available"></i> Disponible</span><span><i class="limited"></i> Pocos horarios</span><span><i class="blocked"></i> No disponible</span></div><div class="time-section"><label>Horarios disponibles</label><div id="times" class="time-grid"><span class="empty">Selecciona un día disponible</span></div></div>
+              <div class="field-grid"><label>Nombre completo<input required id="name" placeholder="Ej. Jane Smith"></label><label>Correo electrónico<input id="email" type="email" placeholder="you@email.com"></label><label>Teléfono / WhatsApp<input id="phone" placeholder="Phone number"></label><label>Dirección<input required id="address" placeholder="Street, number, city"></label></div><p class="quote-note">Proporciona al menos correo electrónico o teléfono/WhatsApp para recibir confirmación.</p>
+              <div class="step-actions"><button type="button" class="btn btn-secondary back">← Atrás</button><button type="button" class="btn btn-primary next">Continuar →</button></div>
+            </div>
+
+            <div class="form-step" data-step="4">
+              <div class="final-summary"><div><span>Servicio</span><strong id="finalService">Residential Cleaning</strong></div><div><span>Fecha</span><strong id="finalDate">—</strong></div><div><span>Cliente</span><strong id="finalName">—</strong></div><div><span>Cotización</span><strong id="finalPrice">—</strong></div></div><div class="final-price-card"><span>Total estimado</span><strong id="finalPriceLarge">—</strong><small id="finalBreakdown"></small></div><div class="payment-note"><b>Confirmación</b><span>Al enviar, registraremos la solicitud. La conexión automática de WhatsApp y correo se activa en la siguiente integración.</span></div><div class="step-actions"><button type="button" class="btn btn-secondary back">← Atrás</button><button type="submit" class="btn btn-primary">Solicitar reserva →</button></div>
+            </div>
+          </form>
+        </div>
+        <aside class="modify-card quote-guide"><span class="eyebrow">HOW IT WORKS</span><h2>Tu precio aparece solo después de cotizar</h2><p>Selecciona las áreas y servicios que necesitas. La cotización se procesa en el servidor y el sistema presenta el precio personalizado.</p><div class="info-box">🔒 Las reglas internas de precio no aparecen en la página pública.</div></aside>
+      </div>
     </section>
 
-    <section class="section contact" id="contacto"><div class="contact-info"><div class="eyebrow">CONTÁCTANOS</div><h2>¿Tienes alguna pregunta?</h2><p>Estamos para ayudarte a elegir el servicio ideal.</p><div class="contact-line">✉ <span>baltazaranaya@outlook.com</span></div></div><form class="contact-form" id="contactForm"><input required placeholder="Nombre completo"><input required type="email" placeholder="Correo electrónico"><input placeholder="Teléfono"><input placeholder="Asunto"><textarea required placeholder="Mensaje"></textarea><button class="btn btn-primary">Enviar mensaje</button></form><div class="map-placeholder"><span>GLEMI</span><small>Cleaning & Building Services Ltd.</small></div></section>
+    <section class="section about" id="nosotros"><div class="about-copy"><div class="eyebrow">ABOUT GLEMI</div><h2>Clean. Professional. Reliable.</h2><p>GLEMI Cleaning & Building Services Ltd. ofrece servicios de limpieza enfocados en calidad, profesionalismo y confianza.</p><ul><li>Residential cleaning</li><li>Commercial cleaning</li><li>Post-construction cleaning</li><li>Quality you can trust</li></ul><button class="btn btn-primary" data-scroll="#contacto">Contáctanos</button></div><div class="team-image brand-panel"><img src="glemi-logo.png" alt="GLEMI logo"></div><div class="certs"><span class="eyebrow">OUR PROMISE</span><h3>Quality you can trust</h3><p>Un servicio claro desde la cotización hasta la limpieza final.</p><div class="cert-grid"><div>⌂<span>Residential</span></div><div>▣<span>Commercial</span></div><div>🏗<span>Post-Construction</span></div><div>✓<span>Reliable</span></div></div></div></section>
+    <section class="section contact" id="contacto"><div class="contact-info"><div class="eyebrow">CONTACT GLEMI</div><h2>¿Necesitas una cotización especial?</h2><p>Para limpieza comercial, post-construcción o proyectos fuera del cotizador residencial, envíanos los detalles.</p><div class="contact-line">✉ <span>GLEMI Cleaning & Building Services Ltd.</span></div></div><form class="contact-form" id="contactForm"><input required placeholder="Nombre completo"><input required type="email" placeholder="Correo electrónico"><input placeholder="Teléfono"><input placeholder="Tipo de servicio"><textarea required placeholder="Cuéntanos sobre el espacio y el servicio que necesitas"></textarea><button class="btn btn-primary">Enviar solicitud</button></form><div class="map-placeholder"><span>✓</span><small>Clean · Professional · Reliable</small></div></section>
   </main>
 
-  <footer class="footer"><div><a class="brand-logo footer-logo" href="index.html"><img src="glemi-logo.png" alt="GLEMI"></a><p>Clean. Professional. Reliable.</p></div><div><b>Servicios</b><a href="residential.html">Residential</a><a href="commercial.html">Commercial</a><a href="post-construction.html">Post-Construction</a></div><div><b>Contacto</b><span>baltazaranaya@outlook.com</span></div></footer>
-  <div class="toast" id="toast"></div>
+  <footer class="footer"><div><a class="footer-brand" href="#inicio"><img src="glemi-logo.png" alt="GLEMI"></a><p>Cleaning & Building Services Ltd.</p></div><div><b>Empresa</b><a href="#nosotros">Nosotros</a><a href="#servicios">Servicios</a><a href="#contacto">Contacto</a></div><div><b>Servicios</b><a href="#cotizar">Residential</a><a href="#contacto">Commercial</a><a href="#contacto">Post-Construction</a></div><div><b>Cotización</b><span>Personalizada</span><a href="#cotizar">Obtener cotización</a></div></footer>
+  <div class="toast" id="toast"></div><div class="modal" id="modal"><div class="modal-card"><button class="modal-close" id="modalClose">×</button><div class="success-icon">✓</div><h2>¡Solicitud registrada!</h2><p id="successText">Tu solicitud fue registrada correctamente.</p><div class="code-box"><span>Código de solicitud</span><strong id="bookingCode">GL-00000</strong></div><p class="small">Tu cotización fue generada por el sistema inteligente de GLEMI.</p><button class="btn btn-primary full" id="modalDone">Listo</button></div></div>
   <script src="app.js"></script>
-</body>
-</html>
+</body></html>
