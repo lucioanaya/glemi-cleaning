@@ -44,70 +44,40 @@ if(bookingForm){
   const round=n=>Math.round((n+Number.EPSILON)*100)/100;
   const goTo=sel=>document.querySelector(sel)?.scrollIntoView({behavior:'smooth'});
 
+  function roomIcon(id){
+    const icons={kitchen:'▣',bathroom:'◫',bedroom:'▭',living:'▤'};
+    return icons[id]||'•';
+  }
+  function selectedRoomCount(id){
+    return Object.values(state.rooms[id]||{}).reduce((sum,n)=>sum+(Number(n)||0),0);
+  }
   function renderRooms(){
     const host=document.getElementById('roomRows');host.innerHTML='';
     roomCatalog.forEach(room=>{
       const row=document.createElement('div');
-      row.className='room-row room-accordion';
-      row.dataset.roomAccordion=room.id;
-      const counters=room.types.map(([type,label])=>`
-        <div class="room-type-counter">
-          <span class="room-type-label">${label}</span>
-          <div class="qty-control">
-            <button type="button" data-room="${room.id}" data-type="${type}" data-delta="-1">−</button>
-            <span id="qty-${room.id}-${type}">${state.rooms[room.id][type]}</span>
-            <button type="button" data-room="${room.id}" data-type="${type}" data-delta="1">+</button>
-          </div>
-        </div>`).join('');
-      row.innerHTML=`
-        <button type="button" class="room-accordion-toggle" aria-expanded="false">
-          <span class="room-name">${room.label}</span>
-          <span class="room-selection-summary" id="summary-${room.id}">No selections</span>
-          <span class="room-chevron">⌄</span>
-        </button>
-        <div class="room-accordion-body" hidden>
-          <div class="room-type-counters">${counters}</div>
-        </div>`;
-      host.appendChild(row);
+      row.className='room-accordion';
+      row.dataset.room=room.id;
+      const counters=room.types.map(([type,label])=>`<div class="room-type-counter"><span class="room-type-label">${label}</span><div class="qty-control"><button type="button" aria-label="Quitar ${label}" data-room="${room.id}" data-type="${type}" data-delta="-1">−</button><span id="qty-${room.id}-${type}">${state.rooms[room.id][type]}</span><button type="button" aria-label="Agregar ${label}" data-room="${room.id}" data-type="${type}" data-delta="1">+</button></div></div>`).join('');
+      row.innerHTML=`<button type="button" class="room-accordion-toggle" aria-expanded="false"><span class="room-icon room-icon-${room.id}">${roomIcon(room.id)}</span><span class="room-title-wrap"><strong class="room-name">${room.label}</strong><small id="summary-${room.id}">0 seleccionados</small></span><span class="room-chevron">⌄</span></button><div class="room-accordion-body" hidden>${counters}</div>`;
+      host.appendChild(row)
     });
-
-    host.querySelectorAll('.room-accordion-toggle').forEach(toggle=>{
-      toggle.addEventListener('click',()=>{
-        const row=toggle.closest('.room-accordion');
-        const body=row.querySelector('.room-accordion-body');
-        const open=toggle.getAttribute('aria-expanded')==='true';
-        toggle.setAttribute('aria-expanded',String(!open));
-        body.hidden=open;
-        row.classList.toggle('open',!open);
-      });
-    });
-
-    host.querySelectorAll('[data-room][data-type][data-delta]').forEach(b=>
-      b.addEventListener('click',e=>{
-        e.stopPropagation();
-        changeQty(b.dataset.room,b.dataset.type,Number(b.dataset.delta));
-      })
-    );
+    host.querySelectorAll('.room-accordion-toggle').forEach(toggle=>toggle.addEventListener('click',()=>{
+      const card=toggle.closest('.room-accordion');
+      const body=card.querySelector('.room-accordion-body');
+      const isOpen=toggle.getAttribute('aria-expanded')==='true';
+      toggle.setAttribute('aria-expanded',String(!isOpen));
+      body.hidden=isOpen;
+      card.classList.toggle('open',!isOpen);
+    }));
+    host.querySelectorAll('[data-room][data-type][data-delta]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();changeQty(b.dataset.room,b.dataset.type,Number(b.dataset.delta))}));
     roomCatalog.forEach(room=>updateRoomSummary(room.id));
   }
-
   function updateRoomSummary(id){
-    const room=roomCatalog.find(r=>r.id===id);
-    const summary=document.getElementById(`summary-${id}`);
-    if(!room||!summary)return;
-    const parts=room.types
-      .map(([type,label])=>({label,qty:Number(state.rooms[id][type])||0}))
-      .filter(x=>x.qty>0)
-      .map(x=>`${x.label} × ${x.qty}`);
-    summary.textContent=parts.length?parts.join(' · '):'No selections';
+    const el=document.getElementById(`summary-${id}`);if(!el)return;
+    const count=selectedRoomCount(id);
+    el.textContent=`${count} ${count===1?'seleccionado':'seleccionados'}`;
   }
-
-  function changeQty(id,type,d){
-    state.rooms[id][type]=Math.max(0,Math.min(20,(Number(state.rooms[id][type])||0)+d));
-    document.getElementById(`qty-${id}-${type}`).textContent=state.rooms[id][type];
-    updateRoomSummary(id);
-    state.quote=null
-  }-${type}`).textContent=state.rooms[id][type];state.quote=null}
+  function changeQty(id,type,d){state.rooms[id][type]=Math.max(0,Math.min(20,(Number(state.rooms[id][type])||0)+d));document.getElementById(`qty-${id}-${type}`).textContent=state.rooms[id][type];updateRoomSummary(id);state.quote=null}
   document.querySelectorAll('[data-cleaning]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-cleaning]').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');state.cleaning=btn.dataset.cleaning;state.quote=null}));
   document.querySelectorAll('.addon input').forEach(i=>i.addEventListener('change',()=>{state.addons=[...document.querySelectorAll('.addon input:checked')].map(x=>x.value);state.quote=null}));
   const hasRooms=()=>roomCatalog.some(room=>room.types.some(([type])=>(Number(state.rooms[room.id][type])||0)>0));

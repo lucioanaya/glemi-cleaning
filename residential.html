@@ -56,96 +56,17 @@
 
 
 <style>
-.room-accordion{
-  display:block!important;
-  padding:0!important;
-  margin:0 0 14px!important;
-  border:1px solid #e2e8f0;
-  border-radius:16px;
-  overflow:hidden;
-  background:#fff;
-}
-.room-accordion-toggle{
-  width:100%;
-  border:0;
-  background:#fff;
-  padding:18px;
-  display:grid;
-  grid-template-columns:1fr auto;
-  grid-template-areas:"name chevron" "summary chevron";
-  gap:4px 12px;
-  text-align:left;
-  align-items:center;
-}
-.room-accordion-toggle .room-name{
-  grid-area:name;
-  font-size:22px!important;
-  font-weight:800!important;
-  margin:0!important;
-  color:#101828;
-}
-.room-selection-summary{
-  grid-area:summary;
-  font-size:12px;
-  color:#667085;
-  font-weight:600;
-}
-.room-chevron{
-  grid-area:chevron;
-  font-size:25px;
-  color:#1765e8;
-  transition:transform .2s ease;
-}
-.room-accordion.open .room-chevron{transform:rotate(180deg)}
-.room-accordion-body{
-  border-top:1px solid #eef1f5;
-  padding:12px 14px 16px;
-}
-.room-type-counters{
-  display:grid!important;
-  grid-template-columns:1fr!important;
-  gap:9px!important;
-}
-.room-type-counter{
-  padding:10px 12px!important;
-  border:1px solid #e6ebf2!important;
-  border-radius:12px!important;
-  background:#fbfcfe!important;
-}
-.room-type-label{
-  font-size:12px!important;
-  font-weight:700!important;
-  margin-bottom:7px!important;
-}
-.room-type-counter .qty-control{
-  display:grid!important;
-  grid-template-columns:42px 1fr 42px!important;
-  align-items:center!important;
-  border:1px solid #e2e8f0;
-  border-radius:11px;
-  overflow:hidden;
-  background:#fff;
-}
-.room-type-counter .qty-control button{
-  width:42px!important;
-  height:40px!important;
-  border:0!important;
-  background:#fff!important;
-  color:#1765e8!important;
-  font-size:19px!important;
-  font-weight:700!important;
-}
-.room-type-counter .qty-control span{
-  text-align:center!important;
-  font-size:15px!important;
-  font-weight:800!important;
-}
-@media(max-width:650px){
-  .room-accordion-toggle{padding:16px}
-  .room-accordion-toggle .room-name{font-size:24px!important}
-  .room-selection-summary{font-size:11px}
-  .room-type-label{font-size:11px!important}
-}
+/* Compact accordion room selector */
+.room-accordion-list{display:grid;gap:10px;margin-top:22px}
+.room-accordion{border:1px solid #e3e8ef;border-radius:17px;background:#fff;overflow:hidden;box-shadow:0 2px 8px rgba(16,24,40,.025)}
+.room-accordion-toggle{width:100%;border:0;background:#fff;padding:15px 16px;display:grid;grid-template-columns:44px 1fr 28px;align-items:center;gap:12px;text-align:left;color:#101828}
+.room-icon{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;font-size:21px;font-weight:800}
+.room-icon-kitchen{background:#eef4ff;color:#1765e8}.room-icon-bathroom{background:#ecf8ff;color:#169fe6}.room-icon-bedroom{background:#edf9f1;color:#20a65a}.room-icon-living{background:#f5efff;color:#7b46d8}
+.room-title-wrap{display:flex;flex-direction:column;gap:2px;min-width:0}.room-name{font-size:18px!important;line-height:1.2;margin:0!important}.room-title-wrap small{font-size:12px;color:#667085;font-weight:600}.room-chevron{font-size:24px;font-weight:700;color:#101828;transition:transform .2s ease;text-align:center}.room-accordion.open .room-chevron{transform:rotate(180deg)}
+.room-accordion-body{border-top:1px solid #eef1f5;padding:10px 12px 13px;background:#fbfcfe}.room-accordion-body[hidden]{display:none!important}
+.room-type-counter{padding:9px 10px!important;border:1px solid #e6ebf2!important;border-radius:11px!important;background:#fff!important;margin-top:8px}.room-type-counter:first-child{margin-top:0}.room-type-label{display:block;font-size:11px!important;font-weight:700!important;margin-bottom:6px!important;color:#344054}
+.qty-control{display:grid!important;grid-template-columns:40px 1fr 40px!important;align-items:center!important;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;background:#fff}.qty-control button{width:40px!important;height:38px!important;border:0!important;background:#fff!important;color:#1765e8!important;font-size:19px!important;font-weight:800!important}.qty-control span{text-align:center!important;font-size:15px!important;font-weight:800!important;color:#101828}
+@media(max-width:650px){.room-accordion-toggle{padding:13px 14px;grid-template-columns:42px 1fr 26px}.room-icon{width:42px;height:42px}.room-name{font-size:17px!important}.room-title-wrap small{font-size:11px}.room-type-label{font-size:10px!important}.room-accordion-list{margin-top:18px}}
 </style>
 
 </head>
@@ -159,7 +80,7 @@
   <div class="steps"><div class="step"><div class="step-number">1</div><h3>Describe tu espacio</h3><p>Áreas, tamaños y tipo de limpieza.</p></div><div class="step"><div class="step-number">2</div><h3>Cotización</h3><p>Recibe tu precio total.</p></div><div class="step"><div class="step-number">3</div><h3>Fecha y datos</h3><p>Elige horario y comparte tu contacto.</p></div><div class="step"><div class="step-number">4</div><h3>Confirmación</h3><p>Revisa y solicita la reserva.</p></div></div>
   <div class="booking-layout quote-layout"><div class="booking-card"><div class="booking-head"><div><span class="eyebrow">RESIDENTIAL QUOTE</span><h2>Configura tu limpieza</h2></div><span class="secure">✦ QUOTE</span></div><div class="progress"><span class="active"></span><span></span><span></span><span></span></div>
   <form id="bookingForm">
-    <div class="form-step active" data-step="1"><label>Tipo de limpieza</label><div class="cleaning-type-grid"><button type="button" class="cleaning-type selected" data-cleaning="regular"><strong>Regular Cleaning</strong><small>Mantenimiento general</small></button><button type="button" class="cleaning-type" data-cleaning="deep"><strong>Deep Cleaning</strong><small>Limpieza más detallada</small></button></div><div class="room-table-head"><span>Área</span><span>Tamaño</span><span>Cantidad</span></div><div id="roomRows" class="room-rows"></div><button type="button" class="btn btn-primary full" id="generateQuote">Obtener cotización</button><p class="quote-note">La cotización es un estimado para las condiciones descritas. Si el alcance real cambia, el precio final puede ajustarse.</p></div>
+    <div class="form-step active" data-step="1"><label>Tipo de limpieza</label><div class="cleaning-type-grid"><button type="button" class="cleaning-type selected" data-cleaning="regular"><strong>Regular Cleaning</strong><small>Mantenimiento general</small></button><button type="button" class="cleaning-type" data-cleaning="deep"><strong>Deep Cleaning</strong><small>Limpieza más detallada</small></button></div><button type="button" class="btn btn-primary full" id="generateQuote">Obtener cotización</button><p class="quote-note">La cotización es un estimado para las condiciones descritas. Si el alcance real cambia, el precio final puede ajustarse.</p><div id="roomRows" class="room-rows room-accordion-list"></div></div>
     <div class="form-step" data-step="2"><div id="aiLoading" class="ai-loading hidden"><div class="ai-spinner"></div><strong>Preparando tu cotización…</strong><span>Analizando áreas, tipo de limpieza y servicios adicionales.</span></div><div id="aiResult" class="ai-result hidden"><div class="ai-badge">✦ COTIZACIÓN PERSONALIZADA</div><div class="ai-price"><span>Total estimado</span><strong id="aiTotal">—</strong></div><p id="aiMessage"></p><div id="aiBreakdown" class="ai-breakdown"></div><div class="payment-note"><b>Estimado personalizado</b><span>El precio se muestra después de analizar la configuración seleccionada.</span></div><div class="step-actions"><button type="button" class="btn btn-secondary back">← Cambiar detalles</button><button type="button" class="btn btn-primary next">Continuar →</button></div></div></div>
     <div class="form-step" data-step="3"><div class="quote-mini"><span>Tu cotización</span><strong id="calendarQuote">—</strong></div><div class="calendar-header"><button type="button" id="prevMonth">‹</button><strong id="monthTitle"></strong><button type="button" id="nextMonth">›</button></div><div class="calendar-week"><span>Dom</span><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span></div><div class="calendar" id="calendar"></div><div class="legend"><span><i class="available"></i> Disponible</span><span><i class="limited"></i> Pocos horarios</span><span><i class="blocked"></i> No disponible</span></div><div class="time-section"><label>Horarios disponibles</label><div id="times" class="time-grid"><span class="empty">Selecciona un día disponible</span></div></div><div class="field-grid"><label>Nombre completo<input required id="name" placeholder="Ej. Jane Smith"></label><label>Correo electrónico<input id="email" type="email" placeholder="you@email.com"></label><label>Teléfono / WhatsApp<input id="phone" placeholder="Phone number"></label><label>Dirección<input required id="address" placeholder="Street, number, city"></label></div><p class="quote-note">Proporciona al menos correo electrónico o teléfono/WhatsApp para recibir confirmación.</p><div class="step-actions"><button type="button" class="btn btn-secondary back">← Atrás</button><button type="button" class="btn btn-primary next">Continuar →</button></div></div>
     <div class="form-step" data-step="4"><div class="final-summary"><div><span>Servicio</span><strong id="finalService">Residential Cleaning</strong></div><div><span>Fecha</span><strong id="finalDate">—</strong></div><div><span>Cliente</span><strong id="finalName">—</strong></div><div><span>Cotización</span><strong id="finalPrice">—</strong></div></div><div class="final-price-card"><span>Total estimado</span><strong id="finalPriceLarge">—</strong><small id="finalBreakdown"></small></div><div class="payment-note"><b>Confirmación</b><span>Al enviar, registraremos la solicitud.</span></div><div class="step-actions"><button type="button" class="btn btn-secondary back">← Atrás</button><button type="submit" class="btn btn-primary">Solicitar reserva →</button></div></div>
