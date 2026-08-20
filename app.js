@@ -52,8 +52,6 @@ if(bookingForm){
       living:'room-living.png'
     };
     return icons[id]?`<img src="${icons[id]}" alt="" aria-hidden="true">`:'';
-  };
-    return icons[id]||'';
   }
   function selectedRoomCount(id){
     return Object.values(state.rooms[id]||{}).reduce((sum,n)=>sum+(Number(n)||0),0);
