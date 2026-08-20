@@ -35,3 +35,5 @@ body.quote-modal-open{overflow:hidden}
 .subpage-icon.subpage-brand{padding:18px;background:#fff;overflow:hidden}
 .subpage-icon.subpage-brand img{display:block;width:100%;height:100%;object-fit:contain}
 @media(max-width:650px){.subpage-icon.subpage-brand{padding:10px}}
+
+.service-img{height:220px;overflow:hidden}.service-img img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
