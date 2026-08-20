@@ -28,3 +28,10 @@ body.quote-modal-open{overflow:hidden}
 .brand-placeholder{display:grid!important;place-items:center!important;background:#fff!important;text-shadow:none!important}
 .brand-placeholder img{display:block;width:min(78%,280px);max-height:78%;object-fit:contain}
 @media(max-width:650px){.brand-mini-card img{width:112px}.brand-placeholder img{width:min(82%,220px)}}
+
+
+/* Corrected logo placement: one logo per visual area, no duplicate overlay */
+.brand-mini-card{display:none!important}
+.subpage-icon.subpage-brand{padding:18px;background:#fff;overflow:hidden}
+.subpage-icon.subpage-brand img{display:block;width:100%;height:100%;object-fit:contain}
+@media(max-width:650px){.subpage-icon.subpage-brand{padding:10px}}
