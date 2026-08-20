@@ -28,7 +28,7 @@ if(bookingForm){
   const state={step:1,cleaning:'regular',date:null,time:null,month:new Date().getMonth(),year:new Date().getFullYear(),rooms:{},addons:[],quote:null};
   roomCatalog.forEach(r=>state.rooms[r.id]={size:'regular',qty:0});
   const calendarEl=document.getElementById('calendar'),timesEl=document.getElementById('times'),monthTitle=document.getElementById('monthTitle'),steps=document.querySelectorAll('.form-step'),progress=document.querySelectorAll('.progress span');
-  const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);
+  const money=n=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n);
   const round=n=>Math.round((n+Number.EPSILON)*100)/100;
   const goTo=sel=>document.querySelector(sel)?.scrollIntoView({behavior:'smooth'});
 
@@ -51,9 +51,9 @@ if(bookingForm){
     return {cleaning,breakdown,subtotal,addons,addonsAmount,total,message:`Cotización personalizada para ${cleaning==='deep'?'Deep Cleaning':'Regular Cleaning'} con ${breakdown.length} áreas seleccionadas${addons.length?` y ${addons.length} servicio${addons.length>1?'s':''} adicional${addons.length>1?'es':''}`:''}.`};
   }
 
-  function setStep(n){state.step=n;steps.forEach(s=>s.classList.toggle('active',+s.dataset.step===n));progress.forEach((p,i)=>p.classList.toggle('active',i<n));document.body.classList.toggle('quote-modal-open',n===2);if(n===3){renderCalendar();document.getElementById('calendarQuote').textContent=state.quote?`${money(state.quote.total)} USD`:'—'}if(n===4)updateFinal();if(n!==2)goTo('#cotizar')}
+  function setStep(n){state.step=n;steps.forEach(s=>s.classList.toggle('active',+s.dataset.step===n));progress.forEach((p,i)=>p.classList.toggle('active',i<n));document.body.classList.toggle('quote-modal-open',n===2);if(n===3){renderCalendar();document.getElementById('calendarQuote').textContent=state.quote?`${money(state.quote.total)} CAD`:'—'}if(n===4)updateFinal();if(n!==2)goTo('#cotizar')}
 
-  async function generateQuote(){if(!hasRooms()){toast('Agrega al menos un área para generar la cotización.');return}setStep(2);const loading=document.getElementById('aiLoading'),result=document.getElementById('aiResult');loading.classList.remove('hidden');result.classList.add('hidden');await new Promise(r=>setTimeout(r,500));const data=calculateQuote();state.quote=data;document.getElementById('aiTotal').textContent=`${money(data.total)} USD`;document.getElementById('aiMessage').textContent=data.message;const host=document.getElementById('aiBreakdown');host.innerHTML='';
+  async function generateQuote(){if(!hasRooms()){toast('Agrega al menos un área para generar la cotización.');return}setStep(2);const loading=document.getElementById('aiLoading'),result=document.getElementById('aiResult');loading.classList.remove('hidden');result.classList.add('hidden');await new Promise(r=>setTimeout(r,500));const data=calculateQuote();state.quote=data;document.getElementById('aiTotal').textContent=`${money(data.total)} CAD`;document.getElementById('aiMessage').textContent=data.message;const host=document.getElementById('aiBreakdown');host.innerHTML='';
     data.breakdown.forEach(row=>{
       const el=document.createElement('div');
       el.className='breakdown-row';
@@ -77,8 +77,8 @@ if(bookingForm){
   document.getElementById('nextMonth').addEventListener('click',()=>{state.month++;if(state.month>11){state.month=0;state.year++}renderCalendar()});
   const formattedDate=()=>state.date?state.date.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'—';
   const cleaningName=()=>state.cleaning==='deep'?'Deep Cleaning':'Regular Cleaning';
-  function updateFinal(){document.getElementById('finalService').textContent=`Residential · ${cleaningName()}`;document.getElementById('finalDate').textContent=`${formattedDate()} · ${state.time||'—'}`;document.getElementById('finalName').textContent=document.getElementById('name').value||'—';const p=state.quote?`${money(state.quote.total)} USD`:'—';document.getElementById('finalPrice').textContent=p;document.getElementById('finalPriceLarge').textContent=p;document.getElementById('finalBreakdown').textContent=state.quote?.message||''}
-  bookingForm.addEventListener('submit',e=>{e.preventDefault();const code='GL-'+Math.random().toString(36).slice(2,7).toUpperCase();document.getElementById('bookingCode').textContent=code;document.getElementById('successText').textContent=`Tu solicitud de ${cleaningName()} por ${money(state.quote.total)} USD quedó registrada para el ${formattedDate()} a las ${state.time}.`;document.getElementById('modal').classList.add('show')});
+  function updateFinal(){document.getElementById('finalService').textContent=`Residential · ${cleaningName()}`;document.getElementById('finalDate').textContent=`${formattedDate()} · ${state.time||'—'}`;document.getElementById('finalName').textContent=document.getElementById('name').value||'—';const p=state.quote?`${money(state.quote.total)} CAD`:'—';document.getElementById('finalPrice').textContent=p;document.getElementById('finalPriceLarge').textContent=p;document.getElementById('finalBreakdown').textContent=state.quote?.message||''}
+  bookingForm.addEventListener('submit',e=>{e.preventDefault();const code='GL-'+Math.random().toString(36).slice(2,7).toUpperCase();document.getElementById('bookingCode').textContent=code;document.getElementById('successText').textContent=`Tu solicitud de ${cleaningName()} por ${money(state.quote.total)} CAD quedó registrada para el ${formattedDate()} a las ${state.time}.`;document.getElementById('modal').classList.add('show')});
   document.getElementById('modalClose').addEventListener('click',()=>document.getElementById('modal').classList.remove('show'));
   document.getElementById('modalDone').addEventListener('click',()=>document.getElementById('modal').classList.remove('show'));
   renderRooms();setStep(1);
