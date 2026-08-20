@@ -48,7 +48,7 @@ if(bookingForm){
     const cleaning=state.cleaning==='deep'?'deep':'regular';let subtotal=0;const breakdown=[];
     for(const room of roomCatalog){const selected=state.rooms[room.id],qty=Math.max(0,Math.min(20,Number(selected.qty)||0));if(!qty)continue;const size=quoteRules[room.id][selected.size]?selected.size:'regular';const unit=quoteRules[room.id][size][cleaning],amount=round(unit*qty);subtotal=round(subtotal+amount);breakdown.push({item:`${room.label} · ${room.sizes[size]} × ${qty}`,amount})}
     const addons=state.addons.filter(a=>addonLabels[a]),addonsAmount=round(subtotal*(addons.length*0.25)),total=round(subtotal+addonsAmount);
-    return {cleaning,breakdown,subtotal,addons,addonsAmount,total,message:`Cotización personalizada para ${cleaning==='deep'?'Deep Cleaning':'Regular Cleaning'} con ${breakdown.length} áreas seleccionadas${addons.length?` y ${addons.length} servicio${addons.length>1?'s':''} adicional${addons.length>1?'es':''}`:''}.`};
+    return {cleaning,breakdown,subtotal,addons,addonsAmount,total,message:'All prices and estimates are subject to verification upon arrival at the property. The final price may be adjusted if the size, condition of the space, or scope of work differs from the information provided when the estimate was requested.'};
   }
 
   function setStep(n){state.step=n;steps.forEach(s=>s.classList.toggle('active',+s.dataset.step===n));progress.forEach((p,i)=>p.classList.toggle('active',i<n));document.body.classList.toggle('quote-modal-open',n===2);if(n===3){renderCalendar();document.getElementById('calendarQuote').textContent=state.quote?`${money(state.quote.total)} CAD`:'—'}if(n===4)updateFinal();if(n!==2)goTo('#cotizar')}
