@@ -113,3 +113,41 @@ body.quote-modal-open{overflow:hidden}
 .room-type-counter .qty-control button{width:38px!important;height:38px!important;font-size:22px!important;border-radius:10px!important}
 .room-type-counter .qty-control span{min-width:24px;text-align:center;font-size:18px!important;font-weight:800!important}
 @media(max-width:650px){.room-type-counters{grid-template-columns:1fr}.room-type-row{padding:18px 0!important}.room-type-row .room-name{font-size:22px!important}.room-type-label{font-size:17px!important}}
+
+
+/* Home service cards: slightly larger text only */
+#servicios .service-card .service-content h3{
+  font-size:30px;
+  line-height:1.15;
+}
+#servicios .service-card .service-content p{
+  font-size:20px;
+  line-height:1.55;
+}
+#servicios .service-card .service-link{
+  font-size:19px;
+  line-height:1.3;
+}
+#servicios .service-image-link{
+  display:block;
+  text-decoration:none;
+  cursor:pointer;
+}
+#servicios .service-image-link img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+@media (max-width:650px){
+  #servicios .service-card .service-content h3{
+    font-size:25px;
+  }
+  #servicios .service-card .service-content p{
+    font-size:18px;
+    line-height:1.55;
+  }
+  #servicios .service-card .service-link{
+    font-size:18px;
+  }
+}
