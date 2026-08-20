@@ -19,13 +19,30 @@ if(bookingForm){
     {id:'living',label:'Living Room',types:[['regular','Regular'],['large','Large']]}
   ];
   const quoteRules={
-    kitchen:{regular:{regular:67.50,deep:180},large:{regular:135,deep:225}},
-    bathroom:{regular:{regular:67.50,deep:90},large:{regular:90,deep:135},},
-    bedroom:{regular:{regular:22.50,deep:33.75},large:{regular:33.75,deep:45}},
-    living:{regular:{regular:33.75,deep:56.25},large:{regular:56.25,deep:78.75}}
+    kitchen:{
+      regular:{regular:67.50,deep:180},
+      large:{regular:135,deep:225}
+    },
+    bathroom:{
+      regular:{regular:67.50,deep:90},
       half:{regular:30,deep:45},
+      large:{regular:90,deep:135}
+    },
+    bedroom:{
+      regular:{regular:22.50,deep:33.75},
+      large:{regular:33.75,deep:45}
+    },
+    living:{
+      regular:{regular:33.75,deep:56.25},
+      large:{regular:56.25,deep:78.75}
+    }
   };
-  const addonLabels={appliances:'Interior of appliances',windows:'Interior windows',walls:'Interior walls',laundry:'Laundry wash & fold'};
+  const roomCatalog=[
+    {id:'kitchen',label:'Kitchen',types:[['regular','Regular'],['large','Large']]},
+    {id:'bathroom',label:'Bathroom',types:[['regular','Regular'],['half','Half'],['large','Large / Ensuite']]},
+    {id:'bedroom',label:'Bedroom',types:[['regular','Regular'],['large','Large']]},
+    {id:'living',label:'Living Room',types:[['regular','Regular'],['large','Large']]}
+  ];
   const state={step:1,cleaning:'regular',date:null,time:null,month:new Date().getMonth(),year:new Date().getFullYear(),rooms:{},addons:[],quote:null};
   roomCatalog.forEach(r=>{state.rooms[r.id]={};r.types.forEach(([type])=>state.rooms[r.id][type]=0)});
   const calendarEl=document.getElementById('calendar'),timesEl=document.getElementById('times'),monthTitle=document.getElementById('monthTitle'),steps=document.querySelectorAll('.form-step'),progress=document.querySelectorAll('.progress span');
