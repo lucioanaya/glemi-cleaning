@@ -151,3 +151,9 @@ body.quote-modal-open{overflow:hidden}
     font-size:18px;
   }
 }
+
+
+/* GLEMI: Regular Cleaning orange */
+.cleaning-type[data-cleaning="regular"] strong {
+  color: #f97316 !important;
+}
