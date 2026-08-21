@@ -1,0 +1,19 @@
+GLEMI ADMIN - IMPORTANTE
+
+Abrir: /admin.html
+
+La primera vez, el sistema permite crear:
+1. Usuario 1 = Owner
+2. Usuario 2 = Admin
+
+Esta versión guarda los datos en localStorage del navegador para que puedas probar la interfaz y el flujo en Vercel.
+NO es autenticación segura para producción porque no existe todavía una base de datos/servidor.
+
+Para producción, el siguiente paso es conectar el panel a Supabase (Auth + Database + RLS) o un backend equivalente.
+Nunca guardes contraseñas reales importantes en esta versión de prueba.
+
+Permisos implementados:
+- Owner: citas, horarios, precios, contenido y usuarios.
+- Admin: mismas funciones operativas.
+- Admin NO puede eliminar directamente al Owner: solo puede enviar una solicitud.
+- Owner puede eliminar al Admin.

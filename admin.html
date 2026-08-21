@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>GLEMI Admin</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <section id="setupView" class="auth-wrap hidden">
+      <div class="auth-card">
+        <img src="glemi-logo.png" alt="GLEMI" class="admin-logo">
+        <p class="eyebrow">CONFIGURACIÓN INICIAL</p>
+        <h1>Crea los 2 accesos</h1>
+        <p class="muted">Usuario 1 será Owner. Usuario 2 será Admin. Este ZIP funciona en modo local; antes de usarlo con datos reales conviene conectar autenticación y base de datos.</p>
+        <form id="setupForm" class="auth-form">
+          <div class="user-setup">
+            <h3>Usuario 1 · Owner</h3>
+            <input id="ownerName" placeholder="Nombre" required>
+            <input id="ownerEmail" type="email" placeholder="Correo" required>
+            <input id="ownerPassword" type="password" placeholder="Contraseña" minlength="8" required>
+          </div>
+          <div class="user-setup">
+            <h3>Usuario 2 · Admin</h3>
+            <input id="adminName" placeholder="Nombre" required>
+            <input id="adminEmail" type="email" placeholder="Correo" required>
+            <input id="adminPassword" type="password" placeholder="Contraseña" minlength="8" required>
+          </div>
+          <button class="primary" type="submit">Crear accesos</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="loginView" class="auth-wrap hidden">
+      <div class="auth-card">
+        <img src="glemi-logo.png" alt="GLEMI" class="admin-logo">
+        <p class="eyebrow">GLEMI ADMIN</p>
+        <h1>Iniciar sesión</h1>
+        <p class="muted">Acceso privado para administración de citas, horarios y contenido.</p>
+        <form id="loginForm" class="auth-form">
+          <input id="loginEmail" type="email" placeholder="Correo electrónico" required>
+          <input id="loginPassword" type="password" placeholder="Contraseña" required>
+          <button class="primary" type="submit">Iniciar sesión</button>
+        </form>
+        <p id="loginError" class="error"></p>
+      </div>
+    </section>
+
+    <section id="appView" class="app hidden">
+      <aside class="sidebar">
+        <div class="brand-row">
+          <img src="glemi-logo.png" alt="GLEMI">
+          <div><b>GLEMI Admin</b><span id="roleBadge"></span></div>
+        </div>
+        <nav id="sideNav">
+          <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+          <button class="nav-btn" data-view="appointments">Citas</button>
+          <button class="nav-btn" data-view="schedule">Calendario</button>
+          <button class="nav-btn" data-view="pricing">Precios</button>
+          <button class="nav-btn" data-view="content">Página web</button>
+          <button class="nav-btn" data-view="users">Usuarios</button>
+        </nav>
+        <button id="logoutBtn" class="ghost danger-text">Cerrar sesión</button>
+      </aside>
+
+      <div class="main-panel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">PANEL PRIVADO</p>
+            <h2 id="pageTitle">Dashboard</h2>
+          </div>
+          <div class="user-chip"><span id="currentUserName"></span><small id="currentUserRole"></small></div>
+        </header>
+
+        <section id="dashboard" class="panel-view active">
+          <div class="stats">
+            <article><span>Citas pendientes</span><strong id="statPending">0</strong></article>
+            <article><span>Confirmadas</span><strong id="statConfirmed">0</strong></article>
+            <article><span>Hoy</span><strong id="statToday">0</strong></article>
+            <article><span>Total citas</span><strong id="statTotal">0</strong></article>
+          </div>
+          <div class="card">
+            <div class="card-head"><div><p class="eyebrow">PRÓXIMAS</p><h3>Citas recientes</h3></div><button class="secondary" data-go="appointments">Ver todas</button></div>
+            <div id="dashboardAppointments"></div>
+          </div>
+        </section>
+
+        <section id="appointments" class="panel-view">
+          <div class="card">
+            <div class="card-head"><div><p class="eyebrow">GESTIÓN</p><h3>Citas</h3></div><button id="newAppointmentBtn" class="primary small">+ Nueva cita</button></div>
+            <div class="filters"><input id="appointmentSearch" placeholder="Buscar cliente, servicio o fecha"><select id="appointmentFilter"><option value="all">Todas</option><option value="pending">Pendientes</option><option value="confirmed">Confirmadas</option><option value="cancelled">Canceladas</option></select></div>
+            <div id="appointmentList"></div>
+          </div>
+        </section>
+
+        <section id="schedule" class="panel-view">
+          <div class="card">
+            <div class="card-head"><div><p class="eyebrow">DISPONIBILIDAD</p><h3>Horarios de trabajo</h3></div><button id="saveScheduleBtn" class="primary small">Guardar</button></div>
+            <p class="muted">Activa o desactiva días y define el horario disponible para nuevas citas.</p>
+            <div id="scheduleGrid" class="schedule-grid"></div>
+          </div>
+        </section>
+
+        <section id="pricing" class="panel-view">
+          <div class="card">
+            <div class="card-head"><div><p class="eyebrow">COTIZADOR</p><h3>Precios residenciales · CAD</h3></div><button id="savePricingBtn" class="primary small">Guardar</button></div>
+            <p class="muted">Estos valores son editables desde el panel. Para que cambien automáticamente en la página pública necesitaremos conectar esta sección al backend.</p>
+            <div id="pricingGrid" class="pricing-grid"></div>
+          </div>
+        </section>
+
+        <section id="content" class="panel-view">
+          <div class="card">
+            <div class="card-head"><div><p class="eyebrow">CONTENIDO</p><h3>Textos editables</h3></div><button id="saveContentBtn" class="primary small">Guardar</button></div>
+            <div class="content-grid">
+              <label>Título principal<input id="contentHeroTitle"></label>
+              <label>Subtítulo<textarea id="contentHeroSubtitle"></textarea></label>
+              <label>Correo de contacto<input id="contentEmail" type="email"></label>
+              <label>Nota de cotización<textarea id="contentQuoteNote"></textarea></label>
+            </div>
+          </div>
+        </section>
+
+        <section id="users" class="panel-view">
+          <div class="card">
+            <div class="card-head"><div><p class="eyebrow">SEGURIDAD</p><h3>Usuarios</h3></div></div>
+            <div id="usersList"></div>
+            <div id="removalRequestBox" class="notice hidden"></div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="appointmentDialog">
+    <form method="dialog" id="appointmentForm" class="modal-form">
+      <div class="modal-head"><h3 id="appointmentDialogTitle">Nueva cita</h3><button value="cancel" class="icon-btn">×</button></div>
+      <input type="hidden" id="appointmentId">
+      <label>Cliente<input id="appointmentClient" required></label>
+      <label>Servicio<select id="appointmentService"><option>Residential Cleaning</option><option>Commercial Cleaning</option><option>Post-Construction Cleaning</option></select></label>
+      <div class="two-col"><label>Fecha<input id="appointmentDate" type="date" required></label><label>Hora<input id="appointmentTime" type="time" required></label></div>
+      <label>Teléfono / WhatsApp<input id="appointmentPhone"></label>
+      <label>Correo<input id="appointmentEmail" type="email"></label>
+      <label>Dirección<input id="appointmentAddress"></label>
+      <label>Total CAD<input id="appointmentTotal" type="number" min="0" step="0.01"></label>
+      <label>Estado<select id="appointmentStatus"><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="cancelled">Cancelled</option></select></label>
+      <div class="modal-actions"><button value="cancel" class="secondary">Cancelar</button><button id="saveAppointmentBtn" type="button" class="primary">Guardar cita</button></div>
+    </form>
+  </dialog>
+
+  <script src="admin.js"></script>
+</body>
+</html>
