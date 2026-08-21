@@ -1,0 +1,1 @@
+window.GLEMI_SUPABASE={url:"https://gkhrkomqrlzwbegbsxcr.supabase.co",key:"sb_publishable_Vt691jJ2s0p6V2lMKRTwPw_TciY0uJJ"};

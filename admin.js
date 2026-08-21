@@ -1,158 +1,61 @@
 (() => {
-  const DB_KEY='glemiAdminDataV1';
-  const SESSION_KEY='glemiAdminSessionV1';
+const cfg=window.GLEMI_SUPABASE;
+const sb=window.supabase.createClient(cfg.url,cfg.key);
+const el=id=>document.getElementById(id);
+let me=null, profile=null, appointments=[], schedule={}, pricing={}, settings={};
 
-  const defaultData=()=>({
-    users:[],
-    appointments:[
-      {id:crypto.randomUUID(),client:'Demo Client',service:'Residential Cleaning',date:new Date().toISOString().slice(0,10),time:'10:00',phone:'',email:'demo@example.com',address:'',total:191.25,status:'pending'}
-    ],
-    schedule:{
-      Mon:{enabled:true,start:'08:00',end:'17:00'},Tue:{enabled:true,start:'08:00',end:'17:00'},Wed:{enabled:true,start:'08:00',end:'17:00'},Thu:{enabled:true,start:'08:00',end:'17:00'},Fri:{enabled:true,start:'08:00',end:'17:00'},Sat:{enabled:true,start:'09:00',end:'15:00'},Sun:{enabled:false,start:'09:00',end:'15:00'}
-    },
-    pricing:{
-      Kitchen:{Regular:[67.5,180],Large:[135,225]},
-      Bathroom:{Regular:[67.5,90],Half:[30,45],'Large / Ensuite':[90,135]},
-      Bedroom:{Regular:[22.5,33.75],Large:[33.75,45]},
-      'Living Room':{Regular:[33.75,56.25],Large:[56.25,78.75]}
-    },
-    content:{
-      heroTitle:'Elige el servicio que necesitas. Nosotros nos encargamos del resto.',
-      heroSubtitle:'Ahora cada servicio tiene su propia sección para que encuentres exactamente la información que necesitas.',
-      email:'baltazaranaya@outlook.com',
-      quoteNote:'All prices and estimates are subject to verification upon arrival at the property.'
-    },
-    ownerRemovalRequest:null
-  });
-
-  const el=id=>document.getElementById(id);
-  let data=loadData();
-  let session=loadSession();
-
-  function loadData(){try{return JSON.parse(localStorage.getItem(DB_KEY))||defaultData()}catch{return defaultData()}}
-  function saveData(){localStorage.setItem(DB_KEY,JSON.stringify(data))}
-  function loadSession(){try{return JSON.parse(sessionStorage.getItem(SESSION_KEY))}catch{return null}}
-  function saveSession(v){session=v;if(v)sessionStorage.setItem(SESSION_KEY,JSON.stringify(v));else sessionStorage.removeItem(SESSION_KEY)}
-
-  async function hash(text){
-    const bytes=new TextEncoder().encode(text);
-    const digest=await crypto.subtle.digest('SHA-256',bytes);
-    return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
-  }
-
-  function show(id){['setupView','loginView','appView'].forEach(x=>el(x).classList.add('hidden'));el(id).classList.remove('hidden')}
-  function currentUser(){return data.users.find(u=>u.id===session?.userId)}
-  function init(){
-    if(!data.users.length){show('setupView');return}
-    if(!session||!currentUser()){show('loginView');return}
-    show('appView');renderAll()
-  }
-
-  el('setupForm').addEventListener('submit',async e=>{
-    e.preventDefault();
-    const ownerEmail=el('ownerEmail').value.trim().toLowerCase();
-    const adminEmail=el('adminEmail').value.trim().toLowerCase();
-    if(ownerEmail===adminEmail){alert('Los dos usuarios deben usar correos distintos.');return}
-    data.users=[
-      {id:crypto.randomUUID(),name:el('ownerName').value.trim(),email:ownerEmail,passwordHash:await hash(el('ownerPassword').value),role:'owner',active:true},
-      {id:crypto.randomUUID(),name:el('adminName').value.trim(),email:adminEmail,passwordHash:await hash(el('adminPassword').value),role:'admin',active:true}
-    ];
-    saveData();show('loginView');
-  });
-
-  el('loginForm').addEventListener('submit',async e=>{
-    e.preventDefault();el('loginError').textContent='';
-    const email=el('loginEmail').value.trim().toLowerCase(),ph=await hash(el('loginPassword').value);
-    const u=data.users.find(x=>x.email===email&&x.passwordHash===ph&&x.active);
-    if(!u){el('loginError').textContent='Correo o contraseña incorrectos.';return}
-    saveSession({userId:u.id});show('appView');renderAll();
-  });
-  el('logoutBtn').onclick=()=>{saveSession(null);show('loginView')};
-
-  document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>openView(b.dataset.view));
-  document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openView(b.dataset.go));
-  function openView(id){
-    document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x.dataset.view===id));
-    document.querySelectorAll('.panel-view').forEach(x=>x.classList.toggle('active',x.id===id));
-    const labels={dashboard:'Dashboard',appointments:'Citas',schedule:'Calendario',pricing:'Precios',content:'Página web',users:'Usuarios'};
-    el('pageTitle').textContent=labels[id]||id;
-  }
-
-  function renderAll(){
-    const u=currentUser();
-    el('roleBadge').textContent=u.role==='owner'?'Owner':'Admin';
-    el('currentUserName').textContent=u.name;
-    el('currentUserRole').textContent=u.role==='owner'?'Propietario':'Administrador';
-    renderAppointments();renderStats();renderSchedule();renderPricing();renderContent();renderUsers();
-  }
-
-  function renderStats(){
-    const a=data.appointments;
-    el('statPending').textContent=a.filter(x=>x.status==='pending').length;
-    el('statConfirmed').textContent=a.filter(x=>x.status==='confirmed').length;
-    el('statToday').textContent=a.filter(x=>x.date===new Date().toISOString().slice(0,10)).length;
-    el('statTotal').textContent=a.length;
-    el('dashboardAppointments').innerHTML=a.slice().sort((x,y)=>(x.date+x.time).localeCompare(y.date+y.time)).slice(0,5).map(appointmentHTML).join('')||'<p class="muted">No hay citas.</p>';
-  }
-
-  function appointmentHTML(a){
-    const statusLabel={pending:'Pending',confirmed:'Confirmed',cancelled:'Cancelled'}[a.status];
-    return `<div class="appointment-item"><div><h4>${esc(a.client)}</h4><p>${esc(a.service)}</p></div><div><b>${esc(a.date)}</b><small>${esc(a.time)}</small></div><div><span class="status ${a.status}">${statusLabel}</span><small>${a.total?`$${Number(a.total).toFixed(2)} CAD`:''}</small></div><div class="actions"><button data-edit="${a.id}">Editar</button>${a.status!=='confirmed'?`<button data-confirm="${a.id}">Confirmar</button>`:''}${a.status!=='cancelled'?`<button data-cancel="${a.id}">Cancelar</button>`:''}</div></div>`
-  }
-
-  function renderAppointments(){
-    const q=(el('appointmentSearch')?.value||'').toLowerCase(),f=el('appointmentFilter')?.value||'all';
-    const arr=data.appointments.filter(a=>(f==='all'||a.status===f)&&`${a.client} ${a.service} ${a.date}`.toLowerCase().includes(q));
-    el('appointmentList').innerHTML=arr.map(appointmentHTML).join('')||'<p class="muted">No hay resultados.</p>';
-    document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editAppointment(b.dataset.edit));
-    document.querySelectorAll('[data-confirm]').forEach(b=>b.onclick=()=>setStatus(b.dataset.confirm,'confirmed'));
-    document.querySelectorAll('[data-cancel]').forEach(b=>b.onclick=()=>setStatus(b.dataset.cancel,'cancelled'));
-  }
-  el('appointmentSearch').addEventListener('input',renderAppointments);
-  el('appointmentFilter').addEventListener('change',renderAppointments);
-  el('newAppointmentBtn').onclick=()=>openAppointment();
-
-  function setStatus(id,status){const a=data.appointments.find(x=>x.id===id);if(a){a.status=status;saveData();renderAppointments();renderStats()}}
-  function openAppointment(a={}){
-    el('appointmentDialogTitle').textContent=a.id?'Editar cita':'Nueva cita';el('appointmentId').value=a.id||'';el('appointmentClient').value=a.client||'';el('appointmentService').value=a.service||'Residential Cleaning';el('appointmentDate').value=a.date||'';el('appointmentTime').value=a.time||'';el('appointmentPhone').value=a.phone||'';el('appointmentEmail').value=a.email||'';el('appointmentAddress').value=a.address||'';el('appointmentTotal').value=a.total||'';el('appointmentStatus').value=a.status||'pending';el('appointmentDialog').showModal()
-  }
-  function editAppointment(id){const a=data.appointments.find(x=>x.id===id);if(a)openAppointment(a)}
-  el('saveAppointmentBtn').onclick=()=>{
-    const id=el('appointmentId').value;const obj={id:id||crypto.randomUUID(),client:el('appointmentClient').value.trim(),service:el('appointmentService').value,date:el('appointmentDate').value,time:el('appointmentTime').value,phone:el('appointmentPhone').value.trim(),email:el('appointmentEmail').value.trim(),address:el('appointmentAddress').value.trim(),total:Number(el('appointmentTotal').value||0),status:el('appointmentStatus').value};
-    if(!obj.client||!obj.date||!obj.time){alert('Completa cliente, fecha y hora.');return}
-    const i=data.appointments.findIndex(x=>x.id===obj.id);if(i>=0)data.appointments[i]=obj;else data.appointments.push(obj);saveData();el('appointmentDialog').close();renderAppointments();renderStats()
-  };
-
-  function renderSchedule(){
-    const labels={Mon:'Lunes',Tue:'Martes',Wed:'Miércoles',Thu:'Jueves',Fri:'Viernes',Sat:'Sábado',Sun:'Domingo'};
-    el('scheduleGrid').innerHTML=Object.entries(data.schedule).map(([k,v])=>`<div class="schedule-row"><b>${labels[k]}</b><label><input type="checkbox" data-day-enabled="${k}" ${v.enabled?'checked':''}> Activo</label><input type="time" data-day-start="${k}" value="${v.start}"><input type="time" data-day-end="${k}" value="${v.end}"></div>`).join('')
-  }
-  el('saveScheduleBtn').onclick=()=>{Object.keys(data.schedule).forEach(k=>{data.schedule[k].enabled=document.querySelector(`[data-day-enabled="${k}"]`).checked;data.schedule[k].start=document.querySelector(`[data-day-start="${k}"]`).value;data.schedule[k].end=document.querySelector(`[data-day-end="${k}"]`).value});saveData();alert('Horarios guardados.')};
-
-  function renderPricing(){
-    el('pricingGrid').innerHTML=Object.entries(data.pricing).map(([room,types])=>`<div class="price-card"><h4>${room}</h4>${Object.entries(types).map(([type,vals])=>`<div class="price-row"><span>${type}</span><input type="number" step=".01" data-price="${room}|${type}|0" value="${vals[0]}" title="Regular"><input type="number" step=".01" data-price="${room}|${type}|1" value="${vals[1]}" title="Deep"></div>`).join('')}</div>`).join('')
-  }
-  el('savePricingBtn').onclick=()=>{document.querySelectorAll('[data-price]').forEach(inp=>{const [r,t,i]=inp.dataset.price.split('|');data.pricing[r][t][Number(i)]=Number(inp.value||0)});saveData();alert('Precios guardados en el panel.')};
-
-  function renderContent(){el('contentHeroTitle').value=data.content.heroTitle;el('contentHeroSubtitle').value=data.content.heroSubtitle;el('contentEmail').value=data.content.email;el('contentQuoteNote').value=data.content.quoteNote}
-  el('saveContentBtn').onclick=()=>{data.content.heroTitle=el('contentHeroTitle').value;data.content.heroSubtitle=el('contentHeroSubtitle').value;data.content.email=el('contentEmail').value;data.content.quoteNote=el('contentQuoteNote').value;saveData();alert('Contenido guardado en el panel.')};
-
-  function renderUsers(){
-    const me=currentUser();
-    el('usersList').innerHTML=data.users.map(u=>`<div class="user-card"><div><h4>${esc(u.name)} · ${u.role==='owner'?'Owner':'Admin'}</h4><p>${esc(u.email)}</p></div><div>${u.id!==me.id?(me.role==='owner'?`<button class="secondary" data-remove-user="${u.id}">Eliminar usuario</button>`:`${u.role==='owner'?'<button class="secondary" id="requestOwnerRemovalBtn">Solicitar eliminar Owner</button>':'<span class="muted">Sin acción</span>'}`):'<span class="muted">Tu cuenta</span>'}</div></div>`).join('');
-    document.querySelectorAll('[data-remove-user]').forEach(b=>b.onclick=()=>{if(confirm('¿Eliminar este usuario?')){data.users=data.users.filter(u=>u.id!==b.dataset.removeUser);saveData();renderUsers()}});
-    const req=el('requestOwnerRemovalBtn');if(req)req.onclick=()=>{data.ownerRemovalRequest={requestedBy:me.id,createdAt:new Date().toISOString(),status:'pending'};saveData();renderUsers()};
-    const box=el('removalRequestBox');
-    if(data.ownerRemovalRequest?.status==='pending'){
-      const requester=data.users.find(u=>u.id===data.ownerRemovalRequest.requestedBy);
-      box.classList.remove('hidden');
-      if(me.role==='owner'){
-        box.innerHTML=`<b>Solicitud pendiente:</b> ${esc(requester?.name||'Admin')} solicitó eliminar la cuenta Owner. <button id="denyRemoval" class="secondary">Rechazar</button>`;
-        setTimeout(()=>{const d=el('denyRemoval');if(d)d.onclick=()=>{data.ownerRemovalRequest={...data.ownerRemovalRequest,status:'denied'};saveData();renderUsers()}},0);
-      }else box.textContent='Solicitud enviada al Owner. El Admin no puede eliminar directamente al propietario.';
-    } else box.classList.add('hidden');
-  }
-
-  function esc(s=''){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-  init();
+const show=id=>{['setupView','loginView','appView'].forEach(x=>el(x).classList.add('hidden'));el(id).classList.remove('hidden')};
+const esc=(s='')=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+async function profileFor(id){const {data,error}=await sb.from('profiles').select('*').eq('id',id).single();return error?null:data}
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(session){me=session.user;profile=await profileFor(me.id);if(profile?.active){show('appView');await loadAll();return}}
+  const {count}=await sb.from('profiles').select('*',{count:'exact',head:true});
+  show(count===0?'setupView':'loginView');
+}
+el('setupForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const owner={name:el('ownerName').value.trim(),email:el('ownerEmail').value.trim().toLowerCase(),pass:el('ownerPassword').value};
+ const admin={name:el('adminName').value.trim(),email:el('adminEmail').value.trim().toLowerCase(),pass:el('adminPassword').value};
+ if(owner.email===admin.email)return alert('Usa correos distintos.');
+ const a=await sb.auth.signUp({email:owner.email,password:owner.pass,options:{data:{display_name:owner.name}}});
+ if(a.error)return alert(a.error.message);
+ if(a.data.session) await sb.auth.signOut();
+ alert('Owner creado. Por seguridad, crea el segundo usuario iniciando sesión como Owner y usa Usuarios. Si Supabase solicita confirmar correo, confírmalo primero.');
+ show('loginView');
+});
+el('loginForm').addEventListener('submit',async e=>{
+ e.preventDefault();el('loginError').textContent='';
+ const {data,error}=await sb.auth.signInWithPassword({email:el('loginEmail').value.trim(),password:el('loginPassword').value});
+ if(error){el('loginError').textContent=error.message;return}
+ me=data.user;profile=await profileFor(me.id);
+ if(!profile?.active){await sb.auth.signOut();el('loginError').textContent='Usuario sin acceso.';return}
+ show('appView');await loadAll();
+});
+el('logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
+document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>openView(b.dataset.view));
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openView(b.dataset.go));
+function openView(id){document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x.dataset.view===id));document.querySelectorAll('.panel-view').forEach(x=>x.classList.toggle('active',x.id===id));el('pageTitle').textContent=({dashboard:'Dashboard',appointments:'Citas',schedule:'Calendario',pricing:'Precios',content:'Página web',users:'Usuarios'})[id]||id}
+async function loadAll(){
+ el('roleBadge').textContent=profile.role==='owner'?'Owner':'Admin';el('currentUserName').textContent=profile.display_name||profile.email;el('currentUserRole').textContent=profile.role==='owner'?'Propietario':'Administrador';
+ const [a,s,p,c]=await Promise.all([sb.from('appointments').select('*').order('appointment_date'),sb.from('schedule_settings').select('*'),sb.from('pricing_settings').select('*').order('id'),sb.from('site_settings').select('*')]);
+ appointments=a.data||[];schedule=Object.fromEntries((s.data||[]).map(x=>[x.day_key,x]));pricing=p.data||[];settings=Object.fromEntries((c.data||[]).map(x=>[x.key,x.value]));
+ renderAppointments();renderStats();renderSchedule();renderPricing();renderContent();await renderUsers();
+}
+function appointmentHTML(a){return `<div class="appointment-item"><div><h4>${esc(a.client_name)}</h4><p>${esc(a.service)}</p></div><div><b>${esc(a.appointment_date)}</b><small>${esc(a.appointment_time?.slice(0,5)||'')}</small></div><div><span class="status ${a.status}">${a.status}</span><small>${a.total_cad?`$${Number(a.total_cad).toFixed(2)} CAD`:''}</small></div><div class="actions"><button data-edit="${a.id}">Editar</button>${a.status!=='confirmed'?`<button data-confirm="${a.id}">Confirmar</button>`:''}${a.status!=='cancelled'?`<button data-cancel="${a.id}">Cancelar</button>`:''}</div></div>`}
+function renderStats(){el('statPending').textContent=appointments.filter(x=>x.status==='pending').length;el('statConfirmed').textContent=appointments.filter(x=>x.status==='confirmed').length;el('statToday').textContent=appointments.filter(x=>x.appointment_date===new Date().toISOString().slice(0,10)).length;el('statTotal').textContent=appointments.length;el('dashboardAppointments').innerHTML=appointments.slice(0,5).map(appointmentHTML).join('')||'<p class="muted">No hay citas.</p>'}
+function renderAppointments(){const q=(el('appointmentSearch').value||'').toLowerCase(),f=el('appointmentFilter').value;const arr=appointments.filter(a=>(f==='all'||a.status===f)&&`${a.client_name} ${a.service} ${a.appointment_date}`.toLowerCase().includes(q));el('appointmentList').innerHTML=arr.map(appointmentHTML).join('')||'<p class="muted">No hay resultados.</p>';document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editAppointment(b.dataset.edit));document.querySelectorAll('[data-confirm]').forEach(b=>b.onclick=()=>setStatus(b.dataset.confirm,'confirmed'));document.querySelectorAll('[data-cancel]').forEach(b=>b.onclick=()=>setStatus(b.dataset.cancel,'cancelled'))}
+el('appointmentSearch').oninput=renderAppointments;el('appointmentFilter').onchange=renderAppointments;el('newAppointmentBtn').onclick=()=>openAppointment();
+async function setStatus(id,status){await sb.from('appointments').update({status}).eq('id',id);await loadAll()}
+function openAppointment(a={}){el('appointmentDialogTitle').textContent=a.id?'Editar cita':'Nueva cita';el('appointmentId').value=a.id||'';el('appointmentClient').value=a.client_name||'';el('appointmentService').value=a.service||'Residential Cleaning';el('appointmentDate').value=a.appointment_date||'';el('appointmentTime').value=(a.appointment_time||'').slice(0,5);el('appointmentPhone').value=a.phone||'';el('appointmentEmail').value=a.email||'';el('appointmentAddress').value=a.address||'';el('appointmentTotal').value=a.total_cad||'';el('appointmentStatus').value=a.status||'pending';el('appointmentDialog').showModal()}
+function editAppointment(id){openAppointment(appointments.find(x=>x.id===id)||{})}
+el('saveAppointmentBtn').onclick=async()=>{const id=el('appointmentId').value;const obj={client_name:el('appointmentClient').value.trim(),service:el('appointmentService').value,appointment_date:el('appointmentDate').value,appointment_time:el('appointmentTime').value,phone:el('appointmentPhone').value.trim(),email:el('appointmentEmail').value.trim(),address:el('appointmentAddress').value.trim(),total_cad:Number(el('appointmentTotal').value||0),status:el('appointmentStatus').value};const r=id?await sb.from('appointments').update(obj).eq('id',id):await sb.from('appointments').insert(obj);if(r.error)return alert(r.error.message);el('appointmentDialog').close();await loadAll()};
+function renderSchedule(){const labels={Mon:'Lunes',Tue:'Martes',Wed:'Miércoles',Thu:'Jueves',Fri:'Viernes',Sat:'Sábado',Sun:'Domingo'};el('scheduleGrid').innerHTML=Object.keys(labels).map(k=>{const v=schedule[k]||{enabled:false,start_time:'08:00',end_time:'17:00'};return `<div class="schedule-row"><b>${labels[k]}</b><label><input type="checkbox" data-day-enabled="${k}" ${v.enabled?'checked':''}> Activo</label><input type="time" data-day-start="${k}" value="${(v.start_time||'').slice(0,5)}"><input type="time" data-day-end="${k}" value="${(v.end_time||'').slice(0,5)}"></div>`}).join('')}
+el('saveScheduleBtn').onclick=async()=>{for(const k of Object.keys(schedule)){await sb.from('schedule_settings').update({enabled:document.querySelector(`[data-day-enabled="${k}"]`).checked,start_time:document.querySelector(`[data-day-start="${k}"]`).value,end_time:document.querySelector(`[data-day-end="${k}"]`).value}).eq('day_key',k)}alert('Horarios guardados.');await loadAll()};
+function renderPricing(){const grouped={};pricing.forEach(x=>(grouped[x.room]??=[]).push(x));el('pricingGrid').innerHTML=Object.entries(grouped).map(([room,rows])=>`<div class="price-card"><h4>${room}</h4>${rows.map(x=>`<div class="price-row"><span>${x.room_type}</span><input type="number" step=".01" data-reg="${x.id}" value="${x.regular_cad}"><input type="number" step=".01" data-deep="${x.id}" value="${x.deep_cad}"></div>`).join('')}</div>`).join('')}
+el('savePricingBtn').onclick=async()=>{for(const x of pricing){await sb.from('pricing_settings').update({regular_cad:Number(document.querySelector(`[data-reg="${x.id}"]`).value),deep_cad:Number(document.querySelector(`[data-deep="${x.id}"]`).value)}).eq('id',x.id)}alert('Precios guardados.');await loadAll()};
+function renderContent(){el('contentHeroTitle').value=settings.hero_title||'';el('contentHeroSubtitle').value=settings.hero_subtitle||'';el('contentEmail').value=settings.contact_email||'';el('contentQuoteNote').value=settings.quote_note||''}
+el('saveContentBtn').onclick=async()=>{const vals={hero_title:el('contentHeroTitle').value,hero_subtitle:el('contentHeroSubtitle').value,contact_email:el('contentEmail').value,quote_note:el('contentQuoteNote').value};for(const [key,value] of Object.entries(vals))await sb.from('site_settings').upsert({key,value});alert('Contenido guardado.');await loadAll()};
+async function renderUsers(){const {data:users}=await sb.from('profiles').select('*').order('created_at');el('usersList').innerHTML=(users||[]).map(u=>`<div class="user-card"><div><h4>${esc(u.display_name||u.email)} · ${u.role==='owner'?'Owner':'Admin'}</h4><p>${esc(u.email)}</p></div><div>${u.id===me.id?'<span class="muted">Tu cuenta</span>':profile.role==='admin'&&u.role==='owner'?'<button class="secondary" id="requestOwnerRemovalBtn">Solicitar eliminar Owner</button>':'<span class="muted">Cuenta protegida</span>'}</div></div>`).join('');const req=el('requestOwnerRemovalBtn');if(req)req.onclick=async()=>{const r=await sb.from('owner_removal_requests').insert({requested_by:me.id});alert(r.error?r.error.message:'Solicitud enviada al Owner.');await renderUsers()};const {data:rqs}=await sb.from('owner_removal_requests').select('*').eq('status','pending');const box=el('removalRequestBox');if(rqs?.length){box.classList.remove('hidden');box.textContent=profile.role==='owner'?'Hay una solicitud pendiente para eliminar la cuenta Owner. Revísala antes de tomar cualquier acción.':'Solicitud de eliminación del Owner pendiente.'}else box.classList.add('hidden')}
+init();
 })();

@@ -1,0 +1,14 @@
+GLEMI está conectado a Supabase.
+Proyecto: GLEMI Cleaning Admin
+Región: Canada Central
+Admin: /admin.html
+
+El panel usa Supabase Auth y tablas con Row Level Security.
+La clave incluida en el navegador es una publishable key (diseñada para cliente); las políticas RLS protegen las escrituras.
+
+Primera cuenta registrada = Owner.
+Segunda cuenta registrada = Admin.
+El Admin puede solicitar eliminación del Owner, pero no eliminarlo directamente.
+
+IMPORTANTE:
+Actualmente el panel administra los datos en Supabase. La siguiente integración consiste en hacer que cada sección pública de la web lea precios/textos/horarios directamente desde estas tablas para que los cambios del Admin se reflejen instantáneamente.

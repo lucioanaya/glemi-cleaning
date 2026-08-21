@@ -14,7 +14,7 @@
         <img src="glemi-logo.png" alt="GLEMI" class="admin-logo">
         <p class="eyebrow">CONFIGURACIÓN INICIAL</p>
         <h1>Crea los 2 accesos</h1>
-        <p class="muted">Usuario 1 será Owner. Usuario 2 será Admin. Este ZIP funciona en modo local; antes de usarlo con datos reales conviene conectar autenticación y base de datos.</p>
+        <p class="muted">Usuario 1 será Owner. Usuario 2 será Admin. Estos accesos se crearán de forma segura en la base de datos de GLEMI.</p>
         <form id="setupForm" class="auth-form">
           <div class="user-setup">
             <h3>Usuario 1 · Owner</h3>
@@ -150,6 +150,8 @@
     </form>
   </dialog>
 
-  <script src="admin.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>window.GLEMI_SUPABASE={url:"https://gkhrkomqrlzwbegbsxcr.supabase.co",key:"sb_publishable_Vt691jJ2s0p6V2lMKRTwPw_TciY0uJJ"};</script>
+<script src="admin.js"></script>
 </body>
 </html>
