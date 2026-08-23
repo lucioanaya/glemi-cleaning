@@ -157,3 +157,38 @@ body.quote-modal-open{overflow:hidden}
 .cleaning-type[data-cleaning="regular"] strong {
   color: #f97316 !important;
 }
+
+
+/* Home: Locally Owned & Operated seal directly below GLEMI logo */
+.home-logo-first .home-main-logo{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:22px !important;
+}
+.home-logo-first .home-main-logo .home-glemi-logo{
+  width:min(78vw,430px) !important;
+  height:auto !important;
+  object-fit:contain !important;
+}
+.home-logo-first .home-main-logo .home-local-seal{
+  width:150px !important;
+  height:150px !important;
+  object-fit:cover !important;
+  border-radius:50% !important;
+  box-shadow:0 12px 28px rgba(15,23,40,.10) !important;
+}
+@media (max-width:650px){
+  .home-logo-first .home-main-logo{
+    min-height:430px !important;
+    gap:18px !important;
+  }
+  .home-logo-first .home-main-logo .home-glemi-logo{
+    width:min(82vw,360px) !important;
+  }
+  .home-logo-first .home-main-logo .home-local-seal{
+    width:118px !important;
+    height:118px !important;
+  }
+}
