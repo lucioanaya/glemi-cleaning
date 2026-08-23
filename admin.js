@@ -4,30 +4,30 @@ const sb=window.supabase.createClient(cfg.url,cfg.key);
 const el=id=>document.getElementById(id);
 let me=null, profile=null, appointments=[], schedule={}, pricing={}, settings={};
 
-const show=id=>{['setupView','loginView','appView'].forEach(x=>el(x).classList.add('hidden'));el(id).classList.remove('hidden')};
+const show=id=>{['loginView','appView'].forEach(x=>{const n=el(x);if(n)n.classList.add('hidden')});const t=el(id);if(t)t.classList.remove('hidden')};
 const esc=(s='')=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 async function profileFor(id){const {data,error}=await sb.from('profiles').select('*').eq('id',id).single();return error?null:data}
 async function init(){
   const {data:{session}}=await sb.auth.getSession();
-  if(session){me=session.user;profile=await profileFor(me.id);if(profile?.active){show('appView');await loadAll();return}}
-  const {count}=await sb.from('profiles').select('*',{count:'exact',head:true});
-  show(count===0?'setupView':'loginView');
+  if(session){
+    me=session.user;
+    profile=await profileFor(me.id);
+    if(profile?.active){show('appView');await loadAll();return}
+  }
+  show('loginView');
 }
-el('setupForm').addEventListener('submit',async e=>{
- e.preventDefault();
- const owner={name:el('ownerName').value.trim(),email:el('ownerEmail').value.trim().toLowerCase(),pass:el('ownerPassword').value};
- const admin={name:el('adminName').value.trim(),email:el('adminEmail').value.trim().toLowerCase(),pass:el('adminPassword').value};
- if(owner.email===admin.email)return alert('Usa correos distintos.');
- const a=await sb.auth.signUp({email:owner.email,password:owner.pass,options:{data:{display_name:owner.name}}});
- if(a.error)return alert(a.error.message);
- if(a.data.session) await sb.auth.signOut();
- alert('Owner creado. Por seguridad, crea el segundo usuario iniciando sesión como Owner y usa Usuarios. Si Supabase solicita confirmar correo, confírmalo primero.');
- show('loginView');
-});
 el('loginForm').addEventListener('submit',async e=>{
  e.preventDefault();el('loginError').textContent='';
  const {data,error}=await sb.auth.signInWithPassword({email:el('loginEmail').value.trim(),password:el('loginPassword').value});
- if(error){el('loginError').textContent=error.message;return}
+ if(error){
+   const msg=(error.message||'').toLowerCase();
+   el('loginError').textContent=msg.includes('email not confirmed')
+     ? 'Tu correo todavía no está confirmado. Revisa tu email y confirma la cuenta antes de iniciar sesión.'
+     : msg.includes('invalid login credentials')
+       ? 'Correo o contraseña incorrectos.'
+       : error.message;
+   return
+ }
  me=data.user;profile=await profileFor(me.id);
  if(!profile?.active){await sb.auth.signOut();el('loginError').textContent='Usuario sin acceso.';return}
  show('appView');await loadAll();
@@ -56,6 +56,34 @@ function renderPricing(){const grouped={};pricing.forEach(x=>(grouped[x.room]??=
 el('savePricingBtn').onclick=async()=>{for(const x of pricing){await sb.from('pricing_settings').update({regular_cad:Number(document.querySelector(`[data-reg="${x.id}"]`).value),deep_cad:Number(document.querySelector(`[data-deep="${x.id}"]`).value)}).eq('id',x.id)}alert('Precios guardados.');await loadAll()};
 function renderContent(){el('contentHeroTitle').value=settings.hero_title||'';el('contentHeroSubtitle').value=settings.hero_subtitle||'';el('contentEmail').value=settings.contact_email||'';el('contentQuoteNote').value=settings.quote_note||''}
 el('saveContentBtn').onclick=async()=>{const vals={hero_title:el('contentHeroTitle').value,hero_subtitle:el('contentHeroSubtitle').value,contact_email:el('contentEmail').value,quote_note:el('contentQuoteNote').value};for(const [key,value] of Object.entries(vals))await sb.from('site_settings').upsert({key,value});alert('Contenido guardado.');await loadAll()};
-async function renderUsers(){const {data:users}=await sb.from('profiles').select('*').order('created_at');el('usersList').innerHTML=(users||[]).map(u=>`<div class="user-card"><div><h4>${esc(u.display_name||u.email)} · ${u.role==='owner'?'Owner':'Admin'}</h4><p>${esc(u.email)}</p></div><div>${u.id===me.id?'<span class="muted">Tu cuenta</span>':profile.role==='admin'&&u.role==='owner'?'<button class="secondary" id="requestOwnerRemovalBtn">Solicitar eliminar Owner</button>':'<span class="muted">Cuenta protegida</span>'}</div></div>`).join('');const req=el('requestOwnerRemovalBtn');if(req)req.onclick=async()=>{const r=await sb.from('owner_removal_requests').insert({requested_by:me.id});alert(r.error?r.error.message:'Solicitud enviada al Owner.');await renderUsers()};const {data:rqs}=await sb.from('owner_removal_requests').select('*').eq('status','pending');const box=el('removalRequestBox');if(rqs?.length){box.classList.remove('hidden');box.textContent=profile.role==='owner'?'Hay una solicitud pendiente para eliminar la cuenta Owner. Revísala antes de tomar cualquier acción.':'Solicitud de eliminación del Owner pendiente.'}else box.classList.add('hidden')}
-init();
+async function renderUsers(){
+  const {data:users}=await sb.from('profiles').select('*').order('created_at');
+  const list=users||[];
+  el('usersList').innerHTML=list.map(u=>`<div class="user-card"><div><h4>${esc(u.display_name||u.email)} · ${u.role==='owner'?'Owner':'Admin'}</h4><p>${esc(u.email)}</p></div><div>${u.id===me.id?'<span class="muted">Tu cuenta</span>':profile.role==='admin'&&u.role==='owner'?'<button class="secondary" id="requestOwnerRemovalBtn">Solicitar eliminar Owner</button>':'<span class="muted">Cuenta protegida</span>'}</div></div>`).join('');
+  const createBox=el('createAdminBox');
+  if(createBox) createBox.classList.toggle('hidden', !(profile.role==='owner' && list.length<2));
+  const createBtn=el('createAdminBtn');
+  if(createBtn) createBtn.onclick=async()=>{
+    const display_name=el('newAdminName').value.trim();
+    const email=el('newAdminEmail').value.trim().toLowerCase();
+    const password=el('newAdminPassword').value;
+    if(!display_name||!email||password.length<8){alert('Completa nombre, correo y una contraseña de mínimo 8 caracteres.');return}
+    createBtn.disabled=true; createBtn.textContent='Creando...';
+    const {data,error}=await sb.functions.invoke('create-staff-user',{body:{display_name,email,password}});
+    createBtn.disabled=false; createBtn.textContent='Crear Admin';
+    if(error){alert(error.message||'No se pudo crear el Admin.');return}
+    if(data?.error){alert(data.error);return}
+    el('newAdminName').value='';el('newAdminEmail').value='';el('newAdminPassword').value='';
+    alert('Usuario Admin creado correctamente. Ya puede iniciar sesión.');
+    await renderUsers();
+  };
+  const req=el('requestOwnerRemovalBtn');
+  if(req) req.onclick=async()=>{
+    const r=await sb.from('owner_removal_requests').insert({requested_by:me.id});
+    alert(r.error?r.error.message:'Solicitud enviada al Owner.');
+    await renderUsers()
+  };
+  const {data:rqs}=await sb.from('owner_removal_requests').select('*').eq('status','pending');
+  const box=el('removalRequestBox');
+  if(rqs?.length){box.classList.remove('hidden');box.textContent=profile.role==='owner'?'Hay una solicitud pendiente para eliminar la cuenta Owner. Revísala antes de tomar cualquier acción.':'Solicitud de eliminación del Owner pendiente.'}else box.classList.add('hidden')
 })();

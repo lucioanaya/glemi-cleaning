@@ -9,36 +9,12 @@
 </head>
 <body>
   <main class="admin-shell">
-    <section id="setupView" class="auth-wrap hidden">
-      <div class="auth-card">
-        <img src="glemi-logo.png" alt="GLEMI" class="admin-logo">
-        <p class="eyebrow">CONFIGURACIÓN INICIAL</p>
-        <h1>Crea los 2 accesos</h1>
-        <p class="muted">Usuario 1 será Owner. Usuario 2 será Admin. Estos accesos se crearán de forma segura en la base de datos de GLEMI.</p>
-        <form id="setupForm" class="auth-form">
-          <div class="user-setup">
-            <h3>Usuario 1 · Owner</h3>
-            <input id="ownerName" placeholder="Nombre" required>
-            <input id="ownerEmail" type="email" placeholder="Correo" required>
-            <input id="ownerPassword" type="password" placeholder="Contraseña" minlength="8" required>
-          </div>
-          <div class="user-setup">
-            <h3>Usuario 2 · Admin</h3>
-            <input id="adminName" placeholder="Nombre" required>
-            <input id="adminEmail" type="email" placeholder="Correo" required>
-            <input id="adminPassword" type="password" placeholder="Contraseña" minlength="8" required>
-          </div>
-          <button class="primary" type="submit">Crear accesos</button>
-        </form>
-      </div>
-    </section>
-
-    <section id="loginView" class="auth-wrap hidden">
+<section id="loginView" class="auth-wrap hidden">
       <div class="auth-card">
         <img src="glemi-logo.png" alt="GLEMI" class="admin-logo">
         <p class="eyebrow">GLEMI ADMIN</p>
         <h1>Iniciar sesión</h1>
-        <p class="muted">Acceso privado para administración de citas, horarios y contenido.</p>
+        <p class="muted">Acceso privado para Owner y Admin de GLEMI.</p><p class="login-help">Si acabas de crear tu cuenta Owner, confirma primero el correo recibido de Supabase.</p>
         <form id="loginForm" class="auth-form">
           <input id="loginEmail" type="email" placeholder="Correo electrónico" required>
           <input id="loginPassword" type="password" placeholder="Contraseña" required>
@@ -127,6 +103,16 @@
           <div class="card">
             <div class="card-head"><div><p class="eyebrow">SEGURIDAD</p><h3>Usuarios</h3></div></div>
             <div id="usersList"></div>
+            <div id="createAdminBox" class="user-create-box hidden">
+              <h4>Crear segundo usuario · Admin</h4>
+              <p class="muted">Solo el Owner puede crear este acceso. La cuenta se activa de inmediato.</p>
+              <div class="create-admin-grid">
+                <input id="newAdminName" placeholder="Nombre del administrador">
+                <input id="newAdminEmail" type="email" placeholder="Correo del administrador">
+                <input id="newAdminPassword" type="password" minlength="8" placeholder="Contraseña (mínimo 8 caracteres)">
+                <button id="createAdminBtn" class="primary" type="button">Crear Admin</button>
+              </div>
+            </div>
             <div id="removalRequestBox" class="notice hidden"></div>
           </div>
         </section>
