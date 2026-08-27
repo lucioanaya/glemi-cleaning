@@ -153,10 +153,6 @@ body.quote-modal-open{overflow:hidden}
 }
 
 
-/* GLEMI: Regular Cleaning orange */
-.cleaning-type[data-cleaning="regular"] strong {
-  color: #f97316 !important;
-}
 
 
 /* Home: Locally Owned & Operated seal directly below GLEMI logo */
@@ -218,3 +214,7 @@ body.quote-modal-open{overflow:hidden}
 .promo-message{margin:9px 0 0!important;font-size:12px!important;line-height:1.45!important;color:#667085!important}.promo-message.success{color:#067647!important}.promo-message.error{color:#b42318!important}
 .promo-final-line{margin-top:10px;padding:8px 11px;border-radius:10px;background:#ecfdf3;color:#067647;font-size:13px;font-weight:800}
 @media(max-width:650px){.why-home-title{font-size:36px!important}.why-home-intro{font-size:15px!important}.home-why-item summary{grid-template-columns:40px 1fr 18px;padding:12px}.home-why-item>p{padding:0 12px 14px 64px!important}.welcome-offer{grid-template-columns:48px 1fr;padding:14px}.welcome-gift{font-size:34px}.welcome-offer h2{font-size:20px}.promo-code-row{grid-template-columns:1fr}.promo-code-row .btn{width:100%}}
+
+/* Residential cleaning type colors */
+.cleaning-type[data-cleaning="regular"] strong{color:#1769e8 !important;}
+.cleaning-type[data-cleaning="deep"] strong{color:#101828 !important;}

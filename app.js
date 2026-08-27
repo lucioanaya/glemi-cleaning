@@ -149,7 +149,23 @@ function calculateQuote(){
   document.getElementById('nextMonth').addEventListener('click',()=>{state.month++;if(state.month>11){state.month=0;state.year++}renderCalendar()});
   const formattedDate=()=>state.date?state.date.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'—';
   const cleaningName=()=>state.cleaning==='deep'?'Deep Cleaning':'Regular Cleaning';
-  function updateFinal(){document.getElementById('finalService').textContent=`Residential · ${cleaningName()}`;document.getElementById('finalDate').textContent=`${formattedDate()} · ${state.time||'—'}`;document.getElementById('finalName').textContent=document.getElementById('name').value||'—';const original=state.quote?.total||0;const finalTotal=state.promoEligible?discountTotal(original,state.promoPercent):original;state.promoFinalTotal=finalTotal;const p=state.quote?`${money(finalTotal)} CAD`:'—';document.getElementById('finalPrice').textContent=p;document.getElementById('finalPriceLarge').textContent=p;const promoLine=document.getElementById('promoFinalLine');if(promoLine){promoLine.classList.toggle('hidden',!state.promoEligible);promoLine.textContent=state.promoEligible?`${state.promoCode}: ${state.promoPercent}% OFF · Regular total ${money(original)} CAD`:''}document.getElementById('finalBreakdown').textContent=state.quote?.message||''}`;document.getElementById('finalDate').textContent=`${formattedDate()} · ${state.time||'—'}`;document.getElementById('finalName').textContent=document.getElementById('name').value||'—';const p=state.quote?`${money(state.quote.total)} CAD`:'—';document.getElementById('finalPrice').textContent=p;document.getElementById('finalPriceLarge').textContent=p;document.getElementById('finalBreakdown').textContent=state.quote?.message||''}
+  function updateFinal(){
+    document.getElementById('finalService').textContent=`Residential · ${cleaningName()}`;
+    document.getElementById('finalDate').textContent=`${formattedDate()} · ${state.time||'—'}`;
+    document.getElementById('finalName').textContent=document.getElementById('name').value||'—';
+    const original=state.quote?.total||0;
+    const finalTotal=state.promoEligible?discountTotal(original,state.promoPercent):original;
+    state.promoFinalTotal=finalTotal;
+    const priceText=state.quote?`${money(finalTotal)} CAD`:'—';
+    document.getElementById('finalPrice').textContent=priceText;
+    document.getElementById('finalPriceLarge').textContent=priceText;
+    const promoLine=document.getElementById('promoFinalLine');
+    if(promoLine){
+      promoLine.classList.toggle('hidden',!state.promoEligible);
+      promoLine.textContent=state.promoEligible?`${state.promoCode}: ${state.promoPercent}% OFF · Regular total ${money(original)} CAD`:'';
+    }
+    document.getElementById('finalBreakdown').textContent=state.quote?.message||'';
+  }
   bookingForm.addEventListener('submit',async e=>{
     e.preventDefault();
     const submitBtn=bookingForm.querySelector('button[type="submit"]');
