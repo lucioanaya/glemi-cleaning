@@ -5,10 +5,10 @@ document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',()=>do
 function toast(msg){const el=document.getElementById('toast');if(!el)return;el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3000)}
 
 const contactForm=document.getElementById('contactForm');
-if(contactForm){contactForm.addEventListener('submit',e=>{e.preventDefault();e.target.reset();toast('Solicitud enviada. Gracias por contactar a GLEMI.')})}
+if(contactForm){contactForm.addEventListener('submit',e=>{e.preventDefault();e.target.reset();toast('Request sent. Thank you for contacting GLEMI.')})}
 
 const commercialForm=document.getElementById('commercialForm');
-if(commercialForm){commercialForm.addEventListener('submit',e=>{e.preventDefault();toast('Gracias. Tu solicitud comercial quedó lista para revisión.');e.target.reset()})}
+if(commercialForm){commercialForm.addEventListener('submit',e=>{e.preventDefault();toast('Thank you. Your commercial request is ready for review.');e.target.reset()})}
 
 const bookingForm=document.getElementById('bookingForm');
 if(bookingForm){
@@ -42,7 +42,7 @@ if(bookingForm){
   const calendarEl=document.getElementById('calendar'),timesEl=document.getElementById('times'),monthTitle=document.getElementById('monthTitle'),steps=document.querySelectorAll('.form-step'),progress=document.querySelectorAll('.progress span');
   const money=n=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n);
   const round=n=>Math.round((n+Number.EPSILON)*100)/100;
-  const goTo=sel=>document.querySelector(sel)?.scrollIntoView({behavior:'smooth'});
+  const goTo=sel=>document.querySelector(sel)?.scrollIntoFriw({behavior:'smooth'});
 
   function roomIcon(id){
     const icons={
@@ -63,7 +63,7 @@ if(bookingForm){
       row.className='room-accordion';
       row.dataset.room=room.id;
       const counters=room.types.map(([type,label])=>`<div class="room-type-counter"><span class="room-type-label">${label}</span><div class="qty-control"><button type="button" aria-label="Quitar ${label}" data-room="${room.id}" data-type="${type}" data-delta="-1">−</button><span id="qty-${room.id}-${type}">${state.rooms[room.id][type]}</span><button type="button" aria-label="Agregar ${label}" data-room="${room.id}" data-type="${type}" data-delta="1">+</button></div></div>`).join('');
-      row.innerHTML=`<button type="button" class="room-accordion-toggle" aria-expanded="false"><span class="room-icon room-icon-${room.id}">${roomIcon(room.id)}</span><span class="room-title-wrap"><strong class="room-name">${room.label}</strong><small id="summary-${room.id}">0 seleccionados</small></span><span class="room-chevron">⌄</span></button><div class="room-accordion-body" hidden>${counters}</div>`;
+      row.innerHTML=`<button type="button" class="room-accordion-toggle" aria-expanded="false"><span class="room-icon room-icon-${room.id}">${roomIcon(room.id)}</span><span class="room-title-wrap"><strong class="room-name">${room.label}</strong><small id="summary-${room.id}">0 selected</small></span><span class="room-chevron">⌄</span></button><div class="room-accordion-body" hidden>${counters}</div>`;
       host.appendChild(row)
     });
     host.querySelectorAll('.room-accordion-toggle').forEach(toggle=>toggle.addEventListener('click',()=>{
@@ -80,7 +80,7 @@ if(bookingForm){
   function updateRoomSummary(id){
     const el=document.getElementById(`summary-${id}`);if(!el)return;
     const count=selectedRoomCount(id);
-    el.textContent=`${count} ${count===1?'seleccionado':'seleccionados'}`;
+    el.textContent=`${count} ${count===1?'selected':'selected'}`;
   }
   function changeQty(id,type,d){state.rooms[id][type]=Math.max(0,Math.min(20,(Number(state.rooms[id][type])||0)+d));document.getElementById(`qty-${id}-${type}`).textContent=state.rooms[id][type];updateRoomSummary(id);state.quote=null}
   document.querySelectorAll('[data-cleaning]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-cleaning]').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');state.cleaning=btn.dataset.cleaning;state.quote=null}));
@@ -124,7 +124,7 @@ function calculateQuote(){
 
   function setStep(n){state.step=n;steps.forEach(s=>s.classList.toggle('active',+s.dataset.step===n));progress.forEach((p,i)=>p.classList.toggle('active',i<n));document.body.classList.toggle('quote-modal-open',n===2);if(n===3){renderCalendar();document.getElementById('calendarQuote').textContent=state.quote?`${money(state.quote.total)} CAD`:'—'}if(n===4)updateFinal();if(n!==2)goTo('#cotizar')}
 
-  async function generateQuote(){if(!hasRooms()){toast('Agrega al menos un área para generar la cotización.');return}setStep(2);const loading=document.getElementById('aiLoading'),result=document.getElementById('aiResult');loading.classList.remove('hidden');result.classList.add('hidden');await new Promise(r=>setTimeout(r,500));const data=calculateQuote();state.quote=data;document.getElementById('aiTotal').textContent=`${money(data.total)} CAD`;document.getElementById('aiMessage').textContent=data.message;const host=document.getElementById('aiBreakdown');host.innerHTML='';
+  async function generateQuote(){if(!hasRooms()){toast('Add at least one area to generate an estimate.');return}setStep(2);const loading=document.getElementById('aiLoading'),result=document.getElementById('aiResult');loading.classList.remove('hidden');result.classList.add('hidden');await new Promise(r=>setTimeout(r,500));const data=calculateQuote();state.quote=data;document.getElementById('aiTotal').textContent=`${money(data.total)} CAD`;document.getElementById('aiMessage').textContent=data.message;const host=document.getElementById('aiBreakdown');host.innerHTML='';
     data.breakdown.forEach(row=>{
       const el=document.createElement('div');
       el.className='breakdown-row';
@@ -140,7 +140,7 @@ function calculateQuote(){
     loading.classList.add('hidden');result.classList.remove('hidden')}
   document.getElementById('generateQuote').addEventListener('click',generateQuote);
   document.getElementById('applyPromo')?.addEventListener('click',()=>verifyPromo(true));
-  document.querySelectorAll('.next').forEach(btn=>btn.addEventListener('click',async()=>{if(state.step===2&&!state.quote){toast('Primero genera tu cotización.');return}if(state.step===3){if(!state.date||!state.time){toast('Selecciona un día y horario disponible.');return}const name=document.getElementById('name'),address=document.getElementById('address'),email=document.getElementById('email'),phone=document.getElementById('phone');if(!name.reportValidity()||!address.reportValidity())return;if(!email.value.trim()&&!phone.value.trim()){toast('Agrega un correo o un teléfono/WhatsApp.');return}if(email.value&&!email.reportValidity())return;const entered=document.getElementById('promoCode')?.value.trim();if(entered){const ok=await verifyPromo(false);if(!ok)return}}if(state.step<4)setStep(state.step+1)}));
+  document.querySelectorAll('.next').forEach(btn=>btn.addEventListener('click',async()=>{if(state.step===2&&!state.quote){toast('Generate your estimate first.');return}if(state.step===3){if(!state.date||!state.time){toast('Select an available day and time.');return}const name=document.getElementById('name'),address=document.getElementById('address'),email=document.getElementById('email'),phone=document.getElementById('phone');if(!name.reportValidity()||!address.reportValidity())return;if(!email.value.trim()&&!phone.value.trim()){toast('Add an email address or phone/WhatsApp number.');return}if(email.value&&!email.reportValidity())return;const entered=document.getElementById('promoCode')?.value.trim();if(entered){const ok=await verifyPromo(false);if(!ok)return}}if(state.step<4)setStep(state.step+1)}));
   document.querySelectorAll('.back').forEach(btn=>btn.addEventListener('click',()=>setStep(state.step-1)));
   const dayStatus=day=>day%7===0?'blocked':day%5===0?'limited':'available';
   function renderCalendar(){const m=new Date(state.year,state.month,1);monthTitle.textContent=m.toLocaleDateString('es-MX',{month:'long',year:'numeric'}).replace(/^./,c=>c.toUpperCase());calendarEl.innerHTML='';const first=m.getDay(),total=new Date(state.year,state.month+1,0).getDate();for(let i=0;i<first;i++){const e=document.createElement('div');e.className='day empty';calendarEl.appendChild(e)}for(let d=1;d<=total;d++){const cell=document.createElement('button'),status=dayStatus(d);cell.type='button';cell.className=`day ${status}`;cell.innerHTML=`${d}<i class="dot"></i>`;if(status==='blocked')cell.disabled=true;else cell.addEventListener('click',()=>selectDay(d,status,cell));calendarEl.appendChild(cell)}}
@@ -197,12 +197,12 @@ function calculateQuote(){
       const shortId=String(data.appointment_id||'').split('-')[0].toUpperCase();
       const code='GL-'+(shortId||Math.random().toString(36).slice(2,7).toUpperCase());
       document.getElementById('bookingCode').textContent=code;
-      document.getElementById('successText').textContent=`Tu solicitud de ${cleaningName()} por ${money(finalTotal)} CAD quedó registrada para el ${formattedDate()} a las ${state.time}.${Number(data.discount_percent)>0?' Se aplicó '+data.discount_percent+'% de descuento con '+data.discount_code+'.':''}`;
+      document.getElementById('successText').textContent=`Your request for ${cleaningName()} por ${money(finalTotal)} CAD was submitted for ${formattedDate()} at ${state.time}.${Number(data.discount_percent)>0?' A '+data.discount_percent+'% discount was applied with '+data.discount_code+'.':''}`;
       document.getElementById('modal').classList.add('show');
     }catch(err){
-      console.error(err);toast('No pudimos registrar la solicitud. Intenta de nuevo.');
+      console.error(err);toast('We could not submit the request. Please try again.');
     }finally{
-      if(submitBtn){submitBtn.disabled=false;submitBtn.textContent='Solicitar reserva →'}
+      if(submitBtn){submitBtn.disabled=false;submitBtn.textContent='Request booking →'}
     }
   });
   document.getElementById('modalClose').addEventListener('click',()=>document.getElementById('modal').classList.remove('show'));

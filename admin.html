@@ -9,22 +9,22 @@
 </head>
 <body>
   <main class="admin-shell">
-<section id="loginView" class="auth-wrap hidden">
+<section id="loginFriw" class="auth-wrap hidden">
       <div class="auth-card">
         <img src="glemi-logo.png" alt="GLEMI" class="admin-logo">
         <p class="eyebrow">GLEMI ADMIN</p>
-        <h1>Iniciar sesión</h1>
-        <p class="muted">Acceso privado para Owner y Admin de GLEMI.</p><p class="login-help">Si acabas de crear tu cuenta Owner, confirma primero el correo recibido de Supabase.</p>
+        <h1>Sign In</h1>
+        <p class="muted">Private access for GLEMI Owner and Admin.</p><p class="login-help">If you just created your Owner account, first confirm the email received from Supabase.</p>
         <form id="loginForm" class="auth-form">
-          <input id="loginEmail" type="email" placeholder="Correo electrónico" required>
-          <input id="loginPassword" type="password" placeholder="Contraseña" required>
-          <button class="primary" type="submit">Iniciar sesión</button>
+          <input id="loginEmail" type="email" placeholder="Email address" required>
+          <input id="loginPassword" type="password" placeholder="Password" required>
+          <button class="primary" type="submit">Sign In</button>
         </form>
         <p id="loginError" class="error"></p>
       </div>
     </section>
 
-    <section id="appView" class="app hidden">
+    <section id="appFriw" class="app hidden">
       <aside class="sidebar">
         <div class="brand-row">
           <img src="glemi-logo.png" alt="GLEMI">
@@ -32,13 +32,13 @@
         </div>
         <nav id="sideNav">
           <button class="nav-btn active" data-view="dashboard">Dashboard</button>
-          <button class="nav-btn" data-view="appointments">Citas</button>
+          <button class="nav-btn" data-view="appointments">Appointments</button>
           <button class="nav-btn" data-view="schedule">Calendario</button>
           <button class="nav-btn" data-view="pricing">Precios</button>
-          <button class="nav-btn" data-view="content">Página web</button>
+          <button class="nav-btn" data-view="content">Website</button>
           <button class="nav-btn" data-view="users">Usuarios</button>
         </nav>
-        <button id="logoutBtn" class="ghost danger-text">Cerrar sesión</button>
+        <button id="logoutBtn" class="ghost danger-text">Sign Out</button>
       </aside>
 
       <div class="main-panel">
@@ -52,49 +52,49 @@
 
         <section id="dashboard" class="panel-view active">
           <div class="stats">
-            <article><span>Citas pendientes</span><strong id="statPending">0</strong></article>
-            <article><span>Confirmadas</span><strong id="statConfirmed">0</strong></article>
+            <article><span>Appointments pendientes</span><strong id="statPending">0</strong></article>
+            <article><span>Confirmed</span><strong id="statConfirmed">0</strong></article>
             <article><span>Hoy</span><strong id="statToday">0</strong></article>
-            <article><span>Total citas</span><strong id="statTotal">0</strong></article>
+            <article><span>Total appointments</span><strong id="statTotal">0</strong></article>
           </div>
           <div class="card">
-            <div class="card-head"><div><p class="eyebrow">PRÓXIMAS</p><h3>Citas recientes</h3></div><button class="secondary" data-go="appointments">Ver todas</button></div>
+            <div class="card-head"><div><p class="eyebrow">UPCOMING</p><h3>Recent appointments</h3></div><button class="secondary" data-go="appointments">Friw all</button></div>
             <div id="dashboardAppointments"></div>
           </div>
         </section>
 
         <section id="appointments" class="panel-view">
           <div class="card">
-            <div class="card-head"><div><p class="eyebrow">GESTIÓN</p><h3>Citas</h3></div><button id="newAppointmentBtn" class="primary small">+ Nueva cita</button></div>
-            <div class="filters"><input id="appointmentSearch" placeholder="Buscar cliente, servicio o fecha"><select id="appointmentFilter"><option value="all">Todas</option><option value="pending">Pendientes</option><option value="confirmed">Confirmadas</option><option value="cancelled">Canceladas</option></select></div>
+            <div class="card-head"><div><p class="eyebrow">MANAGEMENT</p><h3>Appointments</h3></div><button id="newAppointmentBtn" class="primary small">+ New appointment</button></div>
+            <div class="filters"><input id="appointmentSearch" placeholder="Search client, service, or date"><select id="appointmentFilter"><option value="all">All</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="cancelled">Cancelled</option></select></div>
             <div id="appointmentList"></div>
           </div>
         </section>
 
         <section id="schedule" class="panel-view">
           <div class="card">
-            <div class="card-head"><div><p class="eyebrow">DISPONIBILIDAD</p><h3>Horarios de trabajo</h3></div><button id="saveScheduleBtn" class="primary small">Guardar</button></div>
-            <p class="muted">Activa o desactiva días y define el horario disponible para nuevas citas.</p>
+            <div class="card-head"><div><p class="eyebrow">AVAILABILITY</p><h3>Working hours</h3></div><button id="saveScheduleBtn" class="primary small">Save</button></div>
+            <p class="muted">Enable or disable days and set available hours for new appointments.</p>
             <div id="scheduleGrid" class="schedule-grid"></div>
           </div>
         </section>
 
         <section id="pricing" class="panel-view">
           <div class="card">
-            <div class="card-head"><div><p class="eyebrow">COTIZADOR</p><h3>Precios residenciales · CAD</h3></div><button id="savePricingBtn" class="primary small">Guardar</button></div>
-            <p class="muted">Estos valores son editables desde el panel. Para que cambien automáticamente en la página pública necesitaremos conectar esta sección al backend.</p>
+            <div class="card-head"><div><p class="eyebrow">ESTIMATOR</p><h3>Residential pricing · CAD</h3></div><button id="savePricingBtn" class="primary small">Save</button></div>
+            <p class="muted">These values can be edited from the dashboard. To update them automatically on the public website, this section needs to be connected to the backend.</p>
             <div id="pricingGrid" class="pricing-grid"></div>
           </div>
         </section>
 
         <section id="content" class="panel-view">
           <div class="card">
-            <div class="card-head"><div><p class="eyebrow">CONTENIDO</p><h3>Textos editables</h3></div><button id="saveContentBtn" class="primary small">Guardar</button></div>
+            <div class="card-head"><div><p class="eyebrow">CONTENT</p><h3>Editable text</h3></div><button id="saveContentBtn" class="primary small">Save</button></div>
             <div class="content-grid">
-              <label>Título principal<input id="contentHeroTitle"></label>
-              <label>Subtítulo<textarea id="contentHeroSubtitle"></textarea></label>
+              <label>Main title<input id="contentHeroTitle"></label>
+              <label>Subtitle<textarea id="contentHeroSubtitle"></textarea></label>
               <label>Correo de contacto<input id="contentEmail" type="email"></label>
-              <label>Nota de cotización<textarea id="contentQuoteNote"></textarea></label>
+              <label>Estimate note<textarea id="contentQuoteNote"></textarea></label>
             </div>
           </div>
         </section>
@@ -104,12 +104,12 @@
             <div class="card-head"><div><p class="eyebrow">SEGURIDAD</p><h3>Usuarios</h3></div></div>
             <div id="usersList"></div>
             <div id="createAdminBox" class="user-create-box hidden">
-              <h4>Crear segundo usuario · Admin</h4>
-              <p class="muted">Solo el Owner puede crear este acceso. La cuenta se activa de inmediato.</p>
+              <h4>Create second user · Admin</h4>
+              <p class="muted">Only the Owner can create this access. The account is activated immediately.</p>
               <div class="create-admin-grid">
                 <input id="newAdminName" placeholder="Nombre del administrador">
                 <input id="newAdminEmail" type="email" placeholder="Correo del administrador">
-                <input id="newAdminPassword" type="password" minlength="8" placeholder="Contraseña (mínimo 8 caracteres)">
+                <input id="newAdminPassword" type="password" minlength="8" placeholder="Password (minimum 8 characters)">
                 <button id="createAdminBtn" class="primary" type="button">Crear Admin</button>
               </div>
             </div>
@@ -122,17 +122,17 @@
 
   <dialog id="appointmentDialog">
     <form method="dialog" id="appointmentForm" class="modal-form">
-      <div class="modal-head"><h3 id="appointmentDialogTitle">Nueva cita</h3><button value="cancel" class="icon-btn">×</button></div>
+      <div class="modal-head"><h3 id="appointmentDialogTitle">New appointment</h3><button value="cancel" class="icon-btn">×</button></div>
       <input type="hidden" id="appointmentId">
-      <label>Cliente<input id="appointmentClient" required></label>
-      <label>Servicio<select id="appointmentService"><option>Residential Cleaning</option><option>Commercial Cleaning</option><option>Post-Construction Cleaning</option></select></label>
-      <div class="two-col"><label>Fecha<input id="appointmentDate" type="date" required></label><label>Hora<input id="appointmentTime" type="time" required></label></div>
-      <label>Teléfono / WhatsApp<input id="appointmentPhone"></label>
+      <label>Client<input id="appointmentClient" required></label>
+      <label>Service<select id="appointmentService"><option>Residential Cleaning</option><option>Commercial Cleaning</option><option>Post-Construction Cleaning</option></select></label>
+      <div class="two-col"><label>Date<input id="appointmentDate" type="date" required></label><label>Hora<input id="appointmentTime" type="time" required></label></div>
+      <label>Phone / WhatsApp<input id="appointmentPhone"></label>
       <label>Correo<input id="appointmentEmail" type="email"></label>
-      <label>Dirección<input id="appointmentAddress"></label>
+      <label>Address<input id="appointmentAddress"></label>
       <label>Total CAD<input id="appointmentTotal" type="number" min="0" step="0.01"></label>
       <label>Estado<select id="appointmentStatus"><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="cancelled">Cancelled</option></select></label>
-      <div class="modal-actions"><button value="cancel" class="secondary">Cancelar</button><button id="saveAppointmentBtn" type="button" class="primary">Guardar cita</button></div>
+      <div class="modal-actions"><button value="cancel" class="secondary">Cancel</button><button id="saveAppointmentBtn" type="button" class="primary">Save appointment</button></div>
     </form>
   </dialog>
 
