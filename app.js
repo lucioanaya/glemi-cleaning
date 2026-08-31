@@ -96,7 +96,7 @@ if(bookingForm){
     if(!input)return true;
     const code=input.value.trim().toUpperCase();
     state.promoCode='';state.promoEligible=false;state.promoPercent=0;state.promoFinalTotal=null;
-    if(!code){msg.innerHTML='New customer? Use <b>WELCOME20</b> for 20% off your first cleaning.';msg.className='promo-message';return true}
+    if(!code){msg.innerHTML='New customer? Use <b>WELCOME20</b> for 10% off your first cleaning.';msg.className='promo-message';return true}
     const email=document.getElementById('email')?.value.trim()||'',phone=document.getElementById('phone')?.value.trim()||'';
     if(!email&&!phone){msg.textContent='Add your email or phone first so we can verify the promo code.';msg.className='promo-message error';return false}
     if(!glemiSb){msg.textContent='Promo verification is temporarily unavailable.';msg.className='promo-message error';return false}
@@ -108,7 +108,7 @@ if(bookingForm){
       msg.textContent=reasons[data?.reason]||'This promo code cannot be applied.';
       msg.className='promo-message error';return false
     }
-    state.promoCode=data.code||code;state.promoEligible=true;state.promoPercent=Number(data.discount_percent)||20;
+    state.promoCode=data.code||code;state.promoEligible=true;state.promoPercent=Number(data.discount_percent)||10;
     state.promoFinalTotal=state.quote?discountTotal(state.quote.total,state.promoPercent):null;
     msg.innerHTML=`✓ <b>${state.promoCode}</b> applied — ${state.promoPercent}% off your first cleaning.`;
     msg.className='promo-message success';
@@ -198,6 +198,7 @@ function calculateQuote(){
       const code='GL-'+(shortId||Math.random().toString(36).slice(2,7).toUpperCase());
       document.getElementById('bookingCode').textContent=code;
       document.getElementById('successText').textContent=`Your request for ${cleaningName()} por ${money(finalTotal)} CAD was submitted for ${formattedDate()} at ${state.time}.${Number(data.discount_percent)>0?' A '+data.discount_percent+'% discount was applied with '+data.discount_code+'.':''}`;
+      if(email){ try { await glemiSb.functions.invoke('send-booking-confirmation',{body:{appointment_id:data.appointment_id}}); } catch(_e){} }
       document.getElementById('modal').classList.add('show');
     }catch(err){
       console.error(err);toast('We could not submit the request. Please try again.');
