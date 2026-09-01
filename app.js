@@ -215,7 +215,21 @@ function calculateQuote(){
     const booked=new Set((info?.booked_times||[]).map(t=>String(t).slice(0,5)));
     const start=String(info?.start_time||'08:00').slice(0,5);
     const end=String(info?.end_time||'17:00').slice(0,5);
-    const slots=slotCatalog.filter(s=>s.value>=start&&s.value<end&&!booked.has(s.value));
+    let slots=slotCatalog.filter(s=>s.value>=start&&s.value<end&&!booked.has(s.value));
+
+    // If the selected day is today, hide any time that has already passed.
+    // Example: at 2:00 PM, 9:00 AM / 10:00 AM / 12:00 PM will no longer appear.
+    const now=new Date();
+    const selectedDay=localDateOnly(state.date);
+    const today=localDateOnly(now);
+    if(selectedDay.getTime()===today.getTime()){
+      const nowMinutes=now.getHours()*60+now.getMinutes();
+      slots=slots.filter(s=>{
+        const [h,m]=s.value.split(':').map(Number);
+        return (h*60+m)>nowMinutes;
+      });
+    }
+
     timesEl.innerHTML='';
     if(!slots.length){
       timesEl.innerHTML='<span class="empty">No times available for this day</span>';
