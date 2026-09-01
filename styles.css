@@ -218,3 +218,35 @@ body.quote-modal-open{overflow:hidden}
 /* Residential cleaning type colors */
 .cleaning-type[data-cleaning="regular"] strong{color:#1769e8 !important;}
 .cleaning-type[data-cleaning="deep"] strong{color:#101828 !important;}
+
+/* Real-time booking calendar */
+.calendar{position:relative}
+.calendar-loading{
+  grid-column:1/-1;
+  padding:26px 10px;
+  text-align:center;
+  color:#98a2b3;
+  font-size:12px;
+}
+.day.past{
+  color:#ef3f36 !important;
+  background:#fff5f4 !important;
+  border-color:#ffc9c5 !important;
+  opacity:1 !important;
+}
+.day.past .dot{background:#ef3f36 !important}
+.day.blocked{
+  color:#d84a43 !important;
+  background:#fff7f6 !important;
+  border-color:#ffd2cf !important;
+  opacity:1 !important;
+}
+.day.blocked .dot{background:var(--red) !important}
+.day.today{
+  box-shadow:inset 0 0 0 2px rgba(23,101,232,.18);
+}
+.day.today.available{
+  border-color:#9fc3ff !important;
+  background:#f7fbff;
+}
+.day:disabled{cursor:not-allowed}

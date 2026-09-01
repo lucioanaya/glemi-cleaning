@@ -142,12 +142,101 @@ function calculateQuote(){
   document.getElementById('applyPromo')?.addEventListener('click',()=>verifyPromo(true));
   document.querySelectorAll('.next').forEach(btn=>btn.addEventListener('click',async()=>{if(state.step===2&&!state.quote){toast('Generate your estimate first.');return}if(state.step===3){if(!state.date||!state.time){toast('Select an available day and time.');return}const name=document.getElementById('name'),address=document.getElementById('address'),email=document.getElementById('email'),phone=document.getElementById('phone');if(!name.reportValidity()||!address.reportValidity())return;if(!email.value.trim()&&!phone.value.trim()){toast('Add an email address or phone/WhatsApp number.');return}if(email.value&&!email.reportValidity())return;const entered=document.getElementById('promoCode')?.value.trim();if(entered){const ok=await verifyPromo(false);if(!ok)return}}if(state.step<4)setStep(state.step+1)}));
   document.querySelectorAll('.back').forEach(btn=>btn.addEventListener('click',()=>setStep(state.step-1)));
-  const dayStatus=day=>day%7===0?'blocked':day%5===0?'limited':'available';
-  function renderCalendar(){const m=new Date(state.year,state.month,1);monthTitle.textContent=m.toLocaleDateString('es-MX',{month:'long',year:'numeric'}).replace(/^./,c=>c.toUpperCase());calendarEl.innerHTML='';const first=m.getDay(),total=new Date(state.year,state.month+1,0).getDate();for(let i=0;i<first;i++){const e=document.createElement('div');e.className='day empty';calendarEl.appendChild(e)}for(let d=1;d<=total;d++){const cell=document.createElement('button'),status=dayStatus(d);cell.type='button';cell.className=`day ${status}`;cell.innerHTML=`${d}<i class="dot"></i>`;if(status==='blocked')cell.disabled=true;else cell.addEventListener('click',()=>selectDay(d,status,cell));calendarEl.appendChild(cell)}}
-  function selectDay(d,status,cell){document.querySelectorAll('.day').forEach(x=>x.classList.remove('selected'));cell.classList.add('selected');state.date=new Date(state.year,state.month,d);state.time=null;const slots=status==='limited'?['10:00 AM','2:00 PM']:['9:00 AM','10:00 AM','12:00 PM','2:00 PM','4:00 PM'];timesEl.innerHTML='';slots.forEach(t=>{const b=document.createElement('button');b.type='button';b.className='time';b.textContent=t;b.addEventListener('click',()=>{document.querySelectorAll('.time').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');state.time=t});timesEl.appendChild(b)})}
-  document.getElementById('prevMonth').addEventListener('click',()=>{state.month--;if(state.month<0){state.month=11;state.year--}renderCalendar()});
+  const pad2=n=>String(n).padStart(2,'0');
+  const localDateOnly=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  const isoLocal=d=>`${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+  const slotCatalog=[
+    {label:'9:00 AM',value:'09:00'},
+    {label:'10:00 AM',value:'10:00'},
+    {label:'12:00 PM',value:'12:00'},
+    {label:'2:00 PM',value:'14:00'},
+    {label:'4:00 PM',value:'16:00'}
+  ];
+  let calendarAvailability={};
+
+  async function loadCalendarAvailability(){
+    if(!glemiSb)return {};
+    const first=new Date(state.year,state.month,1);
+    const last=new Date(state.year,state.month+1,0);
+    const {data,error}=await glemiSb.rpc('get_calendar_availability',{
+      p_start_date:isoLocal(first),
+      p_end_date:isoLocal(last)
+    });
+    if(error){console.warn('Calendar availability:',error);return {}}
+    const map={};
+    (data||[]).forEach(r=>{map[r.day]=r});
+    return map;
+  }
+
+  function statusForDate(date,info){
+    const today=localDateOnly(new Date());
+    const day=localDateOnly(date);
+    if(day<today)return 'past';
+    if(info && info.enabled===false)return 'blocked';
+    const bookings=Number(info?.booking_count||0);
+    if(bookings>=5)return 'blocked';
+    if(bookings>=3)return 'limited';
+    return 'available';
+  }
+
+  async function renderCalendar(){
+    const m=new Date(state.year,state.month,1);
+    monthTitle.textContent=m.toLocaleDateString('en-CA',{month:'long',year:'numeric'});
+    calendarEl.innerHTML='<div class="calendar-loading">Loading availability…</div>';
+    calendarAvailability=await loadCalendarAvailability();
+    calendarEl.innerHTML='';
+    const first=m.getDay(),total=new Date(state.year,state.month+1,0).getDate();
+    for(let i=0;i<first;i++){const e=document.createElement('div');e.className='day empty';calendarEl.appendChild(e)}
+    for(let d=1;d<=total;d++){
+      const date=new Date(state.year,state.month,d);
+      const key=isoLocal(date);
+      const info=calendarAvailability[key];
+      const status=statusForDate(date,info);
+      const cell=document.createElement('button');
+      cell.type='button';
+      cell.className=`day ${status}`;
+      if(localDateOnly(date).getTime()===localDateOnly(new Date()).getTime())cell.classList.add('today');
+      cell.innerHTML=`${d}<i class="dot"></i>`;
+      if(status==='blocked'||status==='past'){
+        cell.disabled=true;
+        cell.setAttribute('aria-label',`${d} unavailable`);
+      }else{
+        cell.addEventListener('click',()=>selectDay(d,status,cell,info));
+      }
+      calendarEl.appendChild(cell)
+    }
+  }
+
+  function selectDay(d,status,cell,info){
+    document.querySelectorAll('.day').forEach(x=>x.classList.remove('selected'));
+    cell.classList.add('selected');
+    state.date=new Date(state.year,state.month,d);
+    state.time=null;
+    const booked=new Set((info?.booked_times||[]).map(t=>String(t).slice(0,5)));
+    const start=String(info?.start_time||'08:00').slice(0,5);
+    const end=String(info?.end_time||'17:00').slice(0,5);
+    const slots=slotCatalog.filter(s=>s.value>=start&&s.value<end&&!booked.has(s.value));
+    timesEl.innerHTML='';
+    if(!slots.length){
+      timesEl.innerHTML='<span class="empty">No times available for this day</span>';
+      return;
+    }
+    slots.forEach(s=>{
+      const b=document.createElement('button');
+      b.type='button';
+      b.className='time';
+      b.textContent=s.label;
+      b.addEventListener('click',()=>{
+        document.querySelectorAll('.time').forEach(x=>x.classList.remove('selected'));
+        b.classList.add('selected');
+        state.time=s.label
+      });
+      timesEl.appendChild(b)
+    })
+  }
+  document.getElementById('prevMonth').addEventListener('click',()=>{const now=new Date();const candidate=new Date(state.year,state.month-1,1);const current=new Date(now.getFullYear(),now.getMonth(),1);if(candidate<current){toast('Past months are unavailable for booking.');return}state.month--;if(state.month<0){state.month=11;state.year--}renderCalendar()});
   document.getElementById('nextMonth').addEventListener('click',()=>{state.month++;if(state.month>11){state.month=0;state.year++}renderCalendar()});
-  const formattedDate=()=>state.date?state.date.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'—';
+  const formattedDate=()=>state.date?state.date.toLocaleDateString('en-CA',{weekday:'long',day:'numeric',month:'long',year:'numeric'}):'—';
   const cleaningName=()=>state.cleaning==='deep'?'Deep Cleaning':'Regular Cleaning';
   function updateFinal(){
     document.getElementById('finalService').textContent=`Residential · ${cleaningName()}`;
