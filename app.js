@@ -96,7 +96,7 @@ if(bookingForm){
     if(!input)return true;
     const code=input.value.trim().toUpperCase();
     state.promoCode='';state.promoEligible=false;state.promoPercent=0;state.promoFinalTotal=null;
-    if(!code){msg.innerHTML='New customer? Use <b>WELCOME20</b> for 10% off your first cleaning.';msg.className='promo-message';return true}
+    if(!code){msg.innerHTML='New customer? Use <b>WELCOME</b> for 10% off your first cleaning.';msg.className='promo-message';return true}
     const email=document.getElementById('email')?.value.trim()||'',phone=document.getElementById('phone')?.value.trim()||'';
     if(!email&&!phone){msg.textContent='Add your email or phone first so we can verify the promo code.';msg.className='promo-message error';return false}
     if(!glemiSb){msg.textContent='Promo verification is temporarily unavailable.';msg.className='promo-message error';return false}
@@ -104,7 +104,7 @@ if(bookingForm){
     const {data,error}=await glemiSb.rpc('check_promo_eligibility',{p_code:code,p_email:email||null,p_phone:phone||null});
     if(error){msg.textContent='We could not verify the code. Please try again.';msg.className='promo-message error';return false}
     if(!data?.eligible){
-      const reasons={already_used:'WELCOME20 has already been used with this contact information.',existing_customer:'WELCOME20 is only available for a customer’s first cleaning.',invalid_code:'That promo code is not valid.',contact_required:'Add an email or phone to verify the code.'};
+      const reasons={already_used:'WELCOME has already been used with this contact information.',existing_customer:'WELCOME is only available for a customer’s first cleaning.',invalid_code:'That promo code is not valid.',contact_required:'Add an email or phone to verify the code.'};
       msg.textContent=reasons[data?.reason]||'This promo code cannot be applied.';
       msg.className='promo-message error';return false
     }
@@ -277,7 +277,7 @@ function calculateQuote(){
       });
       if(error)throw error;
       if(!data?.ok){
-        const reasons={already_used:'WELCOME20 has already been used with this contact information.',existing_customer:'WELCOME20 is only available for a customer’s first cleaning.',invalid_code:'The promo code is no longer valid.',contact_required:'Add an email or phone number.'};
+        const reasons={already_used:'WELCOME has already been used with this contact information.',existing_customer:'WELCOME is only available for a customer’s first cleaning.',invalid_code:'The promo code is no longer valid.',contact_required:'Add an email or phone number.'};
         toast(reasons[data?.reason]||'We could not register the booking.');
         if(state.promoEligible){state.promoEligible=false;state.promoCode='';state.promoPercent=0}
         return
