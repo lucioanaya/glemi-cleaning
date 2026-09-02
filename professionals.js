@@ -21,6 +21,6 @@ Project Details:
 ${data.get('details')}`
     );
     if(toast){toast.textContent='Opening your email to send the quote request…';toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600)}
-    window.location.href=`mailto:baltazaranaya@outlook.com?subject=${subject}&body=${body}`;
+    window.location.href=`mailto:Glemiservices@gmail.com?subject=${subject}&body=${body}`;
   });
 })();

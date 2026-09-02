@@ -8,7 +8,7 @@ This version separates the website into three service pages:
 
 `index.html` is now the service-selection homepage.
 
-The residential calculator only reveals the personalized price after the customer finishes configuring the service. Post-Construction directs customers to baltazaranaya@outlook.com for a personalized quote.
+The residential calculator only reveals the personalized price after the customer finishes configuring the service. Post-Construction directs customers to Glemiservices@gmail.com for a personalized quote.
 
 
 ## Corrección de logo
