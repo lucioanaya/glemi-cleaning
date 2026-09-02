@@ -146,26 +146,40 @@
   display:block!important;
 }
 </style>
+
+<style>
+.residential-promo-section{
+  padding:24px clamp(16px,4vw,48px) 36px!important;
+  display:flex!important;
+  justify-content:center!important;
+}
+.residential-promo-section img{
+  display:block!important;
+  width:100%!important;
+  max-width:980px!important;
+  height:auto!important;
+  border-radius:28px!important;
+  object-fit:contain!important;
+}
+@media (max-width:700px){
+  .residential-promo-section{
+    padding:18px 14px 28px!important;
+  }
+  .residential-promo-section img{
+    border-radius:20px!important;
+  }
+}
+</style>
 </head>
 <body data-page="residential">
 <header class="header"><a class="brand-logo" href="index.html"><img src="glemi-logo.png" alt="GLEMI"></a><nav class="nav" id="nav"><a href="index.html">Home</a><a href="residential.html" class="active-link">Residential</a><a href="commercial.html">Commercial</a><a href="post-construction.html">Post-Construction</a><a href="deep.html">Deep</a></nav><a class="btn btn-secondary header-cta" href="index.html#servicios">Change service</a><button class="menu-btn" id="menuBtn">☰</button></header>
 <main>
 
-<section class="section process" id="cotizar">
-  <div class="section-heading"><div class="eyebrow">RESIDENTIAL ESTIMATOR</div><h2>Tell us about your home</h2><p>Prices appear only after you complete your service configuration.</p></div>
-  <div class="steps"><div class="step"><div class="step-number">1</div><h3>Describe your space</h3><p>Areas, sizes, and cleaning type.</p></div><div class="step"><div class="step-number">2</div><h3>Estimate</h3><p>Receive your total price.</p></div><div class="step"><div class="step-number">3</div><h3>Date and details</h3><p>Choose a time and share your contact details.</p></div><div class="step"><div class="step-number">4</div><h3>Confirmation</h3><p>Review and request your booking.</p></div></div>
-  <div class="booking-layout quote-layout"><div class="booking-card"><div class="booking-head"><div><span class="eyebrow">RESIDENTIAL QUOTE</span><h2>Configure your cleaning</h2></div><span class="secure">✦ QUOTE</span></div><div class="progress"><span class="active"></span><span></span><span></span><span></span></div>
-  <form id="bookingForm">
-    <div class="form-step active" data-step="1"><label>Cleaning type</label><div class="cleaning-type-grid"><button type="button" class="cleaning-type selected" data-cleaning="regular"><strong>Regular Cleaning</strong><small>General maintenance</small></button><button type="button" class="cleaning-type" data-cleaning="deep"><strong>Deep Cleaning</strong><small>More detailed cleaning</small></button></div><div id="roomRows" class="room-rows room-accordion-list"></div><p class="quote-note">The estimate is based on the conditions described. If the actual scope changes, the final price may be adjusted.</p><button type="button" class="btn btn-primary full" id="generateQuote">Get estimate</button></div>
-    <div class="form-step" data-step="2"><div id="aiLoading" class="ai-loading hidden"><div class="ai-spinner"></div><strong>Preparing your estimate…</strong><span>Analyzing areas, cleaning type, and additional services.</span></div><div id="aiResult" class="ai-result hidden"><div class="ai-badge">✦ PERSONALIZED ESTIMATE</div><div class="ai-price"><span>Estimated total</span><strong id="aiTotal">—</strong></div><p id="aiMessage"></p><div id="aiBreakdown" class="ai-breakdown"></div><div class="payment-note"><b>Personalized estimate</b><span>The price is shown after analyzing the selected configuration.</span></div><div class="step-actions"><button type="button" class="btn btn-secondary back">← Change details</button><button type="button" class="btn btn-primary next">Continue →</button></div></div></div>
-    <div class="form-step" data-step="3"><div class="quote-mini"><span>Your estimate</span><strong id="calendarQuote">—</strong></div><div class="calendar-header"><button type="button" id="prevMonth">‹</button><strong id="monthTitle"></strong><button type="button" id="nextMonth">›</button></div><div class="calendar-week"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="calendar" id="calendar"></div><div class="legend"><span><i class="available"></i> Available</span><span><i class="limited"></i> Limited availability</span><span><i class="blocked"></i> Unavailable</span></div><div class="time-section"><label>Available times</label><div id="times" class="time-grid"><span class="empty">Select an available day</span></div></div><div class="field-grid"><label>Full name<input required id="name" placeholder="E.g. Jane Smith"></label><label>Email address<input id="email" type="email" placeholder="you@email.com"></label><label>Phone / WhatsApp<input id="phone" placeholder="Phone number"></label><label>Address<input required id="address" placeholder="Street, number, city"></label></div><p class="quote-note">Provide at least an email address or phone/WhatsApp number to receive confirmation.</p><div class="promo-code-card">
-  <label for="promoCode">Promo code <span>optional</span></label>
-  <div class="promo-code-row"><input id="promoCode" autocomplete="off" placeholder="WELCOME"><button type="button" class="btn btn-secondary" id="applyPromo">Apply code</button></div>
-  <p id="promoMessage" class="promo-message">New customer? Use <b>WELCOME</b> for 10% off your first cleaning.</p>
-</div><div class="step-actions"><button type="button" class="btn btn-secondary back">← Back</button><button type="button" class="btn btn-primary next">Continue →</button></div></div>
-    <div class="form-step" data-step="4"><div class="final-summary"><div><span>Service</span><strong id="finalService">Residential Cleaning</strong></div><div><span>Date</span><strong id="finalDate">—</strong></div><div><span>Client</span><strong id="finalName">—</strong></div><div><span>Estimate</span><strong id="finalPrice">—</strong></div></div><div class="final-price-card"><span>Estimated total</span><strong id="finalPriceLarge">—</strong><div id="promoFinalLine" class="promo-final-line hidden"></div><small id="finalBreakdown"></small></div><div class="payment-note"><b>Confirmation</b><span>When submitted, we will register your request.</span></div><div class="step-actions"><button type="button" class="btn btn-secondary back">← Back</button><button type="submit" class="btn btn-primary">Request booking →</button></div></div>
-  </form></div><aside class="modify-card quote-guide"><span class="eyebrow">RESIDENTIAL ONLY</span><h2>Everything here is for your home</h2><p>You will not see commercial or post-construction options in this flow.</p><a class="btn btn-secondary full" href="index.html#servicios">← Friw other services</a></aside></div>
+
+<section class="section residential-promo-section">
+  <img src="residential-design-your-cleaning.jpeg" alt="GLEMI Design Your Cleaning - choose what you need cleaned">
 </section>
+
 <section class="section service-bottom-image"><div class="subpage-icon subpage-brand"><img src="glemi-logo.png" alt="GLEMI Cleaning & Building Services Ltd."></div></section>
 </main>
 <footer class="footer"><div><a class="brand-logo footer-logo" href="index.html"><img src="glemi-logo.png" alt="GLEMI"></a></div><div><b>Services</b><a href="residential.html">Residential</a><a href="commercial.html">Commercial</a><a href="post-construction.html">Post-Construction</a><a href="deep.html">Deep</a></div><div><b>Contact</b><span>Glemiservices@gmail.com</span></div></footer>
