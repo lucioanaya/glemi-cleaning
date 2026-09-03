@@ -194,6 +194,87 @@ body[data-page="residential"] .residential-promo-section img{
 }
 </style>
 
+
+<style>
+/* Larger residential estimator controls */
+body[data-page="residential"] .room-card,
+body[data-page="residential"] .room-selector,
+body[data-page="residential"] details.room-card{
+  min-height:150px!important;
+  padding:22px 24px!important;
+  border-radius:24px!important;
+}
+body[data-page="residential"] .room-card img,
+body[data-page="residential"] .room-selector img,
+body[data-page="residential"] details.room-card img{
+  width:104px!important;
+  height:104px!important;
+  object-fit:cover!important;
+}
+body[data-page="residential"] .room-card h3,
+body[data-page="residential"] .room-selector h3,
+body[data-page="residential"] details.room-card h3{
+  font-size:31px!important;
+  font-weight:850!important;
+}
+body[data-page="residential"] .estimate-disclaimer-strong{
+  color:#172033!important;
+  font-weight:750!important;
+}
+body[data-page="residential"] .residential-only-panel{
+  margin:22px 0 26px!important;
+  padding:30px 30px!important;
+  border-radius:24px!important;
+  background:#eef6ff!important;
+  text-align:left!important;
+}
+body[data-page="residential"] .residential-only-title{
+  font-size:30px!important;
+  line-height:1.08!important;
+  font-weight:900!important;
+  color:#0d1b3d!important;
+  margin-bottom:10px!important;
+}
+body[data-page="residential"] .residential-only-subtitle{
+  font-size:24px!important;
+  line-height:1.25!important;
+  font-weight:850!important;
+  color:#1267e8!important;
+  margin-bottom:10px!important;
+}
+body[data-page="residential"] .residential-only-copy{
+  font-size:21px!important;
+  line-height:1.4!important;
+  color:#101828!important;
+  margin-bottom:18px!important;
+}
+body[data-page="residential"] .residential-only-link{
+  display:inline-block!important;
+  font-size:23px!important;
+  line-height:1.2!important;
+  font-weight:850!important;
+  color:#1267e8!important;
+  text-decoration:none!important;
+}
+@media(max-width:700px){
+  body[data-page="residential"] .room-card,
+  body[data-page="residential"] .room-selector,
+  body[data-page="residential"] details.room-card{
+    min-height:142px!important;
+    padding:20px 22px!important;
+  }
+  body[data-page="residential"] .room-card h3,
+  body[data-page="residential"] .room-selector h3,
+  body[data-page="residential"] details.room-card h3{
+    font-size:29px!important;
+  }
+  body[data-page="residential"] .residential-only-title{font-size:29px!important;}
+  body[data-page="residential"] .residential-only-subtitle{font-size:23px!important;}
+  body[data-page="residential"] .residential-only-copy{font-size:20px!important;}
+  body[data-page="residential"] .residential-only-link{font-size:22px!important;}
+}
+</style>
+
 </head>
 <body data-page="residential">
 <header class="header"><a class="brand-logo" href="index.html"><img src="glemi-logo.png" alt="GLEMI"></a><nav class="nav" id="nav"><a href="index.html">Home</a><a href="residential.html" class="active-link">Residential</a><a href="commercial.html">Commercial</a><a href="post-construction.html">Post-Construction</a><a href="deep.html">Deep</a></nav><a class="btn btn-secondary header-cta" href="index.html#servicios">Change service</a><button class="menu-btn" id="menuBtn">☰</button></header>
@@ -205,7 +286,15 @@ body[data-page="residential"] .residential-promo-section img{
 
 <div class="booking-layout quote-layout"><div class="booking-card"><div class="booking-head"><div><span class="eyebrow">RESIDENTIAL QUOTE</span><h2>Configure your cleaning</h2></div><span class="secure">✦ QUOTE</span></div><div class="progress"><span class="active"></span><span></span><span></span><span></span></div>
   <form id="bookingForm">
-    <div class="form-step active" data-step="1"><label>Cleaning type</label></div><div id="roomRows" class="room-rows room-accordion-list"></div><p class="quote-note">The estimate is based on the conditions described. If the actual scope changes, the final price may be adjusted.</p><button type="button" class="btn btn-primary full" id="generateQuote">Get estimate</button></div>
+    <div class="form-step active" data-step="1"><label>Cleaning type</label></div><div id="roomRows" class="room-rows room-accordion-list"></div><p class="quote-note"><span class="estimate-disclaimer-strong">The estimate is based on the conditions described. If the actual scope changes, the final price may be adjusted.</span></p><button type="button" class="btn btn-primary full" id="generateQuote">Get estimate</button>
+
+<div class="residential-only-panel">
+  <div class="residential-only-title">RESIDENTIAL ONLY</div>
+  <div class="residential-only-subtitle">Everything here is for your home</div>
+  <div class="residential-only-copy">You will not see commercial or post-construction options in this flow.</div>
+  <a class="residential-only-link" href="index.html#servicios">← View other services</a>
+</div>
+</div>
     <div class="form-step" data-step="2"><div id="aiLoading" class="ai-loading hidden"><div class="ai-spinner"></div><strong>Preparing your estimate…</strong><span>Analyzing areas, cleaning type, and additional services.</span></div><div id="aiResult" class="ai-result hidden"><div class="ai-badge">✦ PERSONALIZED ESTIMATE</div><div class="ai-price"><span>Estimated total</span><strong id="aiTotal">—</strong></div><p id="aiMessage"></p><div id="aiBreakdown" class="ai-breakdown"></div><div class="payment-note"><b>Personalized estimate</b><span>The price is shown after analyzing the selected configuration.</span></div><div class="step-actions"><button type="button" class="btn btn-secondary back">← Change details</button><button type="button" class="btn btn-primary next">Continue →</button></div></div></div>
     <div class="form-step" data-step="3"><div class="quote-mini"><span>Your estimate</span><strong id="calendarQuote">—</strong></div><div class="calendar-header"><button type="button" id="prevMonth">‹</button><strong id="monthTitle"></strong><button type="button" id="nextMonth">›</button></div><div class="calendar-week"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="calendar" id="calendar"></div><div class="legend"><span><i class="available"></i> Available</span><span><i class="limited"></i> Limited availability</span><span><i class="blocked"></i> Unavailable</span></div><div class="time-section"><label>Available times</label><div id="times" class="time-grid"><span class="empty">Select an available day</span></div></div><div class="field-grid"><label>Full name<input required id="name" placeholder="E.g. Jane Smith"></label><label>Email address<input id="email" type="email" placeholder="you@email.com"></label><label>Phone / WhatsApp<input id="phone" placeholder="Phone number"></label><label>Address<input required id="address" placeholder="Street, number, city"></label></div><p class="quote-note">Provide at least an email address or phone/WhatsApp number to receive confirmation.</p><div class="promo-code-card">
   <label for="promoCode">Promo code <span>optional</span></label>
