@@ -101,16 +101,16 @@
 
         <section id="users" class="panel-view">
           <div class="card">
-            <div class="card-head"><div><p class="eyebrow">SEGURIDAD</p><h3>Usuarios</h3></div></div>
+            <div class="card-head"><div><p class="eyebrow">ACCESO PRIVADO</p><h3>Usuarios</h3><p class="muted">Este panel está limitado a 2 cuentas: la dueña (Owner) y el administrador (Admin).</p></div></div>
             <div id="usersList"></div>
             <div id="createAdminBox" class="user-create-box hidden">
-              <h4>Create second user · Admin</h4>
-              <p class="muted">Only the Owner can create this access. The account is activated immediately.</p>
+              <h4>Agregar la segunda cuenta · Admin</h4>
+              <p class="muted">Solo la cuenta Owner puede crear este acceso. No se pueden agregar más de 2 usuarios.</p>
               <div class="create-admin-grid">
-                <input id="newAdminName" placeholder="Nombre del administrador">
-                <input id="newAdminEmail" type="email" placeholder="Correo del administrador">
-                <input id="newAdminPassword" type="password" minlength="8" placeholder="Password (minimum 8 characters)">
-                <button id="createAdminBtn" class="primary" type="button">Crear Admin</button>
+                <input id="newAdminName" placeholder="Nombre">
+                <input id="newAdminEmail" type="email" placeholder="Correo">
+                <input id="newAdminPassword" type="password" minlength="8" placeholder="Contraseña (mínimo 8 caracteres)">
+                <button id="createAdminBtn" class="primary" type="button">Crear cuenta Admin</button>
               </div>
             </div>
             <div id="removalRequestBox" class="notice hidden"></div>

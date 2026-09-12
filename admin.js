@@ -59,7 +59,7 @@ el('saveContentBtn').onclick=async()=>{const vals={hero_title:el('contentHeroTit
 async function renderUsers(){
   const {data:users}=await sb.from('profiles').select('*').order('created_at');
   const list=users||[];
-  el('usersList').innerHTML=list.map(u=>`<div class="user-card"><div><h4>${esc(u.display_name||u.email)} · ${u.role==='owner'?'Owner':'Admin'}</h4><p>${esc(u.email)}</p></div><div>${u.id===me.id?'<span class="muted">Your account</span>':profile.role==='admin'&&u.role==='owner'?'<button class="secondary" id="requestOwnerRemovalBtn">Request Owner removal</button>':'<span class="muted">Protected account</span>'}</div></div>`).join('');
+  el('usersList').innerHTML=list.map(u=>`<div class="user-card"><div><h4>${esc(u.display_name||u.email)}</h4><p>${esc(u.email)}</p><span class="account-role ${u.role==='owner'?'owner':'admin'}">${u.role==='owner'?'Owner · Dueña':'Admin · Administrador'}</span></div><div><span class="muted">${u.id===me.id?'Tu cuenta':'Cuenta protegida'}</span></div></div>`).join('');
   const createBox=el('createAdminBox');
   if(createBox) createBox.classList.toggle('hidden', !(profile.role==='owner' && list.length<2));
   const createBtn=el('createAdminBtn');
@@ -70,20 +70,21 @@ async function renderUsers(){
     if(!display_name||!email||password.length<8){alert('Enter a name, email, and a password of at least 8 characters.');return}
     createBtn.disabled=true; createBtn.textContent='Creando...';
     const {data,error}=await sb.functions.invoke('create-staff-user',{body:{display_name,email,password}});
-    createBtn.disabled=false; createBtn.textContent='Crear Admin';
+    createBtn.disabled=false; createBtn.textContent='Crear cuenta Admin';
     if(error){alert(error.message||'The Admin user could not be created.');return}
     if(data?.error){alert(data.error);return}
     el('newAdminName').value='';el('newAdminEmail').value='';el('newAdminPassword').value='';
-    alert('Admin user created successfully. They can now sign in.');
+    alert('Cuenta Admin creada correctamente. Ya puede iniciar sesión.');
     await renderUsers();
   };
-  const req=el('requestOwnerRemovalBtn');
-  if(req) req.onclick=async()=>{
-    const r=await sb.from('owner_removal_requests').insert({requested_by:me.id});
-    alert(r.error?r.error.message:'Request sent to the Owner.');
-    await renderUsers()
-  };
-  const {data:rqs}=await sb.from('owner_removal_requests').select('*').eq('status','pending');
-  const box=el('removalRequestBox');
-  if(rqs?.length){box.classList.remove('hidden');box.textContent=profile.role==='owner'?'There is a pending request to remove the Owner account. Review it before taking any action.':'Owner removal request pending.'}else box.classList.add('hidden')
+}
+
+init().catch((err)=>{
+  console.error("GLEMI admin initialization failed:", err);
+  const login=el("loginFriw");
+  if(login) login.classList.remove("hidden");
+  const errorBox=el("loginError");
+  if(errorBox) errorBox.textContent="The admin panel could not be loaded. Please refresh the page and try again.";
+});
+
 })();

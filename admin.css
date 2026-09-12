@@ -7,3 +7,5 @@
 .create-admin-grid input{width:100%;border:1px solid #d0d5dd;border-radius:12px;padding:12px 14px;font:inherit}
 .create-admin-grid .primary{grid-column:1/-1}
 @media(max-width:650px){.create-admin-grid{grid-template-columns:1fr}}
+
+.account-role{display:inline-flex;margin-top:9px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900;letter-spacing:.02em}.account-role.owner{background:#eef4ff;color:#1849a9}.account-role.admin{background:#ecfdf3;color:#027a48}
