@@ -58,7 +58,7 @@ resetForm.addEventListener('submit',async e=>{
 el('logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
 document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>openFriw(b.dataset.view));
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openFriw(b.dataset.go));
-function openFriw(id){document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x.dataset.view===id));document.querySelectorAll('.panel-view').forEach(x=>x.classList.toggle('active',x.id===id));el('pageTitle').textContent=({dashboard:'Dashboard',appointments:'Appointments',schedule:'Calendario',pricing:'Pricing',content:'Website',users:'Users'})[id]||id}
+function openFriw(id){document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x.dataset.view===id));document.querySelectorAll('.panel-view').forEach(x=>x.classList.toggle('active',x.id===id));el('pageTitle').textContent=({dashboard:'Dashboard',appointments:'Appointments',schedule:'Calendario',pricing:'Pricing',content:'Website',users:'Users'})[id]||id;if(id==='content')setTimeout(initWebsiteEditor,0)}
 async function loadAll(){
  el('roleBadge').textContent=profile.role==='owner'?'Owner':'Admin';el('currentUserName').textContent=profile.display_name||profile.email;el('currentUserRole').textContent=profile.role==='owner'?'Propietario':'Administrador';
  const [a,s,p,c]=await Promise.all([sb.from('appointments').select('*').order('appointment_date'),sb.from('schedule_settings').select('*'),sb.from('pricing_settings').select('*').order('id'),sb.from('site_settings').select('*')]);
@@ -101,6 +101,82 @@ async function renderUsers(){
     await renderUsers();
   };
 }
+
+
+// --- Visual website editor ---
+let selectedCmsElement=null;
+const websitePages=new Set(['index.html','residential.html','commercial.html','post-construction.html','deep.html','professionals.html']);
+function currentWebsitePage(){return el('websitePageSelect')?.value||'index.html'}
+function previewUrl(page=currentWebsitePage()){
+  const u=new URL(page,window.location.href);u.searchParams.set('glemi_editor','1');u.searchParams.set('_t',Date.now());return u.href
+}
+function publicUrl(page=currentWebsitePage()){return new URL(page,window.location.href).href}
+function initWebsiteEditor(){
+  const frame=el('websitePreview'); if(!frame) return;
+  frame.src=previewUrl();
+  el('websiteOpenPublic').href=publicUrl();
+}
+function clearElementEditor(){
+  selectedCmsElement=null;
+  el('selectedElementTitle').textContent='Nothing selected';
+  el('selectedElementHelp').textContent='Tap any highlighted text, button, form field, or image inside the preview.';
+  el('editorTextFields').classList.add('hidden');el('editorImageFields').classList.add('hidden');el('elementEditorActions').classList.add('hidden');el('elementEditorStatus').textContent='';
+}
+if(el('websitePageSelect')) el('websitePageSelect').onchange=()=>{clearElementEditor();initWebsiteEditor()};
+if(el('websiteRefreshBtn')) el('websiteRefreshBtn').onclick=()=>initWebsiteEditor();
+window.addEventListener('message',e=>{
+  if(e.origin!==location.origin||e.data?.source!=='glemi-cms'||e.data.action!=='select') return;
+  const d=e.data;if(!websitePages.has(d.page))return;
+  selectedCmsElement=d;
+  el('selectedElementTitle').textContent=`${d.tag.toUpperCase()} · ${d.type}`;
+  el('selectedElementHelp').textContent=`Page: ${d.page}`;
+  el('elementEditorActions').classList.remove('hidden');el('elementEditorStatus').textContent='';
+  if(d.type==='image'){
+    el('editorTextFields').classList.add('hidden');el('editorImageFields').classList.remove('hidden');
+    el('editorImagePreview').src=d.value||'';el('editorImageAlt').value=d.extra||'';el('editorImageFile').value='';
+  }else{
+    el('editorImageFields').classList.add('hidden');el('editorTextFields').classList.remove('hidden');
+    el('editorValueLabel').firstChild.textContent=d.type==='placeholder'?'Placeholder':'Text';
+    el('editorValue').value=d.value||'';
+    const isLink=d.type==='link';el('editorExtraLabel').classList.toggle('hidden',!isLink);el('editorExtra').value=isLink?(d.extra||''):'';
+  }
+});
+async function saveCmsRow(row){
+  const {error}=await sb.from('site_content').upsert(row,{onConflict:'page,element_key'});if(error)throw error;
+}
+if(el('saveElementBtn')) el('saveElementBtn').onclick=async()=>{
+  if(!selectedCmsElement)return;
+  const btn=el('saveElementBtn'),status=el('elementEditorStatus');btn.disabled=true;btn.textContent='Saving…';status.textContent='';
+  try{
+    const d=selectedCmsElement;let value='',extra='';
+    if(d.type==='image'){
+      extra=el('editorImageAlt').value.trim();
+      const file=el('editorImageFile').files?.[0];
+      if(file){
+        const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'-');
+        const path=`website/${Date.now()}-${safe}`;
+        const {error:upErr}=await sb.storage.from('site-media').upload(path,file,{upsert:false,contentType:file.type||undefined});if(upErr)throw upErr;
+        const {data:pub}=sb.storage.from('site-media').getPublicUrl(path);value=pub.publicUrl;
+      }else value=d.value;
+    }else{
+      value=el('editorValue').value;extra=d.type==='link'?el('editorExtra').value.trim():'';
+    }
+    await saveCmsRow({page:d.page,element_key:d.key,content_type:d.type,value,extra_value:extra,updated_by:me.id,updated_at:new Date().toISOString()});
+    status.textContent='Saved. The public website is updated.';
+    selectedCmsElement={...d,value,extra};
+    if(d.type==='image')el('editorImagePreview').src=value;
+    el('websitePreview').contentWindow?.postMessage({source:'glemi-admin',action:'refresh'},location.origin);
+    setTimeout(()=>initWebsiteEditor(),350);
+  }catch(err){status.textContent=err.message||'Could not save the change.';status.classList.add('error')}
+  finally{btn.disabled=false;btn.textContent='Save change'}
+};
+if(el('resetElementBtn')) el('resetElementBtn').onclick=async()=>{
+  if(!selectedCmsElement)return;
+  const d=selectedCmsElement;
+  const {error}=await sb.from('site_content').delete().eq('page',d.page).eq('element_key',d.key);
+  if(error){el('elementEditorStatus').textContent=error.message;return}
+  clearElementEditor();initWebsiteEditor();
+};
 
 init().catch((err)=>{
   console.error("GLEMI admin initialization failed:", err);

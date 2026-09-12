@@ -95,15 +95,50 @@
           </div>
         </section>
 
-        <section id="content" class="panel-view">
-          <div class="card">
-            <div class="card-head"><div><p class="eyebrow">CONTENT</p><h3>Editable text</h3></div><button id="saveContentBtn" class="primary small">Save</button></div>
-            <div class="content-grid">
-              <label>Main title<input id="contentHeroTitle"></label>
-              <label>Subtitle<textarea id="contentHeroSubtitle"></textarea></label>
-              <label>Correo de contacto<input id="contentEmail" type="email"></label>
-              <label>Estimate note<textarea id="contentQuoteNote"></textarea></label>
+        <section id="content" class="panel-view website-editor-view">
+          <div class="website-toolbar card">
+            <div>
+              <p class="eyebrow">VISUAL WEBSITE EDITOR</p>
+              <h3>Edit the real website</h3>
+              <p class="muted">Open any page, then tap text, buttons, fields, or images to edit them. Changes are saved to Supabase and appear on the public website.</p>
             </div>
+            <div class="website-toolbar-actions">
+              <select id="websitePageSelect">
+                <option value="index.html">Home</option>
+                <option value="residential.html">Residential</option>
+                <option value="commercial.html">Commercial</option>
+                <option value="post-construction.html">Post-Construction</option>
+                <option value="deep.html">Deep Cleaning</option>
+                <option value="professionals.html">Professionals</option>
+              </select>
+              <button id="websiteRefreshBtn" class="secondary small" type="button">Refresh preview</button>
+              <a id="websiteOpenPublic" class="secondary small editor-link-btn" target="_blank" rel="noopener">Open public page</a>
+            </div>
+          </div>
+          <div class="visual-editor-layout">
+            <div class="site-preview-card card">
+              <div class="preview-bar"><span>Live preview · tap an element to edit</span><div class="preview-dots"><i></i><i></i><i></i></div></div>
+              <iframe id="websitePreview" title="GLEMI website visual editor"></iframe>
+            </div>
+            <aside class="element-editor card" id="elementEditor">
+              <p class="eyebrow">SELECTED ELEMENT</p>
+              <h3 id="selectedElementTitle">Nothing selected</h3>
+              <p id="selectedElementHelp" class="muted">Tap any highlighted text, button, form field, or image inside the preview.</p>
+              <div id="editorTextFields" class="hidden">
+                <label id="editorValueLabel">Text<textarea id="editorValue" rows="5"></textarea></label>
+                <label id="editorExtraLabel" class="hidden">Link URL<input id="editorExtra" type="text"></label>
+              </div>
+              <div id="editorImageFields" class="hidden">
+                <div class="selected-image-preview"><img id="editorImagePreview" alt="Selected image"></div>
+                <label>Replace image<input id="editorImageFile" type="file" accept="image/*"></label>
+                <label>Alternative text<input id="editorImageAlt" type="text"></label>
+              </div>
+              <div id="elementEditorActions" class="editor-actions hidden">
+                <button id="saveElementBtn" class="primary" type="button">Save change</button>
+                <button id="resetElementBtn" class="secondary" type="button">Restore original</button>
+              </div>
+              <p id="elementEditorStatus" class="status-text"></p>
+            </aside>
           </div>
         </section>
 
