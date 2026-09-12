@@ -32,6 +32,29 @@ el('loginForm').addEventListener('submit',async e=>{
  if(!profile?.active){await sb.auth.signOut();el('loginError').textContent='User does not have access.';return}
  show('appFriw');await loadAll();
 });
+const allowedAdminEmails=['glemiservices@gmail.com','baltazaranaya@outlook.com'];
+const forgotBtn=el('forgotPasswordBtn'), resetForm=el('resetForm'), loginForm=el('loginForm');
+function resetMessage(message,isError=false){const n=el('resetStatus');n.textContent=message||'';n.className='status-text'+(isError?' error':' success')}
+forgotBtn.onclick=()=>{
+  el('loginError').textContent=''; resetMessage('');
+  const current=el('loginEmail').value.trim(); if(current) el('resetEmail').value=current;
+  loginForm.classList.add('hidden'); forgotBtn.classList.add('hidden'); resetForm.classList.remove('hidden');
+};
+el('backToLoginBtn').onclick=()=>{resetForm.classList.add('hidden');forgotBtn.classList.remove('hidden');loginForm.classList.remove('hidden');resetMessage('')};
+resetForm.addEventListener('submit',async e=>{
+  e.preventDefault(); resetMessage('');
+  const email=el('resetEmail').value.trim().toLowerCase();
+  if(!allowedAdminEmails.includes(email)){resetMessage('This email is not authorized for the GLEMI admin panel.',true);return}
+  const btn=el('sendResetBtn'); btn.disabled=true; btn.textContent='Sending…';
+  const redirectTo=new URL('set-password.html',window.location.href).href;
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});
+  btn.disabled=false; btn.textContent='Send reset link';
+  if(error){
+    const msg=(error.message||'').toLowerCase();
+    resetMessage(msg.includes('rate limit')?'Too many emails were requested. Please wait a while and try again.':error.message,true);return
+  }
+  resetMessage('Password reset email sent. Open the link in your email to create a new password.');
+});
 el('logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
 document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>openFriw(b.dataset.view));
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openFriw(b.dataset.go));

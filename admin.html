@@ -20,6 +20,14 @@
           <input id="loginPassword" type="password" placeholder="Password" required>
           <button class="primary" type="submit">Sign In</button>
         </form>
+        <button id="forgotPasswordBtn" class="forgot-link" type="button">Forgot password?</button>
+        <form id="resetForm" class="auth-form hidden" autocomplete="off">
+          <p class="muted reset-help">Enter your GLEMI admin email and we’ll send you a secure password-reset link.</p>
+          <input id="resetEmail" type="email" placeholder="Email address" required>
+          <button id="sendResetBtn" class="primary" type="submit">Send reset link</button>
+          <button id="backToLoginBtn" class="ghost" type="button">Back to Sign In</button>
+        </form>
+        <p id="resetStatus" class="status-text"></p>
         <p id="loginError" class="error"></p>
       </div>
     </section>

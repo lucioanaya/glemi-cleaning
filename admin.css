@@ -9,3 +9,11 @@
 @media(max-width:650px){.create-admin-grid{grid-template-columns:1fr}}
 
 .account-role{display:inline-flex;margin-top:9px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900;letter-spacing:.02em}.account-role.owner{background:#eef4ff;color:#1849a9}.account-role.admin{background:#ecfdf3;color:#027a48}
+
+/* Password recovery */
+.forgot-link{display:block;margin:14px auto 2px;border:0;background:transparent;color:#2563eb;font:inherit;font-weight:700;cursor:pointer;padding:8px 12px}
+.forgot-link:hover{text-decoration:underline}
+.reset-help{margin:0 0 4px}
+.status-text{margin:14px 0 0;line-height:1.45}
+.status-text.success{color:#16794a}
+.status-text.error{color:#d23b2d}
