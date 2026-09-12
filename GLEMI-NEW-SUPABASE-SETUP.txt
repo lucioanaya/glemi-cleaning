@@ -1,0 +1,25 @@
+GLEMI — NEW SUPABASE CONNECTION
+
+The website in this ZIP now points to:
+https://prsmnnqxzjfkcsoqzrdv.supabase.co
+
+1. Upload/deploy this ZIP to the GLEMI website.
+2. In this Supabase project, open SQL Editor and run GLEMI-new-supabase-schema.sql.
+3. Go to Authentication > Users and create/invite:
+   Glemiservices@gmail.com
+   baltazaranaya@outlook.com
+4. After both users exist, copy each UID and run:
+
+insert into public.profiles(id,email,display_name,role,active) values
+('<YOLANDA_UID>','Glemiservices@gmail.com','Yolanda','owner',true)
+on conflict (id) do update set email=excluded.email,display_name=excluded.display_name,role='owner',active=true;
+
+insert into public.profiles(id,email,display_name,role,active) values
+('<BALTAZAR_UID>','baltazaranaya@outlook.com','Baltazar','admin',true)
+on conflict (id) do update set email=excluded.email,display_name=excluded.display_name,role='admin',active=true;
+
+5. Authentication > URL Configuration:
+Site URL: https://glemi-cleaning.vercel.app/
+Redirect URL: https://glemi-cleaning.vercel.app/set-password.html
+
+IMPORTANT: Never put a secret/service_role key in the website.
