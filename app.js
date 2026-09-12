@@ -18,7 +18,7 @@ if(bookingForm){
     {id:'bedroom',label:'Bedroom',types:[['regular','Regular'],['large','Large']]},
     {id:'living',label:'Living Room',types:[['regular','Regular'],['large','Large']]}
   ];
-  const quoteRules={
+  let quoteRules={
     kitchen:{
       regular:{regular:67.50,deep:180},
       large:{regular:135,deep:225}
@@ -90,6 +90,19 @@ if(bookingForm){
   
   const glemiSb=(window.supabase&&window.GLEMI_SUPABASE)?window.supabase.createClient(window.GLEMI_SUPABASE.url,window.GLEMI_SUPABASE.key):null;
   const discountTotal=(total,percent)=>round(total*(1-(percent||0)/100));
+
+  async function loadRemotePricing(){
+    if(!glemiSb)return;
+    const {data,error}=await glemiSb.from('pricing_settings').select('room,room_type,regular_cad,deep_cad');
+    if(error||!Array.isArray(data))return;
+    for(const row of data){
+      const room=String(row.room||'').toLowerCase();
+      const type=String(row.room_type||'').toLowerCase();
+      if(quoteRules[room]&&quoteRules[room][type]){
+        quoteRules[room][type]={regular:Number(row.regular_cad)||0,deep:Number(row.deep_cad)||0};
+      }
+    }
+  }
 
   async function verifyPromo(showToast=true){
     const input=document.getElementById('promoCode'),msg=document.getElementById('promoMessage');
@@ -311,5 +324,5 @@ function calculateQuote(){
   });
   document.getElementById('modalClose').addEventListener('click',()=>document.getElementById('modal').classList.remove('show'));
   document.getElementById('modalDone').addEventListener('click',()=>document.getElementById('modal').classList.remove('show'));
-  renderRooms();setStep(1);
+  renderRooms();loadRemotePricing();setStep(1);
 }
