@@ -77,8 +77,27 @@ function renderSchedule(){const labels={Mon:'Monday',Tue:'Tuesday',Wed:'Wednesda
 el('saveScheduleBtn').onclick=async()=>{for(const k of Object.keys(schedule)){await sb.from('schedule_settings').update({enabled:document.querySelector(`[data-day-enabled="${k}"]`).checked,start_time:document.querySelector(`[data-day-start="${k}"]`).value,end_time:document.querySelector(`[data-day-end="${k}"]`).value}).eq('day_key',k)}alert('Schedule saved.');await loadAll()};
 function renderPricing(){const grouped={};pricing.forEach(x=>(grouped[x.room]??=[]).push(x));el('pricingGrid').innerHTML=Object.entries(grouped).map(([room,rows])=>`<div class="price-card"><h4>${room}</h4>${rows.map(x=>`<div class="price-row"><span>${x.room_type}</span><input type="number" step=".01" data-reg="${x.id}" value="${x.regular_cad}"><input type="number" step=".01" data-deep="${x.id}" value="${x.deep_cad}"></div>`).join('')}</div>`).join('')}
 el('savePricingBtn').onclick=async()=>{for(const x of pricing){await sb.from('pricing_settings').update({regular_cad:Number(document.querySelector(`[data-reg="${x.id}"]`).value),deep_cad:Number(document.querySelector(`[data-deep="${x.id}"]`).value)}).eq('id',x.id)}alert('Pricing guardados.');await loadAll()};
-function renderContent(){el('contentHeroTitle').value=settings.hero_title||'';el('contentHeroSubtitle').value=settings.hero_subtitle||'';el('contentEmail').value=settings.contact_email||'';el('contentQuoteNote').value=settings.quote_note||''}
-el('saveContentBtn').onclick=async()=>{const vals={hero_title:el('contentHeroTitle').value,hero_subtitle:el('contentHeroSubtitle').value,contact_email:el('contentEmail').value,quote_note:el('contentQuoteNote').value};for(const [key,value] of Object.entries(vals))await sb.from('site_settings').upsert({key,value});alert('Contenido guardado.');await loadAll()};
+function renderContent(){
+  // Legacy form fields were replaced by the visual Website editor.
+  // Keep this hook safe so loading the dashboard does not fail when those fields are absent.
+  const heroTitle=el('contentHeroTitle'),heroSubtitle=el('contentHeroSubtitle'),contactEmail=el('contentEmail'),quoteNote=el('contentQuoteNote');
+  if(heroTitle) heroTitle.value=settings.hero_title||'';
+  if(heroSubtitle) heroSubtitle.value=settings.hero_subtitle||'';
+  if(contactEmail) contactEmail.value=settings.contact_email||'';
+  if(quoteNote) quoteNote.value=settings.quote_note||'';
+}
+const saveContentBtn=el('saveContentBtn');
+if(saveContentBtn) saveContentBtn.onclick=async()=>{
+  const vals={
+    hero_title:el('contentHeroTitle')?.value||'',
+    hero_subtitle:el('contentHeroSubtitle')?.value||'',
+    contact_email:el('contentEmail')?.value||'',
+    quote_note:el('contentQuoteNote')?.value||''
+  };
+  for(const [key,value] of Object.entries(vals)) await sb.from('site_settings').upsert({key,value});
+  alert('Contenido guardado.');
+  await loadAll();
+};
 async function renderUsers(){
   const {data:users}=await sb.from('profiles').select('*').order('created_at');
   const list=users||[];
