@@ -128,6 +128,23 @@
   font-size:clamp(21px, 3.8vw, 27px) !important;
 }
 </style>
+  <script>
+    // Supabase invitations/password recovery can return to the site root.
+    // Send those auth callbacks to the dedicated password setup screen.
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var hash = new URLSearchParams((window.location.hash || '').replace(/^#/, ''));
+      var type = params.get('type') || hash.get('type');
+      var hasAuthCallback =
+        type === 'invite' || type === 'recovery' ||
+        params.has('code') ||
+        hash.has('access_token') || hash.has('refresh_token');
+
+      if (hasAuthCallback && !window.location.pathname.endsWith('/set-password.html')) {
+        window.location.replace('set-password.html' + window.location.search + window.location.hash);
+      }
+    })();
+  </script>
 </head>
 <body>
   <header class="header">
