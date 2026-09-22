@@ -13,15 +13,7 @@ a.btn{text-decoration:none}.service-link{display:inline-flex;margin-top:8px;colo
 @media(max-width:900px){.subpage-hero,.commercial-layout{grid-template-columns:1fr}.subpage-icon{width:160px;height:160px;font-size:62px}.subpage-hero h1{font-size:44px}}
 @media(max-width:650px){.subpage-hero{padding-top:40px}.subpage-hero h1{font-size:38px;letter-spacing:-1.7px}.subpage-icon{width:120px;height:120px;font-size:48px}.post-contact-card{padding:28px 20px}.post-contact-card h2{font-size:29px}.email-cta{margin:0 0 10px 0;width:100%}.post-contact-card .btn-secondary{width:100%}}
 
-/* Quote result modal: keep the calculated price centered in the viewport */
-body.quote-modal-open{overflow:hidden}
-.form-step[data-step="2"].active{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(16,24,40,.62);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
-.form-step[data-step="2"].active>.ai-loading,.form-step[data-step="2"].active>.ai-result{width:min(520px,100%);max-height:calc(100dvh - 40px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 24px 80px rgba(16,24,40,.28)}
-.form-step[data-step="2"].active>.ai-loading{min-height:260px}
-.form-step[data-step="2"].active .ai-price{text-align:center}
-.form-step[data-step="2"].active .ai-price strong{font-size:clamp(32px,9vw,46px)}
-@media(max-width:650px){.form-step[data-step="2"].active{padding:14px}.form-step[data-step="2"].active>.ai-loading,.form-step[data-step="2"].active>.ai-result{max-height:calc(100dvh - 28px);padding:20px;border-radius:20px}.form-step[data-step="2"].active .step-actions{position:sticky;bottom:-20px;background:#fff;padding-top:12px;padding-bottom:4px}}
-
+/* Multi-step residential quote renders inline as normal page content. */
 /* Brand logo replacements for visual placeholders */
 .brand-mini-card{padding:10px 14px;min-width:150px;align-items:center;justify-content:center}
 .brand-mini-card img{display:block;width:138px;max-height:66px;object-fit:contain}
@@ -250,3 +242,24 @@ body.quote-modal-open{overflow:hidden}
   background:#f7fbff;
 }
 .day:disabled{cursor:not-allowed}
+
+/* Residential 3-step flow responsive fix */
+.quote-layout{grid-template-columns:minmax(0,1fr)!important;max-width:820px!important}
+.quote-layout>.booking-card{width:100%;min-width:0}
+.quote-layout>.quote-guide{display:none}
+.quote-layout>.residential-promo-section{grid-column:1;width:100%}
+.form-step[data-step="2"].active,.form-step[data-step="3"].active{position:static!important;inset:auto!important;z-index:auto!important;display:block!important;padding:0!important;background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.calendar-section,.calendar-header,.calendar-week,.calendar,.time-section{width:100%;max-width:100%;min-width:0}
+@media(max-width:650px){
+ .section.process{padding-left:16px!important;padding-right:16px!important}
+ .booking-card{padding:20px 16px!important}
+ .field-grid{grid-template-columns:1fr!important}
+ .property-grid{grid-template-columns:1fr!important}
+ .property-choice{padding:14px 12px!important}
+ .property-choice>span{font-size:12px!important}
+ .unit-input{font-size:12px!important;padding:10px!important}
+ .calendar-week,.calendar{gap:4px!important}
+ .day{min-height:42px!important;padding:0!important}
+ .legend{flex-wrap:wrap!important}
+ .step-actions{position:static!important;background:transparent!important;padding:0!important}
+}
