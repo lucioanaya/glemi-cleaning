@@ -25,7 +25,14 @@ if(bookingForm){
  function setStep(n){state.step=n;steps.forEach(x=>x.classList.toggle('active',+x.dataset.step===n));progress.forEach((x,i)=>x.classList.toggle('active',i<n));document.getElementById('stepBadge').textContent=`STEP ${n} OF 3`;document.getElementById('stepTitle').textContent=n===1?'Choose what you need':n===2?'Your details':'Review your quote';if(n===2)renderCalendar();if(n===3)renderReview();document.querySelector('#cotizar')?.scrollIntoView({behavior:'smooth'})}
  document.getElementById('generateQuote').onclick=()=>{if(!roomCatalog.some(r=>count(r.id)>0)){toast('Select at least one area.');return}state.quote=calculate();setStep(2)};
  document.querySelectorAll('.back').forEach(b=>b.onclick=()=>setStep(state.step-1));
- document.querySelectorAll('input[name=propertyType]').forEach(r=>r.onchange=()=>{document.getElementById('townhouseNumber').disabled=r.value!=='Town house';document.getElementById('apartmentNumber').disabled=r.value!=='Apartment'});
+ document.querySelectorAll('input[name=propertyType]').forEach(r=>r.onchange=()=>{
+  const town=document.getElementById('townhouseNumber'), apt=document.getElementById('apartmentNumber');
+  town.disabled=r.value!=='Town house'; apt.disabled=r.value!=='Apartment';
+  if(r.checked && (r.value==='Town house'||r.value==='Apartment')){
+    const target=r.value==='Town house'?town:apt;
+    setTimeout(()=>{target.focus({preventScroll:true});target.click();},60);
+  }
+});
  document.querySelectorAll('input[name=parking]').forEach(r=>r.onchange=()=>document.getElementById('parkingDetailsWrap').classList.toggle('hidden',r.value!=='No'));
  document.querySelectorAll('input[name=pets]').forEach(r=>r.onchange=()=>document.getElementById('petDetailsWrap').classList.toggle('hidden',r.value!=='Yes'));
  document.querySelectorAll('input[name=allergies]').forEach(r=>r.onchange=()=>document.getElementById('allergyDetailsWrap').classList.toggle('hidden',r.value!=='Yes'));
