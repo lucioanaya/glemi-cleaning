@@ -44,12 +44,24 @@ footer .glemi-footer-logo,
 }
 
 
-/* Compact clean version of the full GLEMI logo */
-.footer .footer-logo, footer .footer-logo{
-  width:140px!important;height:auto!important;background:transparent!important;overflow:visible!important;
+/* Square GLEMI footer logo */
+.footer .footer-logo,
+footer .footer-logo{
+  display:block !important;
+  width:140px !important;
+  height:140px !important;
+  background:#fff !important;
+  border-radius:10px !important;
+  overflow:hidden !important;
 }
-.footer .footer-logo img, footer .footer-logo img{
-  width:140px!important;max-width:140px!important;height:auto!important;
-  display:block!important;object-fit:contain!important;filter:none!important;
-  opacity:1!important;background:transparent!important;
+.footer .footer-logo img,
+footer .footer-logo img{
+  display:block !important;
+  width:140px !important;
+  height:140px !important;
+  max-width:140px !important;
+  object-fit:contain !important;
+  background:#fff !important;
+  filter:none !important;
+  opacity:1 !important;
 }
