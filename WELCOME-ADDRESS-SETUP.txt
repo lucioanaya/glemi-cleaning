@@ -1,0 +1,13 @@
+WELCOME 10% — address/unit protection
+
+1. Open Supabase > SQL Editor.
+2. Paste and run GLEMI-WELCOME-ADDRESS-SETUP.sql once.
+3. Deploy this ZIP to Vercel/GitHub.
+
+Rules:
+- House: WELCOME can be redeemed once for that address.
+- Town house: address + house/unit number is unique.
+- Apartment: building address + apartment number is unique.
+- Different apartments in the same building can each receive the discount once.
+- Eligibility is checked in Supabase when APPLY is pressed and checked again at FINISH.
+- The browser cannot bypass the one-use rule by clearing cookies or using another device.

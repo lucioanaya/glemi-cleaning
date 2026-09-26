@@ -261,63 +261,6 @@ body[data-page="residential"] .residential-promo-section img{
   <script src="supabase-config.js"></script>
   <script src="cms.js"></script>
 
-<script>
-(function(){
-  const VALID_PROMO = 'WELCOME';
-  const DISCOUNT = 0.10;
-  let promoApplied = false;
 
-  function moneyNumber(text){
-    const n = parseFloat(String(text || '').replace(/[^0-9.]/g,''));
-    return Number.isFinite(n) ? n : null;
-  }
-
-  function promoMessage(text, ok){
-    const el=document.getElementById('promoCodeMessage');
-    if(!el) return;
-    el.textContent=text;
-    el.className='promo-code-message ' + (ok ? 'success' : 'error');
-  }
-
-  function updateDiscountedTotals(){
-    if(!promoApplied) return;
-    const candidates=[...document.querySelectorAll('[id*="total" i], [class*="total" i], [class*="price" i]')];
-    candidates.forEach(el=>{
-      if(el.closest('.promo-code-box')) return;
-      const txt=el.textContent || '';
-      if(!/\$\s*\d/.test(txt)) return;
-      if(!el.dataset.prePromoValue){
-        const n=moneyNumber(txt);
-        if(n===null) return;
-        el.dataset.prePromoValue=String(n);
-      }
-      const base=parseFloat(el.dataset.prePromoValue);
-      const discounted=base*(1-DISCOUNT);
-      el.textContent='$'+discounted.toFixed(2)+' CAD';
-    });
-  }
-
-  document.addEventListener('click', function(e){
-    if(e.target && e.target.id==='applyPromoCode'){
-      const input=document.getElementById('promoCode');
-      const code=(input?.value || '').trim().toUpperCase();
-      if(code===VALID_PROMO){
-        promoApplied=true;
-        window.glemiPromo={code:VALID_PROMO,discountPercent:10};
-        promoMessage('WELCOME applied — 10% discount.', true);
-        updateDiscountedTotals();
-      }else{
-        promoApplied=false;
-        window.glemiPromo=null;
-        promoMessage('Invalid promotional code.', false);
-      }
-    }
-  });
-
-  // Reapply when the quote UI changes steps/recalculates.
-  const observer=new MutationObserver(()=>{ if(promoApplied) requestAnimationFrame(updateDiscountedTotals); });
-  observer.observe(document.body,{subtree:true,childList:true,characterData:true});
-})();
-</script>
 
 </body></html>
