@@ -284,6 +284,22 @@ body[data-page="residential"] .residential-promo-section img{
     try { mode = type; } catch (e) {}
     window.__glemiActiveCleaningType = type;
 
+    /* Deep, Move In/Out and Airbnb intentionally share the Deep price table.
+       Regular keeps the original Regular prices. */
+    window.__glemiPriceMode = (type === 'regular') ? 'regular' : 'deep';
+
+    if (typeof applySpecialTotal === 'function') {
+      applySpecialTotal();
+    }
+
+    /* Trigger the existing room calculator too, so already-selected rooms
+       immediately display/recalculate with the newly selected category. */
+    document.querySelectorAll(
+      '.room-card input, .room-card select, [data-room] input, [data-room] select, .cleaning-room input, .cleaning-room select'
+    ).forEach(function(el) {
+      el.dispatchEvent(new Event('change', {bubbles:true}));
+    });
+
     if (typeof applySpecialTotal === 'function') {
       applySpecialTotal();
     }
