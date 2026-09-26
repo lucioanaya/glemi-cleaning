@@ -354,3 +354,45 @@ footer .footer-logo img{
   filter:none!important;
   opacity:1!important;
 }
+
+
+/* IMPORTANT PAYMENT NOTICE — approved blue design */
+.payment-security,
+.payment-notice,
+.security-note,
+.payment-security-note {
+  background: #eef7ff !important;
+  border: 1.5px solid #9dcbff !important;
+  border-radius: 16px !important;
+  color: #0b2f70 !important;
+  padding: 20px 18px !important;
+  font-size: 18px !important;
+  line-height: 1.45 !important;
+}
+.payment-security strong,
+.payment-notice strong,
+.security-note strong,
+.payment-security-note strong {
+  color: #1267e8 !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  letter-spacing: .1px !important;
+}
+
+
+.payment-blue-notice{
+  background:#eef7ff!important;
+  border:1.5px solid #9dcbff!important;
+  border-radius:16px!important;
+  color:#0b2f70!important;
+  padding:20px 18px!important;
+  font-size:18px!important;
+  line-height:1.45!important;
+}
+.payment-blue-notice strong{
+  color:#1267e8!important;
+  font-size:19px!important;
+  font-weight:800!important;
+  line-height:1.25!important;
+}
