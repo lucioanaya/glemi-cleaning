@@ -238,6 +238,16 @@ body[data-page="residential"] .residential-promo-section img{
 <div class="calendar-section"><label class="form-label">Select a date and time *</label><div class="calendar-header"><button type="button" id="prevMonth">‹</button><strong id="monthTitle"></strong><button type="button" id="nextMonth">›</button></div><div class="calendar-week"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="calendar" id="calendar"></div><div class="legend"><span><i class="available"></i> Available</span><span><i class="limited"></i> Limited availability</span><span><i class="blocked"></i> Unavailable</span></div><div class="time-section"><label>Available times</label><div id="times" class="time-grid"><span class="empty">Select an available day</span></div></div></div>
 <div class="step-actions"><button type="button" class="btn btn-secondary back">← Back</button><button type="button" class="btn btn-primary" id="reviewQuote">Get a free quote →</button></div></div>
 <div class="form-step" data-step="3"><h3>Review your quote</h3><p class="quote-note">Review your selections before finishing.</p><div class="review-section"><div class="review-heading"><strong>Selected areas</strong><button type="button" class="text-btn" id="editAreas">Edit</button></div><div id="selectedAreas"></div></div><div class="review-section"><div class="review-heading"><strong>Property details</strong><button type="button" class="text-btn" id="editDetails">Edit</button></div><div id="propertySummary"></div></div><div class="final-price-card"><span>Estimated total</span><strong id="finalPriceLarge">—</strong><small>Final price may be adjusted based on actual conditions.</small></div><div class="question-block"><strong>Payment method *</strong><div class="payment-grid"><label class="payment-choice"><input type="radio" name="payment" value="Cash" required><b>💵</b><span>Cash</span></label><label class="payment-choice"><input type="radio" name="payment" value="Card"><b>💳</b><span>Card</span></label></div></div><div class="payment-blue-notice security-note">🔒 <span><strong>IMPORTANT PAYMENT NOTICE</strong><br>For your security, no payment is required in advance. Payment will be collected at the property.</span></div><div class="step-actions"><button type="button" class="btn btn-secondary back">← Back</button><button type="submit" class="btn btn-primary">FINISH</button></div></div>
+
+<div class="promo-code-box">
+  <label for="promoCode"><strong>Promotional code</strong></label>
+  <div class="promo-code-row">
+    <input id="promoCode" type="text" autocomplete="off" placeholder="Enter promo code">
+    <button type="button" id="applyPromoCode">APPLY</button>
+  </div>
+  <div id="promoCodeMessage" class="promo-code-message" aria-live="polite"></div>
+</div>
+
 </form></div>
 <div class="residential-promo-section"><img src="residential-design-your-cleaning.jpeg" alt="GLEMI Design Your Cleaning"></div><aside class="modify-card quote-guide"><span class="eyebrow">RESIDENTIAL ONLY</span><h2>Everything here is for your home</h2><p>You will not see commercial or post-construction options in this flow.</p><a class="btn btn-secondary full" href="index.html#servicios">← View other services</a></aside></div>
 </section>
@@ -250,4 +260,64 @@ body[data-page="residential"] .residential-promo-section img{
 
   <script src="supabase-config.js"></script>
   <script src="cms.js"></script>
+
+<script>
+(function(){
+  const VALID_PROMO = 'WELCOME';
+  const DISCOUNT = 0.10;
+  let promoApplied = false;
+
+  function moneyNumber(text){
+    const n = parseFloat(String(text || '').replace(/[^0-9.]/g,''));
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function promoMessage(text, ok){
+    const el=document.getElementById('promoCodeMessage');
+    if(!el) return;
+    el.textContent=text;
+    el.className='promo-code-message ' + (ok ? 'success' : 'error');
+  }
+
+  function updateDiscountedTotals(){
+    if(!promoApplied) return;
+    const candidates=[...document.querySelectorAll('[id*="total" i], [class*="total" i], [class*="price" i]')];
+    candidates.forEach(el=>{
+      if(el.closest('.promo-code-box')) return;
+      const txt=el.textContent || '';
+      if(!/\$\s*\d/.test(txt)) return;
+      if(!el.dataset.prePromoValue){
+        const n=moneyNumber(txt);
+        if(n===null) return;
+        el.dataset.prePromoValue=String(n);
+      }
+      const base=parseFloat(el.dataset.prePromoValue);
+      const discounted=base*(1-DISCOUNT);
+      el.textContent='$'+discounted.toFixed(2)+' CAD';
+    });
+  }
+
+  document.addEventListener('click', function(e){
+    if(e.target && e.target.id==='applyPromoCode'){
+      const input=document.getElementById('promoCode');
+      const code=(input?.value || '').trim().toUpperCase();
+      if(code===VALID_PROMO){
+        promoApplied=true;
+        window.glemiPromo={code:VALID_PROMO,discountPercent:10};
+        promoMessage('WELCOME applied — 10% discount.', true);
+        updateDiscountedTotals();
+      }else{
+        promoApplied=false;
+        window.glemiPromo=null;
+        promoMessage('Invalid promotional code.', false);
+      }
+    }
+  });
+
+  // Reapply when the quote UI changes steps/recalculates.
+  const observer=new MutationObserver(()=>{ if(promoApplied) requestAnimationFrame(updateDiscountedTotals); });
+  observer.observe(document.body,{subtree:true,childList:true,characterData:true});
+})();
+</script>
+
 </body></html>

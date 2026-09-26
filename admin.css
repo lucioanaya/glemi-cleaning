@@ -149,3 +149,14 @@ footer .footer-logo img{
   font-weight:800!important;
   line-height:1.25!important;
 }
+
+
+/* 10% promotional code */
+.promo-code-box{margin:22px 0 8px}
+.promo-code-box label{display:block;margin-bottom:9px;color:#172238;font-size:17px}
+.promo-code-row{display:flex;gap:10px}
+.promo-code-row input{min-width:0;flex:1;border:1.5px solid #d9e1ec;border-radius:12px;padding:14px 13px;font-size:16px;text-transform:uppercase}
+.promo-code-row button{border:0;border-radius:12px;padding:0 18px;background:#1769e8;color:#fff;font-weight:800;font-size:14px}
+.promo-code-message{min-height:22px;margin-top:7px;font-size:14px;font-weight:700}
+.promo-code-message.success{color:#1267e8}
+.promo-code-message.error{color:#b42318}
