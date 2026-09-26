@@ -312,3 +312,45 @@ footer .footer-logo img{
   filter:none !important;
   opacity:1 !important;
 }
+
+
+/* Final footer logo: one logo only, compact */
+.footer .footer-logo, footer .footer-logo{
+  width:115px!important;
+  height:auto!important;
+  background:transparent!important;
+  overflow:visible!important;
+}
+.footer .footer-logo img, footer .footer-logo img{
+  display:block!important;
+  width:115px!important;
+  max-width:115px!important;
+  height:auto!important;
+  object-fit:contain!important;
+  filter:none!important;
+  opacity:1!important;
+  background:transparent!important;
+}
+
+
+/* FINAL footer branding */
+.service-bottom-image{display:none!important}
+.footer .footer-logo, footer .footer-logo{
+  display:block!important;
+  width:115px!important;
+  height:115px!important;
+  background:#fff!important;
+  border-radius:10px!important;
+  padding:5px!important;
+  overflow:hidden!important;
+}
+.footer .footer-logo img, footer .footer-logo img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  object-fit:contain!important;
+  background:#fff!important;
+  filter:none!important;
+  opacity:1!important;
+}
