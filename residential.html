@@ -31,6 +31,9 @@
     margin: 0 auto !important;
   }
 }
+
+.cleaning-mode .mode-count{display:block;margin-top:4px;font-size:11px;font-weight:800;color:#68758a;min-height:14px}
+.cleaning-mode.selected .mode-count{color:#1765e8}
 </style>
 
 
@@ -225,7 +228,7 @@ body[data-page="residential"] .residential-promo-section img{
 
 <div class="booking-layout quote-layout"><div class="booking-card"><div class="booking-head"><div><span class="eyebrow">RESIDENTIAL QUOTE</span><h2 id="stepTitle">Choose what you need</h2></div><span class="secure" id="stepBadge">STEP 1 OF 3</span></div><div class="progress"><span class="active"></span><span></span><span></span></div>
 <form id="bookingForm">
-<div class="form-step active" data-step="1"><label class="cleaning-mode-title">TYPE OF CLEANING</label><div class="cleaning-mode-grid" id="cleaningModeGrid"><button type="button" class="cleaning-mode selected" data-service-type="regular">Regular</button><button type="button" class="cleaning-mode" data-service-type="deep">Deep</button><button type="button" class="cleaning-mode" data-service-type="move">Move In / Move Out</button><button type="button" class="cleaning-mode" data-service-type="airbnb">Airbnb</button></div><input type="hidden" id="cleaningType" name="cleaningType" value="Regular"><div id="roomRows" class="room-rows room-accordion-list"></div><p class="quote-note">The estimate is based on the conditions described. If the actual scope changes, the final price may be adjusted.</p><button type="button" class="btn btn-primary full" id="generateQuote">NEXT →</button></div>
+<div class="form-step active" data-step="1"><label class="cleaning-mode-title">TYPE OF CLEANING</label><div class="cleaning-mode-grid" id="cleaningModeGrid"><button type="button" class="cleaning-mode selected" data-service-type="regular">Regular<small class="mode-count" data-count-for="regular"></small></button><button type="button" class="cleaning-mode" data-service-type="deep">Deep<small class="mode-count" data-count-for="deep"></small></button><button type="button" class="cleaning-mode" data-service-type="move">Move In / Move Out<small class="mode-count" data-count-for="move"></small></button><button type="button" class="cleaning-mode" data-service-type="airbnb">Airbnb<small class="mode-count" data-count-for="airbnb"></small></button></div><input type="hidden" id="cleaningType" name="cleaningType" value="Regular"><div id="roomRows" class="room-rows room-accordion-list"></div><p class="quote-note">The estimate is based on the conditions described. If the actual scope changes, the final price may be adjusted.</p><button type="button" class="btn btn-primary full" id="generateQuote">NEXT →</button></div>
 <div class="form-step" data-step="2">
 <div class="field-grid"><label><span class="icon-label"><i class="field-icon">♙</i>Full name *</span><input required id="name" placeholder="E.g. Jane Smith"></label><label><span class="icon-label"><i class="field-icon">✉</i>Email *</span><input required id="email" type="email" placeholder="you@email.com"></label><label><span class="icon-label"><i class="field-icon">⌖</i>Address *</span><input required id="address" placeholder="Street, number, city"></label><label><span class="icon-label"><i class="field-icon">☎</i>Phone number *</span><span class="canada-phone"><span class="canada-flag">🇨🇦</span><input required id="phone" placeholder="+1 (416) 555-0123"></span></label></div>
 <label class="form-label property-label">Property type *</label><div class="property-grid"><label class="property-choice"><input type="radio" name="propertyType" value="House" required><b>⌂</b><span>House</span></label><label class="property-choice"><input type="radio" name="propertyType" value="Town house"><b>⌂⌂</b><span>Town house</span><input class="unit-input" id="townhouseNumber" type="tel" placeholder="House number" inputmode="numeric" pattern="[0-9]*" autocomplete="off" disabled></label><label class="property-choice"><input type="radio" name="propertyType" value="Apartment"><b>▦</b><span>Apartment</span><input class="unit-input" id="apartmentNumber" type="tel" placeholder="Apartment number" inputmode="numeric" pattern="[0-9]*" autocomplete="off" disabled></label></div>
@@ -248,8 +251,133 @@ body[data-page="residential"] .residential-promo-section img{
 
   <script src="supabase-config.js"></script>
   <script src="cms.js"></script>
-\n<script>\n(function(){\n const modes={regular:'Regular',deep:'Deep',move:'Move In / Move Out',airbnb:'Airbnb'};\n const special={kitchen:{regular:112.50,large:180},bedroom:{regular:67.50,large:135},bathroom:{regular:90,large:135},living:{regular:67.50,large:90}};\n let mode='regular';\n const hidden=document.getElementById('cleaningType');\n document.querySelectorAll('[data-service-type]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.serviceType==='regular'?'true':'false'));\n function qty(id){const el=document.getElementById('qty-'+id);return Math.max(0,Number(el?.textContent||0)||0)}\n function size(id){const el=document.querySelector('[data-room-size="'+id+'"]');return el?.value==='large'?'large':'regular'}\n function specialTotal(){return Object.keys(special).reduce((t,id)=>t+qty(id)*special[id][size(id)],0)}\n function cad(n){return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n)+' CAD'}\n function applySpecialTotal(){\n   if(mode==='regular') return;\n   const total=specialTotal();\n   const f=document.getElementById('finalPriceLarge'); if(f) f.textContent=cad(total);\n   const c=document.getElementById('calendarQuote'); if(c) c.textContent=cad(total);\n   const a=document.getElementById('aiTotal'); if(a) a.textContent=cad(total);\n }\n document.querySelectorAll('[data-service-type]').forEach(b=>b.addEventListener('click',()=>{\n   mode=b.dataset.serviceType; hidden.value=modes[mode];\n   document.querySelectorAll('[data-service-type]').forEach(x=>{
-     const isSelected=x===b;
-     x.classList.toggle('selected',isSelected);
-     x.setAttribute('aria-pressed',isSelected?'true':'false');
-   });\n   applySpecialTotal();\n }));\n document.getElementById('generateQuote')?.addEventListener('click',()=>setTimeout(applySpecialTotal,650));\n document.getElementById('reviewQuote')?.addEventListener('click',()=>setTimeout(()=>{applySpecialTotal();const host=document.getElementById('selectedAreas');if(host&&!host.querySelector('.cleaning-type-summary')){const d=document.createElement('div');d.className='review-line cleaning-type-summary';d.innerHTML='<strong>Type of cleaning</strong><span>'+modes[mode]+'</span>';host.prepend(d)}else if(host){host.querySelector('.cleaning-type-summary span').textContent=modes[mode]}},80));\n const obs=new MutationObserver(()=>applySpecialTotal());\n const f=document.getElementById('finalPriceLarge'); if(f) obs.observe(f,{childList:true,subtree:true});\n window.GLEMI_CLEANING_PRICING={modes,special,getSelectedType:()=>modes[mode],getSpecialTotal:specialTotal};\n})();\n</script>\n</body></html>
+\n<script>\n(function(){\n const modes={regular:'Regular',deep:'Deep',move:'Move In / Move Out',airbnb:'Airbnb'};\n const special={kitchen:{regular:112.50,large:180},bedroom:{regular:67.50,large:135},bathroom:{regular:90,large:135},living:{regular:67.50,large:90}};\n let mode='regular';\n const hidden=document.getElementById('cleaningType');\n document.querySelectorAll('[data-service-type]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.serviceType==='regular'?'true':'false'));\n function qty(id){const el=document.getElementById('qty-'+id);return Math.max(0,Number(el?.textContent||0)||0)}\n function size(id){const el=document.querySelector('[data-room-size="'+id+'"]');return el?.value==='large'?'large':'regular'}\n function specialTotal(){return Object.keys(special).reduce((t,id)=>t+qty(id)*special[id][size(id)],0)}\n function cad(n){return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n)+' CAD'}\n function applySpecialTotal(){\n   if(mode==='regular') return;\n   const total=specialTotal();\n   const f=document.getElementById('finalPriceLarge'); if(f) f.textContent=cad(total);\n   const c=document.getElementById('calendarQuote'); if(c) c.textContent=cad(total);\n   const a=document.getElementById('aiTotal'); if(a) a.textContent=cad(total);\n }\n document.querySelectorAll('[data-service-type]').forEach(b => {
+  b.addEventListener('click', function(e) {
+    e.preventDefault();
+    mode = this.dataset.serviceType;
+    hidden.value = modes[mode];
+
+    document.querySelectorAll('[data-service-type]').forEach(x => {
+      const active = x.dataset.serviceType === mode;
+      x.classList.toggle('selected', active);
+      x.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    applySpecialTotal();
+  });
+});\n document.getElementById('generateQuote')?.addEventListener('click',()=>setTimeout(applySpecialTotal,650));\n document.getElementById('reviewQuote')?.addEventListener('click',()=>setTimeout(()=>{applySpecialTotal();const host=document.getElementById('selectedAreas');if(host&&!host.querySelector('.cleaning-type-summary')){const d=document.createElement('div');d.className='review-line cleaning-type-summary';d.innerHTML='<strong>Type of cleaning</strong><span>'+modes[mode]+'</span>';host.prepend(d)}else if(host){host.querySelector('.cleaning-type-summary span').textContent=modes[mode]}},80));\n const obs=new MutationObserver(()=>applySpecialTotal());\n const f=document.getElementById('finalPriceLarge'); if(f) obs.observe(f,{childList:true,subtree:true});\n window.GLEMI_CLEANING_PRICING={modes,special,getSelectedType:()=>modes[mode],getSpecialTotal:specialTotal};\n})();\n</script>\n
+<script>
+(function(){
+  const TYPES=['regular','deep','move','airbnb'];
+  const labels={regular:'Regular',deep:'Deep',move:'Move In / Move Out',airbnb:'Airbnb'};
+  const states={regular:null,deep:null,move:null,airbnb:null};
+  let current='regular';
+
+  function roomInputs(){
+    return Array.from(document.querySelectorAll(
+      '.room-card input, .room-card select, [data-room] input, [data-room] select, .cleaning-room input, .cleaning-room select'
+    )).filter(el=>!el.closest('.cleaning-type-grid'));
+  }
+  function snapshot(){
+    const vals={};
+    roomInputs().forEach((el,i)=>{
+      vals[i]={type:el.type,value:el.value,checked:!!el.checked};
+    });
+    states[current]=vals;
+    updateCounts();
+  }
+  function restore(type){
+    const vals=states[type];
+    roomInputs().forEach((el,i)=>{
+      const v=vals&&vals[i];
+      if(!v){
+        if(el.type==='checkbox'||el.type==='radio') el.checked=false;
+        else if(el.tagName==='SELECT') el.selectedIndex=0;
+        else if(el.type==='number') el.value=0;
+        return;
+      }
+      if(el.type==='checkbox'||el.type==='radio') el.checked=v.checked;
+      else el.value=v.value;
+      el.dispatchEvent(new Event('change',{bubbles:true}));
+    });
+  }
+  function countState(st){
+    if(!st) return 0;
+    let n=0;
+    Object.values(st).forEach(v=>{
+      if(v.type==='checkbox'||v.type==='radio'){ if(v.checked)n++; }
+      else {
+        const num=Number(v.value);
+        if(Number.isFinite(num)&&num>0)n+=num;
+      }
+    });
+    return n;
+  }
+  function updateCounts(){
+    TYPES.forEach(t=>{
+      const el=document.querySelector('[data-count-for="'+t+'"]');
+      if(!el)return;
+      const n=countState(states[t]);
+      el.textContent=n ? n+' selected' : '';
+    });
+  }
+  function switchType(type){
+    if(type===current)return;
+    snapshot();
+    current=type;
+    window.__glemiActiveCleaningType=type;
+    document.querySelectorAll('[data-service-type]').forEach(b=>{
+      const on=b.dataset.serviceType===type;
+      b.classList.toggle('selected',on);
+      b.setAttribute('aria-pressed',on?'true':'false');
+    });
+    const hidden=document.getElementById('cleaningType');
+    if(hidden) hidden.value=labels[type];
+    restore(type);
+    if(typeof window.applySpecialTotal==='function') window.applySpecialTotal();
+    updateCounts();
+  }
+
+  // Capture initial Regular selections after page initialization.
+  setTimeout(()=>{ snapshot(); },0);
+
+  document.querySelectorAll('[data-service-type]').forEach(b=>{
+    // capture clicks before the older single-mode handler and prevent it from wiping state
+    b.addEventListener('click',function(e){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      switchType(this.dataset.serviceType);
+    },true);
+  });
+
+  roomInputs().forEach(el=>{
+    ['change','input'].forEach(ev=>el.addEventListener(ev,()=>{snapshot();},false));
+  });
+
+  // Expose all saved category selections for the existing final-review / submission layer.
+  window.getGlemiCleaningSelections=function(){
+    snapshot();
+    return TYPES.map(t=>({type:t,label:labels[t],state:states[t],selectedCount:countState(states[t])}))
+      .filter(x=>x.selectedCount>0);
+  };
+
+  // Add selected categories to the final review without individual prices.
+  const observer=new MutationObserver(()=>{
+    const review=document.querySelector('#reviewQuote, #quoteReview, .quote-review, .final-summary');
+    if(!review)return;
+    let box=review.querySelector('.multi-cleaning-summary');
+    if(!box){
+      box=document.createElement('div');
+      box.className='multi-cleaning-summary';
+      box.style.cssText='margin:14px 0;padding:14px;border:1px solid #dbe3ef;border-radius:14px;background:#f8fbff';
+      review.prepend(box);
+    }
+    const data=window.getGlemiCleaningSelections();
+    box.innerHTML='<strong>Selected cleaning services</strong>'+
+      (data.length?'<ul style="margin:8px 0 0;padding-left:20px">'+data.map(x=>'<li><b>'+x.label+':</b> '+x.selectedCount+' selected</li>').join('')+'</ul>':'');
+  });
+  observer.observe(document.body,{subtree:true,childList:true,attributes:true});
+})();
+</script>
+
+</body></html>
