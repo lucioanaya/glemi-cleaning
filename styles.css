@@ -263,3 +263,14 @@ a.btn{text-decoration:none}.service-link{display:inline-flex;margin-top:8px;colo
  .legend{flex-wrap:wrap!important}
  .step-actions{position:static!important;background:transparent!important;padding:0!important}
 }
+
+
+/* GLEMI footer logo */
+.glemi-footer-logo{
+  display:block;
+  width:190px;
+  max-width:70vw;
+  height:auto;
+  object-fit:contain;
+  background:transparent;
+}
