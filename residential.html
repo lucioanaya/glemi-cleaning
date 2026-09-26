@@ -251,20 +251,54 @@ body[data-page="residential"] .residential-promo-section img{
 
   <script src="supabase-config.js"></script>
   <script src="cms.js"></script>
-\n<script>\n(function(){\n const modes={regular:'Regular',deep:'Deep',move:'Move In / Move Out',airbnb:'Airbnb'};\n const special={kitchen:{regular:112.50,large:180},bedroom:{regular:67.50,large:135},bathroom:{regular:90,large:135},living:{regular:67.50,large:90}};\n let mode='regular';\n const hidden=document.getElementById('cleaningType');\n document.querySelectorAll('[data-service-type]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.serviceType==='regular'?'true':'false'));\n function qty(id){const el=document.getElementById('qty-'+id);return Math.max(0,Number(el?.textContent||0)||0)}\n function size(id){const el=document.querySelector('[data-room-size="'+id+'"]');return el?.value==='large'?'large':'regular'}\n function specialTotal(){return Object.keys(special).reduce((t,id)=>t+qty(id)*special[id][size(id)],0)}\n function cad(n){return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n)+' CAD'}\n function applySpecialTotal(){\n   if(mode==='regular') return;\n   const total=specialTotal();\n   const f=document.getElementById('finalPriceLarge'); if(f) f.textContent=cad(total);\n   const c=document.getElementById('calendarQuote'); if(c) c.textContent=cad(total);\n   const a=document.getElementById('aiTotal'); if(a) a.textContent=cad(total);\n }\n document.querySelectorAll('[data-service-type]').forEach(b => {
-  b.addEventListener('click', function(e) {
-    e.preventDefault();
-    mode = this.dataset.serviceType;
-    hidden.value = modes[mode];
-
-    document.querySelectorAll('[data-service-type]').forEach(x => {
-      const active = x.dataset.serviceType === mode;
-      x.classList.toggle('selected', active);
-      x.setAttribute('aria-pressed', active ? 'true' : 'false');
-    });
+\n<script>\n(function(){\n const modes={regular:'Regular',deep:'Deep',move:'Move In / Move Out',airbnb:'Airbnb'};\n const special={kitchen:{regular:112.50,large:180},bedroom:{regular:67.50,large:135},bathroom:{regular:90,large:135},living:{regular:67.50,large:90}};\n let mode='regular';\n const hidden=document.getElementById('cleaningType');\n document.querySelectorAll('[data-service-type]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.serviceType==='regular'?'true':'false'));\n function qty(id){const el=document.getElementById('qty-'+id);return Math.max(0,Number(el?.textContent||0)||0)}\n function size(id){const el=document.querySelector('[data-room-size="'+id+'"]');return el?.value==='large'?'large':'regular'}\n function specialTotal(){return Object.keys(special).reduce((t,id)=>t+qty(id)*special[id][size(id)],0)}\n function cad(n){return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n)+' CAD'}\n function applySpecialTotal(){\n   if(mode==='regular') return;\n   const total=specialTotal();\n   const f=document.getElementById('finalPriceLarge'); if(f) f.textContent=cad(total);\n   const c=document.getElementById('calendarQuote'); if(c) c.textContent=cad(total);\n   const a=document.getElementById('aiTotal'); if(a) a.textContent=cad(total);\n }\n 
 
     applySpecialTotal();
   });
 });\n document.getElementById('generateQuote')?.addEventListener('click',()=>setTimeout(applySpecialTotal,650));\n document.getElementById('reviewQuote')?.addEventListener('click',()=>setTimeout(()=>{applySpecialTotal();const host=document.getElementById('selectedAreas');if(host&&!host.querySelector('.cleaning-type-summary')){const d=document.createElement('div');d.className='review-line cleaning-type-summary';d.innerHTML='<strong>Type of cleaning</strong><span>'+modes[mode]+'</span>';host.prepend(d)}else if(host){host.querySelector('.cleaning-type-summary span').textContent=modes[mode]}},80));\n const obs=new MutationObserver(()=>applySpecialTotal());\n const f=document.getElementById('finalPriceLarge'); if(f) obs.observe(f,{childList:true,subtree:true});\n window.GLEMI_CLEANING_PRICING={modes,special,getSelectedType:()=>modes[mode],getSpecialTotal:specialTotal};\n})();\n</script>\n
+
+
+<script>
+(function () {
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-service-type]'));
+  var hidden = document.getElementById('cleaningType');
+  if (!buttons.length) return;
+
+  var names = {
+    regular: 'Regular',
+    deep: 'Deep',
+    move: 'Move In / Move Out',
+    airbnb: 'Airbnb'
+  };
+
+  function activate(type) {
+    buttons.forEach(function (btn) {
+      var active = btn.getAttribute('data-service-type') === type;
+      btn.classList.toggle('selected', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    if (hidden) hidden.value = names[type] || type;
+
+    // Update variables used by the existing pricing calculator.
+    try { mode = type; } catch (e) {}
+    window.__glemiActiveCleaningType = type;
+
+    if (typeof applySpecialTotal === 'function') {
+      applySpecialTotal();
+    }
+  }
+
+  buttons.forEach(function (btn) {
+    btn.onclick = function (event) {
+      event.preventDefault();
+      activate(btn.getAttribute('data-service-type'));
+      return false;
+    };
+  });
+
+  activate('regular');
+})();
+</script>
 
 </body></html>
