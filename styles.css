@@ -267,3 +267,25 @@ a.btn{text-decoration:none}.service-link{display:inline-flex;margin-top:8px;colo
 /* Footer GLEMI logo: transparent artwork, no white placeholder square */
 .footer .footer-logo{width:200px!important;height:auto!important;overflow:visible!important;background:transparent!important}
 .footer .footer-logo img{display:block!important;width:190px!important;max-width:70vw!important;height:auto!important;background:transparent!important;filter:none!important;opacity:1!important}
+
+
+/* Compact GLEMI footer logo */
+footer .footer-logo,
+.footer .footer-logo{
+  width:140px !important;
+  height:auto !important;
+  background:transparent !important;
+}
+footer .footer-logo img,
+.footer .footer-logo img,
+footer .glemi-footer-logo,
+.footer .glemi-footer-logo{
+  display:block !important;
+  width:140px !important;
+  max-width:140px !important;
+  height:auto !important;
+  object-fit:contain !important;
+  background:transparent !important;
+  filter:none !important;
+  opacity:1 !important;
+}
