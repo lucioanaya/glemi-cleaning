@@ -64,32 +64,101 @@ if(bookingForm){
  function val(name){return document.querySelector(`input[name=${name}]:checked`)?.value||''}
 
  async function applyPromo(){
-  const input=document.getElementById('promoCode'),msg=document.getElementById('promoCodeMessage');
+  const input=document.getElementById('promoCode');
+  const msg=document.getElementById('promoCodeMessage');
   if(!input||!msg)return;
+
   const code=input.value.trim().toUpperCase();
-  const address=document.getElementById('address').value.trim();
+  const address=(document.getElementById('address')?.value||'').trim();
   const pt=val('propertyType');
-  const unit=pt==='Town house'?townNumber.value.trim():pt==='Apartment'?apartmentNumber.value.trim():'';
-  if(!address){msg.textContent='Enter the property address first.';msg.className='promo-code-message error';return}
-  if((pt==='Town house'||pt==='Apartment')&&!unit){msg.textContent='Enter the unit/apartment number first.';msg.className='promo-code-message error';return}
-  if(!sb){msg.textContent='Unable to verify the promotional code right now.';msg.className='promo-code-message error';return}
-  const btn=document.getElementById('applyPromoCode');btn.disabled=true;btn.textContent='CHECKING…';
-  try{
-   const {data,error}=await sb.rpc('check_address_promo_eligibility',{p_code:code,p_address:address,p_property_type:pt,p_unit_number:unit||null});
-   if(error)throw error;
-   if(data?.eligible){
-    state.promo={code:data.code||code,discountPercent:Number(data.discount_percent||10),eligible:true};
-    msg.textContent=`${state.promo.code} applied — ${state.promo.discountPercent}% discount.`;
-    msg.className='promo-code-message success';
-   }else{
-    state.promo={code:null,discountPercent:0,eligible:false};
-    const reasons={already_used:'This address/unit has already used the WELCOME discount.',invalid_code:'Invalid promotional code.',address_required:'Enter the property address first.',unit_required:'Enter the unit/apartment number first.'};
-    msg.textContent=reasons[data?.reason]||'This promotional code cannot be applied.';
+  const unit=pt==='Town house'
+    ? (townNumber?.value||'').trim()
+    : pt==='Apartment'
+      ? (apartmentNumber?.value||'').trim()
+      : '';
+
+  if(!address){
+    msg.textContent='Enter the property address first.';
     msg.className='promo-code-message error';
-   }
-   if(state.step===3)renderReview();
-  }catch(err){console.error(err);msg.textContent='Unable to verify the promotional code right now.';msg.className='promo-code-message error'}
-  finally{btn.disabled=false;btn.textContent='APPLY'}
+    return;
+  }
+  if(!pt){
+    msg.textContent='Select the property type first.';
+    msg.className='promo-code-message error';
+    return;
+  }
+  if((pt==='Town house'||pt==='Apartment')&&!unit){
+    msg.textContent='Enter the unit/apartment number first.';
+    msg.className='promo-code-message error';
+    return;
+  }
+
+  const btn=document.getElementById('applyPromoCode');
+  if(btn){btn.disabled=true;btn.textContent='CHECKING…';}
+
+  try{
+    const cfg=window.GLEMI_SUPABASE||{};
+    const supabaseUrl=(cfg.url||'https://prsmnnqxzjfkcsoqzrdv.supabase.co').replace(/\/+$/,'');
+    const publishableKey=cfg.key||'sb_publishable_c7Wd1H4t8NNQs9DmwVn5qQ_-_QZEZIJ';
+
+    const response=await fetch(
+      supabaseUrl+'/rest/v1/rpc/check_address_promo_eligibility',
+      {
+        method:'POST',
+        mode:'cors',
+        cache:'no-store',
+        headers:{
+          'Content-Type':'application/json',
+          'Accept':'application/json',
+          'apikey':publishableKey
+        },
+        body:JSON.stringify({
+          p_code:code,
+          p_address:address,
+          p_property_type:pt,
+          p_unit_number:unit||null
+        })
+      }
+    );
+
+    const raw=await response.text();
+    let data=null;
+    try{data=raw?JSON.parse(raw):null;}catch(_){}
+
+    if(!response.ok){
+      console.error('WELCOME RPC failed:',response.status,raw);
+      throw new Error('RPC '+response.status+': '+raw);
+    }
+
+    if(data?.eligible){
+      state.promo={
+        code:data.code||code,
+        discountPercent:Number(data.discount_percent||10),
+        eligible:true
+      };
+      msg.textContent=`${state.promo.code} applied — ${state.promo.discountPercent}% discount.`;
+      msg.className='promo-code-message success';
+    }else{
+      state.promo={code:null,discountPercent:0,eligible:false};
+      const reasons={
+        already_used:'This address/unit has already used the WELCOME discount.',
+        invalid_code:'Invalid promotional code.',
+        address_required:'Enter the property address first.',
+        unit_required:'Enter the unit/apartment number first.'
+      };
+      msg.textContent=reasons[data?.reason]||'This promotional code cannot be applied.';
+      msg.className='promo-code-message error';
+    }
+
+    if(state.step===3)renderReview();
+  }catch(err){
+    console.error('WELCOME verification error:',err);
+    state.promo={code:null,discountPercent:0,eligible:false};
+    msg.textContent='Unable to verify the promotional code right now.';
+    msg.className='promo-code-message error';
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='APPLY';}
+  }
  }
  const promoBtn=document.getElementById('applyPromoCode');if(promoBtn)promoBtn.onclick=applyPromo;
  ['address','townhouseNumber','apartmentNumber'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{
