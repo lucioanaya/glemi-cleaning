@@ -71,25 +71,64 @@ if(bookingForm){
   const pt=val('propertyType');
   const unit=pt==='Town house'?townNumber.value.trim():pt==='Apartment'?apartmentNumber.value.trim():'';
   if(!address){msg.textContent='Enter the property address first.';msg.className='promo-code-message error';return}
+  if(!pt){msg.textContent='Select the property type first.';msg.className='promo-code-message error';return}
   if((pt==='Town house'||pt==='Apartment')&&!unit){msg.textContent='Enter the unit/apartment number first.';msg.className='promo-code-message error';return}
-  if(!sb){msg.textContent='Unable to verify the promotional code right now.';msg.className='promo-code-message error';return}
-  const btn=document.getElementById('applyPromoCode');btn.disabled=true;btn.textContent='CHECKING…';
+
+  const btn=document.getElementById('applyPromoCode');
+  btn.disabled=true;btn.textContent='CHECKING…';
+
   try{
-   const {data,error}=await sb.rpc('check_address_promo_eligibility',{p_code:code,p_address:address,p_property_type:pt,p_unit_number:unit||null});
-   if(error)throw error;
-   if(data?.eligible){
-    state.promo={code:data.code||code,discountPercent:Number(data.discount_percent||10),eligible:true};
-    msg.textContent=`${state.promo.code} applied — ${state.promo.discountPercent}% discount.`;
-    msg.className='promo-code-message success';
-   }else{
+    const cfg=window.GLEMI_SUPABASE;
+    if(!cfg?.url||!cfg?.key) throw new Error('supabase_config_missing');
+
+    const response=await fetch(cfg.url+'/rest/v1/rpc/check_address_promo_eligibility',{
+      method:'POST',
+      cache:'no-store',
+      headers:{
+        'Content-Type':'application/json',
+        'apikey':cfg.key,
+        'Authorization':'Bearer '+cfg.key
+      },
+      body:JSON.stringify({
+        p_code:code,
+        p_address:address,
+        p_property_type:pt,
+        p_unit_number:unit||null
+      })
+    });
+
+    let data=null;
+    try{data=await response.json()}catch(_){}
+
+    if(!response.ok){
+      console.error('WELCOME verification failed',response.status,data);
+      throw new Error(data?.message||data?.hint||('HTTP '+response.status));
+    }
+
+    if(data?.eligible){
+      state.promo={code:data.code||code,discountPercent:Number(data.discount_percent||10),eligible:true};
+      msg.textContent=`${state.promo.code} applied — ${state.promo.discountPercent}% discount.`;
+      msg.className='promo-code-message success';
+    }else{
+      state.promo={code:null,discountPercent:0,eligible:false};
+      const reasons={
+        already_used:'This address/unit has already used the WELCOME discount.',
+        invalid_code:'Invalid promotional code.',
+        address_required:'Enter the property address first.',
+        unit_required:'Enter the unit/apartment number first.'
+      };
+      msg.textContent=reasons[data?.reason]||'This promotional code cannot be applied.';
+      msg.className='promo-code-message error';
+    }
+    if(state.step===3)renderReview();
+  }catch(err){
+    console.error('WELCOME error:',err);
     state.promo={code:null,discountPercent:0,eligible:false};
-    const reasons={already_used:'This address/unit has already used the WELCOME discount.',invalid_code:'Invalid promotional code.',address_required:'Enter the property address first.',unit_required:'Enter the unit/apartment number first.'};
-    msg.textContent=reasons[data?.reason]||'This promotional code cannot be applied.';
+    msg.textContent='Unable to verify the promotional code right now.';
     msg.className='promo-code-message error';
-   }
-   if(state.step===3)renderReview();
-  }catch(err){console.error(err);msg.textContent='Unable to verify the promotional code right now.';msg.className='promo-code-message error'}
-  finally{btn.disabled=false;btn.textContent='APPLY'}
+  }finally{
+    btn.disabled=false;btn.textContent='APPLY';
+  }
  }
  const promoBtn=document.getElementById('applyPromoCode');if(promoBtn)promoBtn.onclick=applyPromo;
  ['address','townhouseNumber','apartmentNumber'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{
