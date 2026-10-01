@@ -99,7 +99,7 @@ if(bookingForm){
   try{
     const cfg=window.GLEMI_SUPABASE||{};
     const supabaseUrl=(cfg.url||'https://prsmnnqxzjfkcsoqzrdv.supabase.co').replace(/\/+$/,'');
-    const publishableKey=cfg.key||'sb_publishable_c7Wd1H4t8NNQs9DmwVn5qQ_-_QZEZIJ';
+    const publishableKey=cfg.key||'sb_publishable_ufn8YxeJZEaJ7k1B_6XTjQ_eW-rW82p';
 
     const response=await fetch(
       supabaseUrl+'/rest/v1/rpc/check_address_promo_eligibility',
