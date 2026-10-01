@@ -1,4 +1,9 @@
 (() => {
+/* GLEMI_CONFIG_VALIDATED_20261001 */
+const __glemiCfg = window.GLEMI_SUPABASE;
+if (!__glemiCfg || !/^https:\/\/[a-z0-9]+\.supabase\.co$/.test(__glemiCfg.url) || !__glemiCfg.key.startsWith('sb_publishable_')) {
+  throw new Error('GLEMI Supabase configuration is missing or invalid.');
+}
 const cfg=window.GLEMI_SUPABASE;
 const sb=window.supabase.createClient(cfg.url,cfg.key);
 const el=id=>document.getElementById(id);
