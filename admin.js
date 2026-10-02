@@ -57,7 +57,7 @@ resetForm.addEventListener('submit',async e=>{
   const email=el('resetEmail').value.trim().toLowerCase();
   if(!allowedAdminEmails.includes(email)){resetMessage('This email is not authorized for the GLEMI admin panel.',true);return}
   const btn=el('sendResetBtn'); btn.disabled=true; btn.textContent='Sending…';
-  const redirectTo=new URL('set-password.html',window.location.href).href;
+  const redirectTo='https://glemi-cleaning.vercel.app/set-password.html';
   const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});
   btn.disabled=false; btn.textContent='Send reset link';
   if(error){
