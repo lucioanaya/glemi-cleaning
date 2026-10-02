@@ -11,13 +11,18 @@ let me=null, profile=null, appointments=[], schedule={}, pricing={}, settings={}
 
 const show=id=>{['loginFriw','appFriw'].forEach(x=>{const n=el(x);if(n)n.classList.add('hidden')});const t=el(id);if(t)t.classList.remove('hidden')};
 const esc=(s='')=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-async function profileFor(id){const {data,error}=await sb.from('profiles').select('*').eq('id',id).single();return error?null:data}
+async function profileFor(id){
+ const {data,error}=await sb.from('profiles').select('*').eq('id',id).maybeSingle();
+ if(error){console.error('GLEMI profile lookup failed:',error);return {__error:error}}
+ return data
+}
 async function init(){
   const {data:{session}}=await sb.auth.getSession();
   if(session){
     me=session.user;
     profile=await profileFor(me.id);
     if(profile?.active){show('appFriw');await loadAll();return}
+    await sb.auth.signOut();
   }
   show('loginFriw');
 }
@@ -34,7 +39,8 @@ el('loginForm').addEventListener('submit',async e=>{
    return
  }
  me=data.user;profile=await profileFor(me.id);
- if(!profile?.active){await sb.auth.signOut();el('loginError').textContent='User does not have access.';return}
+ if(profile?.__error){await sb.auth.signOut();el('loginError').textContent='Sign-in succeeded, but the admin profile could not be loaded. Run GLEMI-COMPLETE-SETUP.sql in Supabase and try again.';return}
+ if(!profile?.active){await sb.auth.signOut();el('loginError').textContent='Sign-in succeeded, but this account is not authorized for the admin panel.';return}
  show('appFriw');await loadAll();
 });
 const allowedAdminEmails=['glemiservices@gmail.com','baltazaranaya@outlook.com'];
