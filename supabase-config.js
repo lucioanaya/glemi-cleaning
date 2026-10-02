@@ -1,5 +1,5 @@
 // GLEMI public Supabase configuration. Safe for browser use.
 window.GLEMI_SUPABASE = Object.freeze({
-  url: "https://prsmnnqxzjfkcsoqzrdv.supabase.co",
-  key: "sb_publishable_ufn8YxeJZEaJ7k1B_6XTjQ_eW-rW82p"
+  url: "https://gkhrkomqrlzwbegbsxcr.supabase.co",
+  key: "sb_publishable_Vt691jJ2s0p6V2lMKRTwPw_TciY0uJJ"
 });

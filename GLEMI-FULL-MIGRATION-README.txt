@@ -1,7 +1,7 @@
 GLEMI – COMPLETE NEW SUPABASE SETUP
 
 This package keeps the site connected to:
-https://prsmnnqxzjfkcsoqzrdv.supabase.co
+https://gkhrkomqrlzwbegbsxcr.supabase.co
 
 What GLEMI-COMPLETE-SETUP.sql restores/configures:
 - Owner/Admin profile system restricted to the two approved emails

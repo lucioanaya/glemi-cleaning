@@ -1,7 +1,7 @@
 GLEMI — NEW SUPABASE CONNECTION
 
 The website in this ZIP now points to:
-https://prsmnnqxzjfkcsoqzrdv.supabase.co
+https://gkhrkomqrlzwbegbsxcr.supabase.co
 
 1. Upload/deploy this ZIP to the GLEMI website.
 2. In this Supabase project, open SQL Editor and run GLEMI-new-supabase-schema.sql.
