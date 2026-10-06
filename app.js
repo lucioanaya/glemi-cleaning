@@ -17,7 +17,7 @@ if(bookingForm){
  let quoteRules={kitchen:{regular:{regular:67.5},large:{regular:135}},bathroom:{regular:{regular:67.5},half:{regular:30},large:{regular:90}},bedroom:{regular:{regular:22.5},large:{regular:33.75}},living:{regular:{regular:33.75},large:{regular:56.25}}};
  const specialRules={kitchen:{regular:112.50,large:180},bathroom:{regular:90,half:90,large:135},bedroom:{regular:67.50,large:135},living:{regular:67.50,large:90}};
  function emptyRooms(){const x={};roomCatalog.forEach(r=>{x[r.id]={};r.types.forEach(([t])=>x[r.id][t]=0)});return x}
- const state={step:1,date:null,time:null,month:new Date().getMonth(),year:new Date().getFullYear(),activeCleaningType:'regular',roomsByType:{regular:emptyRooms(),deep:emptyRooms(),move:emptyRooms(),airbnb:emptyRooms()},quote:null,promo:{code:null,discountPercent:0,eligible:false}};
+ const state={step:1,date:null,time:null,month:new Date().getMonth(),year:new Date().getFullYear(),activeCleaningType:'regular',roomsByType:{regular:emptyRooms(),deep:emptyRooms(),move:emptyRooms(),airbnb:emptyRooms()},quote:null,promo:{code:null,discountPercent:0,eligible:false,verified:false}};
  const sb=(window.supabase&&window.GLEMI_SUPABASE)?window.supabase.createClient(window.GLEMI_SUPABASE.url,window.GLEMI_SUPABASE.key):null, money=n=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n), pad=n=>String(n).padStart(2,'0');
  const steps=document.querySelectorAll('.form-step'),progress=document.querySelectorAll('.progress span'),calendarEl=document.getElementById('calendar'),timesEl=document.getElementById('times'),monthTitle=document.getElementById('monthTitle');
  function icon(id){return `<img src="room-${id}.png" alt="">`}
@@ -25,11 +25,12 @@ if(bookingForm){
  function count(id,type=state.activeCleaningType){return Object.values(state.roomsByType[type][id]).reduce((a,b)=>a+(+b||0),0)}
  function typeCount(type){return roomCatalog.reduce((n,r)=>n+count(r.id,type),0)}
  function updateTypeBadges(){Object.keys(cleaningTypes).forEach(type=>{const e=document.querySelector(`[data-count-for="${type}"]`);if(e){const n=typeCount(type);e.textContent=n?`${n} selected`:''}})}
- function renderRooms(){const h=document.getElementById('roomRows');h.innerHTML='';const rooms=activeRooms();roomCatalog.forEach(r=>{const d=document.createElement('div');d.className='room-accordion';d.innerHTML=`<button type="button" class="room-accordion-toggle"><span class="room-icon">${icon(r.id)}</span><span class="room-title-wrap"><strong class="room-name">${r.label}</strong><small id="summary-${r.id}">${count(r.id)} selected</small></span><span class="room-chevron">⌄</span></button><div class="room-accordion-body" hidden>${r.types.map(([t,l])=>`<div class="room-type-counter"><span class="room-type-label">${l}</span><div class="qty-control"><button type="button" data-r="${r.id}" data-t="${t}" data-d="-1">−</button><span id="qty-${r.id}-${t}">${rooms[r.id][t]}</span><button type="button" data-r="${r.id}" data-t="${t}" data-d="1">+</button></div></div>`).join('')}</div>`;h.appendChild(d)});h.querySelectorAll('.room-accordion-toggle').forEach(b=>b.onclick=()=>{const body=b.nextElementSibling;body.hidden=!body.hidden});h.querySelectorAll('[data-r]').forEach(b=>b.onclick=e=>{e.stopPropagation();const r=b.dataset.r,t=b.dataset.t;rooms[r][t]=Math.max(0,Math.min(20,rooms[r][t]+(+b.dataset.d)));document.getElementById(`qty-${r}-${t}`).textContent=rooms[r][t];document.getElementById(`summary-${r}`).textContent=`${count(r)} selected`;updateTypeBadges();state.quote=null})}
- function selectCleaningType(type){if(!cleaningTypes[type])return;state.activeCleaningType=type;document.getElementById('cleaningType').value=cleaningTypes[type];document.querySelectorAll('[data-service-type]').forEach(b=>{const on=b.dataset.serviceType===type;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',on?'true':'false')});renderRooms();updateTypeBadges()}
+ function renderRooms(){const h=document.getElementById('roomRows');h.innerHTML='';const rooms=activeRooms();roomCatalog.forEach(r=>{const d=document.createElement('div');d.className='room-accordion';d.innerHTML=`<button type="button" class="room-accordion-toggle"><span class="room-icon">${icon(r.id)}</span><span class="room-title-wrap"><strong class="room-name">${r.label}</strong><small id="summary-${r.id}">${count(r.id)} selected</small></span><span class="room-chevron">⌄</span></button><div class="room-accordion-body" hidden>${r.types.map(([t,l])=>`<div class="room-type-counter"><span class="room-type-label">${l}</span><div class="qty-control"><button type="button" data-r="${r.id}" data-t="${t}" data-d="-1">−</button><span id="qty-${r.id}-${t}">${rooms[r.id][t]}</span><button type="button" data-r="${r.id}" data-t="${t}" data-d="1">+</button></div></div>`).join('')}</div>`;h.appendChild(d)});h.querySelectorAll('.room-accordion-toggle').forEach(b=>b.onclick=()=>{const body=b.nextElementSibling;body.hidden=!body.hidden});h.querySelectorAll('[data-r]').forEach(b=>b.onclick=e=>{e.stopPropagation();const r=b.dataset.r,t=b.dataset.t;rooms[r][t]=Math.max(0,Math.min(20,rooms[r][t]+(+b.dataset.d)));document.getElementById(`qty-${r}-${t}`).textContent=rooms[r][t];document.getElementById(`summary-${r}`).textContent=`${count(r)} selected`;updateTypeBadges();state.quote=null;updateLiveEstimate()})}
+ function selectCleaningType(type){if(!cleaningTypes[type])return;state.activeCleaningType=type;document.getElementById('cleaningType').value=cleaningTypes[type];document.querySelectorAll('[data-service-type]').forEach(b=>{const on=b.dataset.serviceType===type;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',on?'true':'false')});renderRooms();updateTypeBadges();updateLiveEstimate()}
  document.querySelectorAll('[data-service-type]').forEach(b=>b.onclick=()=>selectCleaningType(b.dataset.serviceType));
  async function loadPricing(){if(!sb)return;const {data}=await sb.from('pricing_settings').select('room,room_type,regular_cad');(data||[]).forEach(x=>{let r=String(x.room||'').toLowerCase(),t=String(x.room_type||'').toLowerCase();if(quoteRules[r]?.[t])quoteRules[r][t].regular=+x.regular_cad||0})}
  function calculate(){let total=0,items=[];Object.keys(cleaningTypes).forEach(serviceType=>{const rooms=state.roomsByType[serviceType];roomCatalog.forEach(r=>r.types.forEach(([t,l])=>{let q=+rooms[r.id][t]||0;if(q){const price=serviceType==='regular'?(quoteRules[r.id]?.[t]?.regular||0):(specialRules[r.id]?.[t]??specialRules[r.id]?.regular??0);total+=price*q;items.push({serviceType,serviceLabel:cleaningTypes[serviceType],room:r.id,label:r.label,type:l,qty:q,price})}}))});return {total:Math.round(total*100)/100,items}}
+ function updateLiveEstimate(){const q=calculate(),discount=state.promo.eligible?Number(state.promo.discountPercent||0):0,final=q.total*(1-discount/100),totalEl=document.getElementById('liveEstimateTotal'),discountEl=document.getElementById('liveEstimateDiscount');if(totalEl)totalEl.textContent=`${money(final)} CAD`;if(discountEl)discountEl.textContent=discount?`${state.promo.code}: ${discount}% discount${state.promo.verified?'':' (will be verified with your address)'}`:''}
  renderRooms();updateTypeBadges();
  function setStep(n){state.step=n;steps.forEach(x=>x.classList.toggle('active',+x.dataset.step===n));progress.forEach((x,i)=>x.classList.toggle('active',i<n));document.getElementById('stepBadge').textContent=`STEP ${n} OF 3`;document.getElementById('stepTitle').textContent=n===1?'Choose what you need':n===2?'Your details':'Review your quote';if(n===2)renderCalendar();if(n===3)renderReview();document.querySelector('#cotizar')?.scrollIntoView({behavior:'smooth'})}
  document.getElementById('generateQuote').onclick=()=>{if(!Object.keys(cleaningTypes).some(t=>typeCount(t)>0)){toast('Select at least one area.');return}state.quote=calculate();setStep(2)};
@@ -77,20 +78,17 @@ if(bookingForm){
       ? (apartmentNumber?.value||'').trim()
       : '';
 
-  if(!address){
-    msg.textContent='Enter the property address first.';
+  if(!address||!pt||((pt==='Town house'||pt==='Apartment')&&!unit)){
+    if(code==='WELCOME'){
+      state.promo={code:'WELCOME',discountPercent:10,eligible:true,verified:false};
+      msg.textContent='WELCOME applied — 10% discount. We will verify eligibility after you enter the property address.';
+      msg.className='promo-code-message success';
+      updateLiveEstimate();
+      return true;
+    }
+    msg.textContent='Enter the property address and property type to verify this promotional code.';
     msg.className='promo-code-message error';
-    return;
-  }
-  if(!pt){
-    msg.textContent='Select the property type first.';
-    msg.className='promo-code-message error';
-    return;
-  }
-  if((pt==='Town house'||pt==='Apartment')&&!unit){
-    msg.textContent='Enter the unit/apartment number first.';
-    msg.className='promo-code-message error';
-    return;
+    return false;
   }
 
   const btn=document.getElementById('applyPromoCode');
@@ -134,7 +132,8 @@ if(bookingForm){
       state.promo={
         code:data.code||code,
         discountPercent:Number(data.discount_percent||10),
-        eligible:true
+        eligible:true,
+        verified:true
       };
       msg.textContent=`${state.promo.code} applied — ${state.promo.discountPercent}% discount.`;
       msg.className='promo-code-message success';
@@ -150,24 +149,28 @@ if(bookingForm){
       msg.className='promo-code-message error';
     }
 
+    updateLiveEstimate();
     if(state.step===3)renderReview();
+    return !!state.promo.eligible;
   }catch(err){
     console.error('WELCOME verification error:',err);
     state.promo={code:null,discountPercent:0,eligible:false};
     msg.textContent='Unable to verify the promotional code right now.';
     msg.className='promo-code-message error';
+    updateLiveEstimate();
+    return false;
   }finally{
     if(btn){btn.disabled=false;btn.textContent='APPLY';}
   }
  }
  const promoBtn=document.getElementById('applyPromoCode');if(promoBtn)promoBtn.onclick=applyPromo;
  ['address','townhouseNumber','apartmentNumber'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{
-  if(state.promo.eligible){state.promo={code:null,discountPercent:0,eligible:false};const m=document.getElementById('promoCodeMessage');if(m){m.textContent='Address changed — apply the promotional code again.';m.className='promo-code-message'}}
+  if(state.promo.eligible&&state.promo.verified){state.promo={code:null,discountPercent:0,eligible:false,verified:false};const m=document.getElementById('promoCodeMessage');if(m){m.textContent='Address changed — apply the promotional code again.';m.className='promo-code-message'}}
  }));
  function validateDetails(){for(const id of ['name','email','address','phone'])if(!document.getElementById(id).reportValidity())return false;let pt=val('propertyType');if(!pt){toast('Select a property type.');return false}if(pt==='Town house'&&!document.getElementById('townhouseNumber').value.trim()){toast('Enter the town house number.');return false}if(pt==='Apartment'&&!document.getElementById('apartmentNumber').value.trim()){toast('Enter the apartment number.');return false}if(!val('parking')){toast('Tell us if parking is available.');return false}if(val('parking')==='No'&&!document.getElementById('parkingDetails').value.trim()){toast('Please provide parking options.');return false}if(!val('pets')){toast('Tell us if there are pets in the home.');return false}if(val('pets')==='Yes'&&(!document.getElementById('petType').value.trim()||!document.getElementById('petCount').value)){toast('Tell us the type and number of pets.');return false}if(!val('allergies')){toast('Tell us if you have any allergies.');return false}if(val('allergies')==='Yes'&&!document.getElementById('allergyDetails').value.trim()){toast('Please tell us your allergy details.');return false}if(!state.date||!state.time){toast('Select a date and time.');return false}return true}
- document.getElementById('reviewQuote').onclick=()=>{if(validateDetails()){state.quote=calculate();setStep(3)}};
+ document.getElementById('reviewQuote').onclick=async()=>{if(validateDetails()){if(state.promo.eligible&&!state.promo.verified){const ok=await applyPromo();if(!ok)return;}state.quote=calculate();setStep(3)}};
  function renderReview(){let a=document.getElementById('selectedAreas');a.innerHTML='';Object.keys(cleaningTypes).forEach(type=>{const items=state.quote.items.filter(i=>i.serviceType===type);if(!items.length)return;const group=document.createElement('div');group.className='cleaning-review-group';group.innerHTML=`<div class="review-line"><strong>${cleaningTypes[type]}</strong><span>${items.reduce((n,i)=>n+i.qty,0)} selected</span></div>`+items.map(i=>`<div class="selected-area">${icon(i.room)}<span>${i.label}${i.qty>1?` (${i.qty})`:''} · ${i.type}</span></div>`).join('');a.appendChild(group)});let pt=val('propertyType'),unit=pt==='Town house'?document.getElementById('townhouseNumber').value:pt==='Apartment'?document.getElementById('apartmentNumber').value:'';document.getElementById('propertySummary').innerHTML=`<div class="review-line"><span>Property type</span><span>${pt}${unit?' #'+unit:''}</span></div><div class="review-line"><span>Address</span><span>${document.getElementById('address').value}</span></div><div class="review-line"><span>Parking</span><span>${val('parking')}${val('parking')==='No'?'<br>'+document.getElementById('parkingDetails').value:''}</span></div><div class="review-line"><span>Pets</span><span>${val('pets')}${val('pets')==='Yes'?` · ${document.getElementById('petCount').value} ${document.getElementById('petType').value}`:''}</span></div><div class="review-line"><span>Allergies</span><span>${val('allergies')}${val('allergies')==='Yes'?'<br>'+document.getElementById('allergyDetails').value:''}</span></div><div class="review-line"><span>Date & time</span><span>${state.date.toLocaleDateString('en-CA')} · ${state.time}</span></div>`;{const base=state.quote.total,discount=state.promo.eligible?state.promo.discountPercent:0,final=base*(1-discount/100);document.getElementById('finalPriceLarge').textContent=`${money(final)} CAD`;let promoLine=document.getElementById('promoReviewLine');if(!promoLine){promoLine=document.createElement('div');promoLine.id='promoReviewLine';promoLine.className='review-line';document.querySelector('.final-price-card')?.appendChild(promoLine)}promoLine.innerHTML=discount?`<span>${state.promo.code} discount</span><span>−${discount}% (${money(base-final)})</span>`:''}}
  document.getElementById('editAreas').onclick=()=>setStep(1);document.getElementById('editDetails').onclick=()=>setStep(2);
  bookingForm.onsubmit=async e=>{e.preventDefault();if(!val('payment')){toast('Select a payment method.');return}let btn=bookingForm.querySelector('button[type=submit]');btn.disabled=true;btn.textContent='Submitting…';try{if(!sb)throw Error('Connection unavailable');let pt=val('propertyType'),unit=pt==='Town house'?document.getElementById('townhouseNumber').value.trim():pt==='Apartment'?document.getElementById('apartmentNumber').value.trim():null;let details={rooms_by_cleaning_type:state.roomsByType,items:state.quote.items,cleaning_types:Object.keys(cleaningTypes).filter(t=>typeCount(t)>0).map(t=>cleaningTypes[t]),property:{type:pt,unit_number:unit,parking:val('parking'),parking_details:document.getElementById('parkingDetails').value.trim(),pets:val('pets'),pet_type:document.getElementById('petType').value.trim(),pet_count:document.getElementById('petCount').value||null,pet_details:document.getElementById('petDetails').value.trim(),allergies:val('allergies'),allergy_details:document.getElementById('allergyDetails').value.trim()},payment_method:val('payment')};let {data,error}=await sb.rpc('create_residential_booking',{p_client_name:document.getElementById('name').value.trim(),p_date:iso(state.date),p_time:state.time,p_email:document.getElementById('email').value.trim(),p_phone:document.getElementById('phone').value.trim(),p_address:document.getElementById('address').value.trim(),p_original_total:state.quote.total,p_discount_code:state.promo.eligible?state.promo.code:null,p_quote_details:details});if(error)throw error;if(!data?.ok){if(data?.reason==='already_used'){state.promo={code:null,discountPercent:0,eligible:false};throw Error('PROMO_ALREADY_USED')}throw Error('Booking failed');}document.getElementById('bookingCode').textContent='GL-'+String(data.appointment_id||'').split('-')[0].toUpperCase();document.getElementById('successText').textContent=`Your request for ${money(Number(data.final_total||state.quote.total))} CAD was submitted for ${state.date.toLocaleDateString('en-CA')} at ${state.time}. Payment will be made at the property.`;document.getElementById('modal').classList.add('show')}catch(err){console.error(err);toast(err?.message==='PROMO_ALREADY_USED'?'The WELCOME discount has already been used for this address/unit.':'We could not submit the request. Please try again.')}finally{btn.disabled=false;btn.textContent='FINISH'}};
- document.getElementById('modalClose').onclick=()=>document.getElementById('modal').classList.remove('show');document.getElementById('modalDone').onclick=()=>document.getElementById('modal').classList.remove('show');renderRooms();loadPricing();setStep(1);
+ document.getElementById('modalClose').onclick=()=>document.getElementById('modal').classList.remove('show');document.getElementById('modalDone').onclick=()=>document.getElementById('modal').classList.remove('show');renderRooms();loadPricing().then(updateLiveEstimate);updateLiveEstimate();setStep(1);
 }
