@@ -399,3 +399,10 @@ footer .footer-logo img{
 
 /* GLEMI local SEO and booking information */
 .glemi-seo-section{display:block;padding-top:60px;padding-bottom:60px}.glemi-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.glemi-steps>div{background:#f6f8fc;border:1px solid #e1e7f1;border-radius:16px;padding:24px;color:#15213a}.glemi-steps p{margin:12px 0 0;line-height:1.6}.glemi-cities{display:flex;flex-wrap:wrap;gap:10px;max-width:1100px;margin:auto}.glemi-cities span{border:1px solid #d9e1ef;border-radius:30px;padding:9px 15px;background:#fff;color:#1b2941}.glemi-area-note{text-align:center;margin:25px auto 0}.glemi-faq{max-width:850px;margin:auto}.glemi-faq details{padding:18px;border-bottom:1px solid #dce3ed}.glemi-faq summary{font-weight:700;cursor:pointer}.glemi-faq p{line-height:1.65;margin-top:12px}@media(max-width:720px){.glemi-steps{grid-template-columns:1fr}.glemi-seo-section{padding-top:35px;padding-bottom:35px}}
+
+/* GLEMI service-city estimate selector */
+.glemi-city-field{margin:16px 0 0;display:flex;flex-direction:column;gap:9px}
+.glemi-city-field label{font-size:14px;color:#101828}
+.glemi-city-field select{width:100%;min-height:56px;padding:12px 16px;border:1px solid #cdd5df;border-radius:12px;background:#fff;color:#101828;font:inherit;font-size:16px}
+.glemi-city-field select:focus{outline:2px solid #1d68df;outline-offset:2px}
+.glemi-city-field small{color:#667085;font-size:12px}
