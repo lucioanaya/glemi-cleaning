@@ -43,6 +43,11 @@
   }
 }
 
+/* Homepage intro: keep only the small header logo; bring intro + service shortcuts to the top */
+.home-logo-first{display:block!important;padding-top:42px!important}
+.home-logo-first .why-home-copy{width:100%!important;max-width:1120px;margin:0 auto}
+@media(max-width:650px){.home-logo-first{padding-top:26px!important}}
+
 /* Compact service shortcuts on the Metro Vancouver homepage */
 .glemi-quick-services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0 26px}
 .glemi-quick-service{display:block;position:relative;overflow:hidden;min-height:150px;border:1px solid #dce2ed;border-radius:16px;background:#fff;color:#131b30;text-decoration:none;box-shadow:0 3px 12px rgba(20,36,67,.04);transition:border-color .2s,transform .2s}
@@ -179,9 +184,6 @@
 
   <main>
     <section class="hero section home-logo-first" id="inicio">
-      <div class="hero-visual logo-showcase home-main-logo">
-        <img class="home-glemi-logo" src="glemi-logo.png" alt="GLEMI Cleaning & Building Services Ltd.">
-      </div>
       <div class="hero-copy why-home-copy">
         <div class="eyebrow">METRO VANCOUVER CLEANING SERVICES</div>
         <h1 class="why-home-title">Professional Cleaning Services in Metro Vancouver, BC</h1>
