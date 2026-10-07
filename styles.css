@@ -396,3 +396,6 @@ footer .footer-logo img{
   font-weight:800!important;
   line-height:1.25!important;
 }
+
+/* GLEMI local SEO and booking information */
+.glemi-seo-section{display:block;padding-top:60px;padding-bottom:60px}.glemi-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.glemi-steps>div{background:#f6f8fc;border:1px solid #e1e7f1;border-radius:16px;padding:24px;color:#15213a}.glemi-steps p{margin:12px 0 0;line-height:1.6}.glemi-cities{display:flex;flex-wrap:wrap;gap:10px;max-width:1100px;margin:auto}.glemi-cities span{border:1px solid #d9e1ef;border-radius:30px;padding:9px 15px;background:#fff;color:#1b2941}.glemi-area-note{text-align:center;margin:25px auto 0}.glemi-faq{max-width:850px;margin:auto}.glemi-faq details{padding:18px;border-bottom:1px solid #dce3ed}.glemi-faq summary{font-weight:700;cursor:pointer}.glemi-faq p{line-height:1.65;margin-top:12px}@media(max-width:720px){.glemi-steps{grid-template-columns:1fr}.glemi-seo-section{padding-top:35px;padding-bottom:35px}}

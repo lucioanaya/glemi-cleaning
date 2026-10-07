@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /set-password.html
+Sitemap: https://glemi.ca/sitemap.xml
