@@ -62,6 +62,29 @@
 .glemi-quick-service small{display:block;color:#697489;font-size:12px;line-height:1.35;margin-top:3px}
 .glemi-quick-arrow{color:#2166d8;font-size:19px}
 @media(max-width:600px){.glemi-quick-services{gap:9px}.glemi-quick-service{min-height:137px}.glemi-quick-photo{height:78px}.glemi-quick-info{padding:8px 9px}.glemi-quick-service strong{font-size:13px}.glemi-quick-service small{font-size:11px}.glemi-quick-arrow{font-size:15px}}
+
+/* Approved compact homepage layout */
+.glemi-service-icons-strip{margin:18px 0 16px;width:100%;overflow:hidden}
+.glemi-service-icons-strip img{display:block;width:100%;height:auto}
+.glemi-home-cities{margin:0 0 18px;padding:12px;border:1px solid #dce5f1;border-radius:14px;background:#f7fbff}
+.glemi-home-cities h2{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:15px;color:#15346f}
+.glemi-home-cities h2:before{content:"●";color:#1769d7;font-size:12px}
+.glemi-home-city-grid{display:flex;flex-wrap:wrap;gap:7px}
+.glemi-home-city-grid span{padding:6px 10px;border:1px solid #dfe7f2;border-radius:999px;background:#fff;color:#18376d;font-size:12px;line-height:1}
+.home-logo-first{padding-top:20px!important}
+.glemi-quick-services{margin-top:12px!important}
+@media(max-width:650px){
+  .header-inner{min-height:86px!important;padding-top:10px!important;padding-bottom:10px!important}
+  .brand-logo img{max-height:68px!important}
+  .home-logo-first{padding-top:14px!important}
+  .home-logo-first .why-home-title{margin-top:6px!important}
+  .home-logo-first .why-home-intro{margin-bottom:10px!important}
+  .glemi-service-icons-strip{margin:12px 0 12px}
+  .glemi-home-cities{padding:10px;margin-bottom:14px}
+  .glemi-home-cities h2{font-size:13px;margin-bottom:8px}
+  .glemi-home-city-grid{gap:6px}
+  .glemi-home-city-grid span{font-size:10px;padding:5px 8px}
+}
 </style>
 
 
@@ -188,6 +211,11 @@
         <div class="eyebrow">METRO VANCOUVER CLEANING SERVICES</div>
         <h1 class="why-home-title">Professional Cleaning Services in Metro Vancouver, BC</h1>
         <p class="why-home-intro">Proudly serving Vancouver, Burnaby, Surrey, Richmond, Coquitlam, North Vancouver, West Vancouver, Delta, Maple Ridge, New Westminster, Port Coquitlam, Port Moody, White Rock and Langley.</p>
+        <div class="glemi-service-icons-strip" aria-label="GLEMI service categories"><img src="glemi-service-icons.png" alt="Residential, Commercial, Post-Construction and Quality You Can Trust"></div>
+        <div class="glemi-home-cities" aria-label="Cities We Serve in Metro Vancouver">
+          <h2>Cities We Serve in Metro Vancouver</h2>
+          <div class="glemi-home-city-grid"><span>Vancouver</span><span>Burnaby</span><span>Surrey</span><span>Richmond</span><span>Coquitlam</span><span>North Vancouver</span><span>West Vancouver</span><span>Delta</span><span>Maple Ridge</span><span>New Westminster</span><span>Port Coquitlam</span><span>Port Moody</span><span>White Rock</span><span>Langley</span></div>
+        </div>
         <div class="glemi-quick-services" aria-label="Choose your cleaning service">
           <a class="glemi-quick-service" href="residential.html#cotizar"><img class="glemi-quick-photo" src="home-cleaning-glemi.jpeg" alt="GLEMI Home Cleaning"><span class="glemi-quick-info"><span><strong>Home Cleaning</strong><small>Kitchen, bathroom, bedroom &amp; living room</small></span><span class="glemi-quick-arrow">→</span></span></a>
           <a class="glemi-quick-service" href="deep.html"><img class="glemi-quick-photo" src="deep-cleaning-office.jpeg" alt="GLEMI Deep Cleaning"><span class="glemi-quick-info"><span><strong>Deep Cleaning</strong><small>Detailed cleaning options</small></span><span class="glemi-quick-arrow">→</span></span></a>
