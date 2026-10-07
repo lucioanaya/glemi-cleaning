@@ -1,6 +1,6 @@
 GLEMI SEO UPDATE
 Domain: https://glemi.ca
-Service areas: Vancouver, Burnaby, Surrey, Richmond, Coquitlam, North Vancouver, West Vancouver, Delta, Maple Ridge, New Westminster, Port Coquitlam, Port Moody, White Rock, Pitt Meadows, Langley
+Service areas: Vancouver, Burnaby, Surrey, Richmond, Coquitlam, North Vancouver, West Vancouver, Delta, Maple Ridge, New Westminster, Port Coquitlam, Port Moody, White Rock, Langley
 Phone: 236-998-6275
 
 After uploading: verify site pages and booking forms, connect Google Search Console, submit https://glemi.ca/sitemap.xml, and create/verify Google Business Profile. Ranking is not guaranteed.
