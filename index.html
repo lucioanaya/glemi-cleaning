@@ -85,6 +85,12 @@
   .glemi-home-city-grid{gap:6px}
   .glemi-home-city-grid span{font-size:10px;padding:5px 8px}
 }
+
+/* Category icon badges on homepage shortcut cards */
+.glemi-card-icon{position:absolute;left:12px;top:66px;width:42px;height:42px;border-radius:12px;background:#fff;display:grid;place-items:center;z-index:2;box-shadow:0 4px 14px rgba(15,52,111,.16);border:1px solid #e5ebf4}
+.glemi-card-icon svg{width:27px;height:27px;fill:none;stroke:#123a79;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.glemi-quick-service[href="deep.html"] .glemi-card-icon svg{stroke:#1687e8}
+@media(max-width:600px){.glemi-card-icon{left:9px;top:57px;width:36px;height:36px;border-radius:10px}.glemi-card-icon svg{width:23px;height:23px}}
 </style>
 
 
@@ -217,10 +223,10 @@
           <div class="glemi-home-city-grid"><span>Vancouver</span><span>Burnaby</span><span>Surrey</span><span>Richmond</span><span>Coquitlam</span><span>North Vancouver</span><span>West Vancouver</span><span>Delta</span><span>Maple Ridge</span><span>New Westminster</span><span>Port Coquitlam</span><span>Port Moody</span><span>White Rock</span><span>Langley</span></div>
         </div>
         <div class="glemi-quick-services" aria-label="Choose your cleaning service">
-          <a class="glemi-quick-service" href="residential.html#cotizar"><img class="glemi-quick-photo" src="home-cleaning-glemi.jpeg" alt="GLEMI Home Cleaning"><span class="glemi-quick-info"><span><strong>Home Cleaning</strong><small>Kitchen, bathroom, bedroom &amp; living room</small></span><span class="glemi-quick-arrow">→</span></span></a>
-          <a class="glemi-quick-service" href="deep.html"><img class="glemi-quick-photo" src="deep-cleaning-office.jpeg" alt="GLEMI Deep Cleaning"><span class="glemi-quick-info"><span><strong>Deep Cleaning</strong><small>Detailed cleaning options</small></span><span class="glemi-quick-arrow">→</span></span></a>
-          <a class="glemi-quick-service" href="commercial.html"><img class="glemi-quick-photo" src="commercial-cleaning.jpg" alt="GLEMI Commercial Cleaning"><span class="glemi-quick-info"><span><strong>Commercial Cleaning</strong><small>Offices and business spaces</small></span><span class="glemi-quick-arrow">→</span></span></a>
-          <a class="glemi-quick-service" href="post-construction.html"><img class="glemi-quick-photo" src="post-construction.jpg" alt="GLEMI Post-Construction Cleaning"><span class="glemi-quick-info"><span><strong>Post-Construction</strong><small>After renovation or construction</small></span><span class="glemi-quick-arrow">→</span></span></a>
+          <a class="glemi-quick-service" href="residential.html#cotizar"><img class="glemi-quick-photo" src="home-cleaning-glemi.jpeg" alt="GLEMI Home Cleaning"><span class="glemi-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M8 23 24 10l16 13v17H29V29H19v11H8Z"/><path d="M36 7v7M32.5 10.5h7M11 8v6M8 11h6"/></svg></span><span class="glemi-quick-info"><span><strong>Home Cleaning</strong><small>Kitchen, bathroom, bedroom &amp; living room</small></span><span class="glemi-quick-arrow">→</span></span></a>
+          <a class="glemi-quick-service" href="deep.html"><img class="glemi-quick-photo" src="deep-cleaning-office.jpeg" alt="GLEMI Deep Cleaning"><span class="glemi-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 7c1.6 9.3 6.7 14.4 16 16-9.3 1.6-14.4 6.7-16 16-1.6-9.3-6.7-14.4-16-16 9.3-1.6 14.4-6.7 16-16Z"/></svg></span><span class="glemi-quick-info"><span><strong>Deep Cleaning</strong><small>Detailed cleaning options</small></span><span class="glemi-quick-arrow">→</span></span></a>
+          <a class="glemi-quick-service" href="commercial.html"><img class="glemi-quick-photo" src="commercial-cleaning.jpg" alt="GLEMI Commercial Cleaning"><span class="glemi-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M7 40V21h12v19M19 40V10h16v30M35 40V25h7v15M12 27h3M12 32h3M24 16h6M24 22h6M24 28h6M24 34h6"/></svg></span><span class="glemi-quick-info"><span><strong>Commercial Cleaning</strong><small>Offices and business spaces</small></span><span class="glemi-quick-arrow">→</span></span></a>
+          <a class="glemi-quick-service" href="post-construction.html"><img class="glemi-quick-photo" src="post-construction.jpg" alt="GLEMI Post-Construction Cleaning"><span class="glemi-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M10 29c0-9 6-16 14-16s14 7 14 16M7 29h34v7H7zM18 14V9h12v5"/></svg></span><span class="glemi-quick-info"><span><strong>Post-Construction</strong><small>After renovation or construction</small></span><span class="glemi-quick-arrow">→</span></span></a>
         </div>
 
         <div class="home-why-accordion">
