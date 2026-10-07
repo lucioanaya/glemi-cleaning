@@ -48,6 +48,9 @@
 .glemi-quick-service{display:block;position:relative;overflow:hidden;min-height:150px;border:1px solid #dce2ed;border-radius:16px;background:#fff;color:#131b30;text-decoration:none;box-shadow:0 3px 12px rgba(20,36,67,.04);transition:border-color .2s,transform .2s}
 .glemi-quick-service:hover,.glemi-quick-service:focus-visible{border-color:#2067dc;transform:translateY(-2px)}
 .glemi-quick-photo{display:block;width:100%;height:92px;object-fit:cover}
+/* Raise and center the worker in Deep + Commercial shortcut photos */
+.glemi-quick-service[href="deep.html"] .glemi-quick-photo,
+.glemi-quick-service[href="commercial.html"] .glemi-quick-photo{object-position:center 30%}
 .glemi-quick-info{display:flex;align-items:center;gap:8px;padding:10px 11px}
 .glemi-quick-info>span:first-child{min-width:0;flex:1}
 .glemi-quick-service strong{display:block;font-size:15px;line-height:1.25}
