@@ -42,6 +42,18 @@
     width: min(82vw, 360px) !important;
   }
 }
+
+/* Compact service shortcuts on the Metro Vancouver homepage */
+.glemi-quick-services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0 26px}
+.glemi-quick-service{display:block;position:relative;overflow:hidden;min-height:150px;border:1px solid #dce2ed;border-radius:16px;background:#fff;color:#131b30;text-decoration:none;box-shadow:0 3px 12px rgba(20,36,67,.04);transition:border-color .2s,transform .2s}
+.glemi-quick-service:hover,.glemi-quick-service:focus-visible{border-color:#2067dc;transform:translateY(-2px)}
+.glemi-quick-photo{display:block;width:100%;height:92px;object-fit:cover}
+.glemi-quick-info{display:flex;align-items:center;gap:8px;padding:10px 11px}
+.glemi-quick-info>span:first-child{min-width:0;flex:1}
+.glemi-quick-service strong{display:block;font-size:15px;line-height:1.25}
+.glemi-quick-service small{display:block;color:#697489;font-size:12px;line-height:1.35;margin-top:3px}
+.glemi-quick-arrow{color:#2166d8;font-size:19px}
+@media(max-width:600px){.glemi-quick-services{gap:9px}.glemi-quick-service{min-height:137px}.glemi-quick-photo{height:78px}.glemi-quick-info{padding:8px 9px}.glemi-quick-service strong{font-size:13px}.glemi-quick-service small{font-size:11px}.glemi-quick-arrow{font-size:15px}}
 </style>
 
 
@@ -170,13 +182,15 @@
       <div class="hero-copy why-home-copy">
         <div class="eyebrow">METRO VANCOUVER CLEANING SERVICES</div>
         <h1 class="why-home-title">Professional Cleaning Services in Metro Vancouver, BC</h1>
-        <p class="why-home-intro">GLEMI provides flexible home cleaning and commercial cleaning services across Metro Vancouver, British Columbia. Choose a service and request a personalized estimate.</p>
+        <p class="why-home-intro">Proudly serving Vancouver, Burnaby, Surrey, Richmond, Coquitlam, North Vancouver, West Vancouver, Delta, Maple Ridge, New Westminster, Port Coquitlam, Port Moody, White Rock and Langley.</p>
+        <div class="glemi-quick-services" aria-label="Choose your cleaning service">
+          <a class="glemi-quick-service" href="residential.html#cotizar"><img class="glemi-quick-photo" src="home-cleaning-glemi.jpeg" alt="GLEMI Home Cleaning"><span class="glemi-quick-info"><span><strong>Home Cleaning</strong><small>Kitchen, bathroom, bedroom &amp; living room</small></span><span class="glemi-quick-arrow">→</span></span></a>
+          <a class="glemi-quick-service" href="deep.html"><img class="glemi-quick-photo" src="deep-cleaning-office.jpeg" alt="GLEMI Deep Cleaning"><span class="glemi-quick-info"><span><strong>Deep Cleaning</strong><small>Detailed cleaning options</small></span><span class="glemi-quick-arrow">→</span></span></a>
+          <a class="glemi-quick-service" href="commercial.html"><img class="glemi-quick-photo" src="commercial-cleaning.jpg" alt="GLEMI Commercial Cleaning"><span class="glemi-quick-info"><span><strong>Commercial Cleaning</strong><small>Offices and business spaces</small></span><span class="glemi-quick-arrow">→</span></span></a>
+          <a class="glemi-quick-service" href="post-construction.html"><img class="glemi-quick-photo" src="post-construction.jpg" alt="GLEMI Post-Construction Cleaning"><span class="glemi-quick-info"><span><strong>Post-Construction</strong><small>After renovation or construction</small></span><span class="glemi-quick-arrow">→</span></span></a>
+        </div>
 
         <div class="home-why-accordion">
-          <details class="home-why-item">
-            <summary><span class="why-icon eco">☘</span><span><strong>ECO-FRIENDLY PRODUCTS</strong><small>Fresh cleaning with a more environmentally conscious option.</small></span><b>⌄</b></summary>
-            <p>We use eco-friendly products to leave your home fresh and clean while being kinder to the environment.</p>
-          </details>
           <details class="home-why-item">
             <summary><span class="why-icon own">✦</span><span><strong>PREFER YOUR OWN PRODUCTS?</strong><small>We can use the cleaning products you already know and love.</small></span><b>⌄</b></summary>
             <p>Already have cleaning products you know and love? We’ll be happy to use them. Simply leave them ready and tell us your preferences when booking.</p>
