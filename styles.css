@@ -434,3 +434,13 @@ body{background:#eaf3ff!important}
 .glemi-journey-info{text-align:center;color:#53627a;line-height:1.5;font-size:15px}
 .glemi-journey-action{display:table;margin:22px auto 0;padding:13px 23px;border-radius:13px;background:#1765e8;color:#fff;text-decoration:none;font-weight:800}
 @media(max-width:650px){.glemi-journey{padding:24px 12px}.glemi-journey-step{font-size:11px}.glemi-journey-track:before,.glemi-journey-track:after{top:20px}.glemi-journey-number{height:44px;width:44px}}
+
+/* GLEMI 2026: consistent blue page canvas and booking progress */
+html,body{background:#e5f0ff!important}
+body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-logo-first{background-color:#e5f0ff!important}
+#how-it-works{padding-top:56px!important;padding-bottom:60px!important}
+#how-it-works .glemi-journey{background:#fff!important;max-width:760px!important}
+#how-it-works .glemi-journey-track{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+#how-it-works .glemi-journey-step{min-width:0!important}
+#how-it-works .glemi-journey-step.active .glemi-journey-number,#how-it-works .glemi-journey-step.complete .glemi-journey-number{background:#1765e8!important;color:white!important}
+@media(max-width:650px){#how-it-works .glemi-journey{margin:0 12px!important;padding:24px 12px!important}}
