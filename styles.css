@@ -449,3 +449,11 @@ body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-lo
 #how-it-works{padding:10px 0 22px!important;margin:0!important;background:transparent!important}
 #how-it-works .glemi-journey{padding:26px 20px 18px!important;max-width:760px!important}
 #how-it-works .glemi-journey-track{margin-bottom:0!important}
+
+/* Booking progress card — GLEMI blue */
+#how-it-works .glemi-journey{background:#0b3674!important;border:1px solid #14529a!important;box-shadow:0 12px 30px rgba(7,45,104,.16)!important}
+#how-it-works .glemi-journey-title{margin:0 0 25px;text-align:center;color:#fff;font-size:clamp(21px,4vw,30px);font-weight:800;letter-spacing:-.02em}
+#how-it-works .glemi-journey-step{color:#c3d3ea!important}
+#how-it-works .glemi-journey-step.active,#how-it-works .glemi-journey-step.complete{color:#fff!important}
+#how-it-works .glemi-journey-track:before{background:#56749e!important}
+#how-it-works .glemi-journey-track:after{background:#58a8ff!important}
