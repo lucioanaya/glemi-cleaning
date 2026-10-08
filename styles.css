@@ -444,3 +444,8 @@ body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-lo
 #how-it-works .glemi-journey-step{min-width:0!important}
 #how-it-works .glemi-journey-step.active .glemi-journey-number,#how-it-works .glemi-journey-step.complete .glemi-journey-number{background:#1765e8!important;color:white!important}
 @media(max-width:650px){#how-it-works .glemi-journey{margin:0 12px!important;padding:24px 12px!important}}
+
+/* Compact booking progress above four service cards */
+#how-it-works{padding:10px 0 22px!important;margin:0!important;background:transparent!important}
+#how-it-works .glemi-journey{padding:26px 20px 18px!important;max-width:760px!important}
+#how-it-works .glemi-journey-track{margin-bottom:0!important}
