@@ -220,6 +220,26 @@
 @media(min-width:900px){.glemi-floating-book{left:auto;right:26px;transform:none}}
 @media(max-width:400px){.glemi-floating-book{font-size:14px;padding:13px 19px}}
 </style>
+<style id="glemi-welcome-popup-css">
+.glemi-offer-overlay{position:fixed;inset:0;z-index:12000;background:rgba(11,22,46,.67);display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+.glemi-offer-overlay[hidden]{display:none!important}
+.glemi-offer-dialog{position:relative;width:min(100%,440px);max-height:calc(100dvh - 36px);overflow-y:auto;background:#fff;border-radius:26px;box-shadow:0 24px 65px #0005;color:#101d39;font-family:Inter,Arial,sans-serif;text-align:center}
+.glemi-offer-top{background:linear-gradient(135deg,#073473,#1773dc);color:#fff;padding:38px 20px 26px}
+.glemi-offer-tag{font-size:12px;font-weight:800;letter-spacing:.1em;border:1px solid #ffffff85;border-radius:30px;padding:9px 15px;display:inline-block}
+.glemi-offer-top h2{font-size:clamp(37px,10vw,58px);line-height:1;margin:20px 0 6px;color:#fff}
+.glemi-offer-top p{font-size:19px;margin:0 0 12px;color:#fff}
+.glemi-offer-sub{font-size:12px;opacity:.85;letter-spacing:.03em}
+.glemi-offer-close{position:absolute;top:12px;right:12px;background:#ffffff38;border:0;color:white;border-radius:50%;height:38px;width:38px;font-size:26px;cursor:pointer}
+.glemi-offer-body{padding:24px 23px 26px}
+.glemi-offer-code{border:2px solid #b7d6fa;border-radius:17px;background:#f0f7ff;padding:17px 10px;margin-bottom:18px}
+.glemi-offer-code small{display:block;color:#44618c;font-weight:700;letter-spacing:.09em;margin-bottom:9px}
+.glemi-offer-code strong{font-size:33px;letter-spacing:.07em;color:#0d4d9e}
+.glemi-offer-copy{margin-left:12px;border:1px solid #2778db;border-radius:10px;background:#fff;color:#0757ad;font-weight:700;padding:10px 13px;cursor:pointer}
+.glemi-offer-code p{font-size:12px;color:#63738b;margin:10px 0 0}
+.glemi-offer-cta{display:block;text-decoration:none;border-radius:13px;background:#1769ed;color:white!important;font-weight:800;padding:17px 12px;margin:0 0 12px}
+.glemi-offer-call{display:block;text-decoration:none;border-radius:13px;border:1px solid #dbe4f0;padding:13px;color:#263b5b;font-weight:600}
+.glemi-offer-dismiss{border:0;background:none;color:#6b778d;margin-top:17px;cursor:pointer;font-size:13px}
+</style>
 </head>
 <body>
   <header class="header">
@@ -326,6 +346,25 @@
   window.addEventListener('scroll', updateFloatingButton, {passive:true});
   window.addEventListener('resize', updateFloatingButton);
   updateFloatingButton();
+})();
+</script>
+<div class="glemi-offer-overlay" id="glemiOfferOverlay" hidden>
+ <div class="glemi-offer-dialog" role="dialog" aria-modal="true" aria-labelledby="glemiOfferTitle">
+  <div class="glemi-offer-top"><button class="glemi-offer-close" id="glemiOfferClose" aria-label="Close offer">×</button><span class="glemi-offer-tag">★ NEW CUSTOMER OFFER</span><h2 id="glemiOfferTitle">10% OFF</h2><p>Your First Cleaning</p><span class="glemi-offer-sub">GLEMI · METRO VANCOUVER</span></div>
+  <div class="glemi-offer-body"><div class="glemi-offer-code"><small>YOUR CODE</small><strong>WELCOME</strong><button type="button" class="glemi-offer-copy" id="glemiOfferCopy">Copy</button><p>First eligible booking only · Eligibility verified at booking</p></div><a class="glemi-offer-cta" href="residential.html?promo=WELCOME#cotizar">CLAIM MY 10% DISCOUNT →</a><a class="glemi-offer-call" href="tel:+12369986275">☎ Prefer to call? 236-998-6275</a><button class="glemi-offer-dismiss" id="glemiOfferDismiss">No thanks, continue to GLEMI</button></div>
+ </div>
+</div>
+<script>
+(function(){
+ const overlay=document.getElementById('glemiOfferOverlay');
+ const key='glemiWelcomeOfferSeen';
+ function close(){overlay.hidden=true;document.body.style.overflow='';}
+ try{if(!sessionStorage.getItem(key)){overlay.hidden=false;document.body.style.overflow='hidden';sessionStorage.setItem(key,'1')}}catch(e){overlay.hidden=false;document.body.style.overflow='hidden'}
+ document.getElementById('glemiOfferClose').addEventListener('click',close);
+ document.getElementById('glemiOfferDismiss').addEventListener('click',close);
+ overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.hidden)close()});
+ document.getElementById('glemiOfferCopy').addEventListener('click',async function(){try{await navigator.clipboard.writeText('WELCOME');this.textContent='Copied!'}catch(e){this.textContent='WELCOME'}});
 })();
 </script>
 </body>

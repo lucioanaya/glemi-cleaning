@@ -265,4 +265,7 @@ body[data-page="residential"] .residential-promo-section img{
 
 
 
+<script>
+(function(){const params=new URLSearchParams(location.search);if(params.get('promo')==='WELCOME'){const input=document.getElementById('promoCode');if(input){input.value='WELCOME';input.dispatchEvent(new Event('input',{bubbles:true}));}}})();
+</script>
 </body></html>
