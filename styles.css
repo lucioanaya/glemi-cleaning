@@ -474,3 +474,23 @@ body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-lo
 .header-phone-pop a{display:block;padding:11px;border-radius:10px;background:#2169e9;color:white!important;font-weight:750;text-decoration:none}
 .header-phone-pop span{font-size:12px;color:#59677b}
 @media(max-width:850px){.header-contact{order:3;flex-basis:100%;justify-content:center;margin-left:0;gap:12px!important;font-size:clamp(14px,3.5vw,20px)!important}.header-phone summary{min-width:46px;min-height:46px}}
+
+/* Larger four homepage header controls; retain direct email/call actions */
+.header > .brand-logo{width:190px!important;height:104px!important;flex-shrink:0}
+.header > .brand-logo img{width:100%!important;height:100%!important;max-height:none!important;object-fit:contain}
+.header-contact{gap:28px!important}
+.header-contact a{display:inline-flex;align-items:center;justify-content:center;min-width:64px;min-height:64px;font-size:48px!important;line-height:1}
+.header .menu-btn{font-size:48px!important;line-height:1;min-width:64px;min-height:64px;color:#1689ed}
+@media(max-width:850px){
+ .header{padding-top:18px!important;padding-bottom:18px!important}
+ .header > .brand-logo{width:158px!important;height:100px!important}
+ .header-contact{gap:32px!important}
+ .header-contact a{font-size:46px!important;min-width:68px;min-height:68px}
+ .header .menu-btn{font-size:48px!important;min-width:68px;min-height:68px}
+}
+/* GLEMI: keep all four header controls aligned in one horizontal row */
+.header{display:flex!important;align-items:center!important;flex-wrap:nowrap!important;gap:clamp(8px,2vw,24px)!important}
+.header > .brand-logo{margin-right:auto!important}
+.header-contact{order:initial!important;flex-basis:auto!important;width:auto!important;margin-left:0!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-wrap:nowrap!important;gap:clamp(8px,2vw,22px)!important}
+.header .menu-btn{display:flex!important;align-items:center!important;justify-content:center!important;margin-left:0!important;flex-shrink:0!important}
+@media(max-width:850px){.header{min-height:110px!important;padding:12px 4vw!important}.header > .brand-logo{width:clamp(95px,26vw,155px)!important;height:90px!important}.header-contact a{font-size:clamp(27px,7vw,42px)!important;min-width:38px!important;min-height:44px!important}.header .menu-btn{font-size:clamp(32px,8vw,46px)!important;min-width:42px!important;min-height:44px!important}}
