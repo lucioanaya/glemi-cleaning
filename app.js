@@ -1,5 +1,5 @@
 const menuBtn=document.getElementById('menuBtn');
-if(menuBtn){const nav=document.getElementById('nav');menuBtn.setAttribute('aria-expanded','false');menuBtn.addEventListener('click',()=>{const open=nav?.classList.toggle('open')||false;menuBtn.setAttribute('aria-expanded',String(open))});nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menuBtn.setAttribute('aria-expanded','false')}))}
+if(menuBtn){const nav=document.getElementById('nav');menuBtn.setAttribute('aria-expanded','false');menuBtn.addEventListener('click',()=>{const open=nav?.classList.toggle('open')||false;menuBtn.setAttribute('aria-expanded',String(open));menuBtn.textContent=open?'×':'☰';menuBtn.setAttribute('aria-label',open?'Close menu':'Open menu')});nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');menuBtn.textContent='☰';menuBtn.setAttribute('aria-label','Open menu')}))}
 document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav')?.classList.remove('open')));
 
 function toast(msg){const el=document.getElementById('toast');if(!el)return;el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),3000)}
