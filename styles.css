@@ -406,3 +406,15 @@ footer .footer-logo img{
 .glemi-city-field select{width:100%;min-height:56px;padding:12px 16px;border:1px solid #cdd5df;border-radius:12px;background:#fff;color:#101828;font:inherit;font-size:16px}
 .glemi-city-field select:focus{outline:2px solid #1d68df;outline-offset:2px}
 .glemi-city-field small{color:#667085;font-size:12px}
+
+/* GLEMI homepage: keep promotion and information cards in normal flow */
+.home-logo-first .why-home-copy{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;min-width:0!important}
+.home-logo-first .glemi-home-cities,.home-logo-first .glemi-quick-services,.home-logo-first .welcome-offer,.home-logo-first .home-why-accordion{width:100%!important;max-width:100%!important;min-width:0!important;position:relative!important;float:none!important;transform:none!important;grid-column:auto!important;grid-row:auto!important}
+.home-logo-first .welcome-offer{display:grid!important;grid-template-columns:minmax(0,56px) minmax(0,1fr)!important;align-items:center!important;gap:14px!important;height:auto!important;min-height:0!important;margin:22px 0 16px!important;padding:18px!important;overflow:visible!important}
+.home-logo-first .welcome-offer>div{min-width:0!important;width:auto!important}
+.home-logo-first .welcome-offer h2,.home-logo-first .welcome-offer p{overflow-wrap:break-word!important;white-space:normal!important}
+.home-logo-first .home-why-accordion{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important}
+.home-logo-first .home-why-item{display:block!important;width:100%!important;min-width:0!important;height:auto!important}
+.home-logo-first .home-why-item summary{display:grid!important;grid-template-columns:44px minmax(0,1fr) 22px!important;width:100%!important;min-width:0!important}
+.home-logo-first .home-why-item summary>span:nth-child(2){min-width:0!important}
+@media(max-width:650px){.home-logo-first .welcome-offer{grid-template-columns:42px minmax(0,1fr)!important;gap:12px!important;padding:14px!important}.home-logo-first .welcome-offer h2{font-size:20px!important}.home-logo-first .home-why-item summary{grid-template-columns:40px minmax(0,1fr) 18px!important}}
