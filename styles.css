@@ -511,3 +511,22 @@ body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-lo
  .header .nav::before{content:'GLEMI MENU';display:block;color:#1765e8;font-size:12px;font-weight:800;letter-spacing:.12em;padding:4px 10px 12px}
  .header .menu-btn[aria-expanded="true"]{color:#263345!important}
 }
+
+/* GLEMI responsive service photography: desktop/tablet only; mobile layout preserved. */
+@media (min-width: 701px) {
+  #servicios.glemi-quick-services {grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:24px!important;}
+  #servicios .glemi-quick-service {min-width:0;border-radius:22px;min-height:0;}
+  #servicios .glemi-quick-photo {width:100%;height:clamp(195px,21vw,300px);object-fit:cover;object-position:center 42%;}
+  #servicios .glemi-quick-service[href="deep.html"] .glemi-quick-photo {object-position:center 37%;}
+  #servicios .glemi-quick-service[href="commercial.html"] .glemi-quick-photo {object-position:center 34%;}
+  #servicios .glemi-quick-service[href="post-construction.html"] .glemi-quick-photo {object-position:center 43%;}
+  #servicios .glemi-quick-info {padding:27px 22px 19px!important;min-height:86px;}
+  #servicios .glemi-quick-service strong {font-size:clamp(19px,1.65vw,25px);}
+  #servicios .glemi-quick-service small {font-size:clamp(14px,1.05vw,17px);}
+  #servicios .glemi-quick-arrow {font-size:27px;}
+  #servicios .glemi-card-icon {top:calc(clamp(195px,21vw,300px) - 24px)!important;left:18px;width:49px;height:49px;}
+}
+@media (min-width: 701px) and (max-width: 980px) {
+  #servicios.glemi-quick-services {gap:14px;}
+  #servicios .glemi-quick-info {padding:27px 15px 15px!important;}
+}
