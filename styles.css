@@ -463,3 +463,14 @@ body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-lo
 .header-contact{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-left:auto;font-size:12px}
 .header-contact a{color:#123568;text-decoration:none;font-weight:650;white-space:nowrap}
 @media(max-width:850px){.header{height:auto;min-height:76px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px;gap:8px}.header-contact{order:3;flex-basis:100%;justify-content:center;gap:8px 16px;margin-left:0;font-size:11px}.menu-btn{margin-left:auto}.nav{top:100%!important}}
+
+/* GLEMI header: large email and tap-to-reveal telephone */
+.header-contact{font-size:clamp(15px,2.1vw,22px)!important;gap:18px!important;flex-wrap:nowrap!important}
+.header-contact .header-email{font-weight:750;overflow-wrap:anywhere;white-space:normal}
+.header-phone{position:relative;flex-shrink:0}
+.header-phone summary{list-style:none;cursor:pointer;display:grid;place-items:center;font-size:clamp(27px,3vw,38px);min-width:48px;min-height:48px;border-radius:14px;background:#eaf2ff;user-select:none}
+.header-phone summary::-webkit-details-marker{display:none}
+.header-phone-pop{position:absolute;z-index:60;right:0;top:calc(100% + 9px);min-width:230px;max-width:85vw;padding:16px;border:1px solid #cfdbec;border-radius:16px;background:#fff;box-shadow:0 10px 30px #102a4b29;display:grid;gap:10px;text-align:center;font-size:16px;color:#123568}
+.header-phone-pop a{display:block;padding:11px;border-radius:10px;background:#2169e9;color:white!important;font-weight:750;text-decoration:none}
+.header-phone-pop span{font-size:12px;color:#59677b}
+@media(max-width:850px){.header-contact{order:3;flex-basis:100%;justify-content:center;margin-left:0;gap:12px!important;font-size:clamp(14px,3.5vw,20px)!important}.header-phone summary{min-width:46px;min-height:46px}}
