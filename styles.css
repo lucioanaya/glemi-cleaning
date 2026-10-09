@@ -572,3 +572,14 @@ body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-lo
 .glemi-book-banner h2{margin-bottom:clamp(35px,6vw,70px)!important}
 .glemi-book-no-payment{margin-bottom:clamp(45px,7vw,90px)!important}
 @media(max-width:650px){.glemi-book-banner h2{margin-bottom:42px!important}.glemi-book-no-payment{margin-bottom:55px!important}}
+
+/* Compact owner-approved hero: four elements, consistent responsive spacing */
+.glemi-book-banner{padding:clamp(28px,4vw,48px) 16px clamp(30px,4vw,50px)!important}
+.glemi-book-banner-inner{max-width:1100px}
+.glemi-book-kicker{font-size:clamp(13px,1.8vw,22px);letter-spacing:.045em;margin:0 0 clamp(18px,3vw,32px)}
+.glemi-book-banner h2{font-size:clamp(33px,5.8vw,72px)!important;line-height:1.1;margin:0 0 clamp(20px,3.5vw,36px)!important}
+.glemi-book-no-payment{font-size:clamp(17px,3vw,38px)!important;gap:12px;margin:0 0 clamp(24px,4vw,42px)!important}
+.glemi-book-check{background:transparent!important;color:#1765d7!important;border:2px solid currentColor;width:1.05em;height:1.05em;font-size:.9em;line-height:1}
+.glemi-book-cta{display:flex;width:100%;max-width:1000px;margin:auto;min-height:clamp(64px,9vw,116px);border-radius:clamp(18px,3vw,32px);font-size:clamp(18px,3.2vw,38px);font-weight:700;gap:clamp(10px,2vw,20px);padding:16px 18px}
+.glemi-book-cta svg{width:1em;height:1em;flex:none}
+@media(max-width:650px){.glemi-book-banner{padding:24px 10px 30px!important}.glemi-book-kicker{font-size:clamp(12px,3vw,17px)}.glemi-book-banner h2{font-size:clamp(29px,7.2vw,46px)!important}.glemi-book-no-payment{font-size:clamp(16px,4.1vw,23px)!important;gap:9px}.glemi-book-cta{max-width:100%;font-size:clamp(18px,4.5vw,26px);min-height:68px}}
