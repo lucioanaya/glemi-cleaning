@@ -566,3 +566,9 @@ body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-lo
 
 /* Match the navigation header to GLEMI's soft-blue page background. */
 .header{background:#e5f0ff!important;border-bottom-color:#d4e4f8!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+
+/* Owner-approved simplified intro banner */
+.glemi-book-banner-inner{max-width:1050px}
+.glemi-book-banner h2{margin-bottom:clamp(35px,6vw,70px)!important}
+.glemi-book-no-payment{margin-bottom:clamp(45px,7vw,90px)!important}
+@media(max-width:650px){.glemi-book-banner h2{margin-bottom:42px!important}.glemi-book-no-payment{margin-bottom:55px!important}}
