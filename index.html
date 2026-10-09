@@ -374,7 +374,9 @@
  function update(){let stage=1;const saved=Number(sessionStorage.getItem('glemiBookingStage')||1);stage=Math.max(1,Math.min(3,saved));nodes.forEach((n,i)=>{n.classList.toggle('active',i===stage-1);n.classList.toggle('complete',i<stage-1);n.querySelector('.glemi-journey-number').textContent=i<stage-1?'✓':String(i+1)});track.style.setProperty('--journey-progress',((stage-1)/2*100)+'%');if(info)info.textContent=messages[stage-1];}
  document.querySelectorAll('.glemi-quick-services a').forEach(a=>a.addEventListener('click',()=>{sessionStorage.setItem('glemiBookingStage','2');update()}));
  document.addEventListener('click',e=>{if(e.target.closest('[data-quote],.estimate-button,#estimateBtn')){sessionStorage.setItem('glemiBookingStage','3');update()}});
- window.addEventListener('pageshow',update);
+ window.addEventListener('pageshow',()=>{sessionStorage.setItem('glemiBookingStage','1');update()});
+ // Returning to the four service cards always means step one.
+ sessionStorage.setItem('glemiBookingStage','1');
  update();
 })();
 </script></body>
