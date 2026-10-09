@@ -530,3 +530,15 @@ body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-lo
   #servicios.glemi-quick-services {gap:14px;}
   #servicios .glemi-quick-info {padding:27px 15px 15px!important;}
 }
+
+/* GLEMI introductory booking banner: responsive, no image asset required */
+.glemi-book-banner{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(120deg,#0750bb 0%,#0879dd 55%,#129bed 100%);color:#fff;text-align:center;padding:clamp(30px,5vw,76px) 18px;margin:0}
+.glemi-book-banner::before,.glemi-book-banner::after{content:"";position:absolute;z-index:-1;inset:auto;background:rgba(255,255,255,.075);transform:rotate(-35deg);width:40%;height:180%;top:-40%;pointer-events:none}
+.glemi-book-banner::before{left:-34%}.glemi-book-banner::after{right:-34%}
+.glemi-book-banner-inner{max-width:1200px;margin:auto}
+.glemi-book-banner h2{font-size:clamp(28px,5.4vw,74px);line-height:1.1;letter-spacing:-.035em;margin:0 0 18px;font-weight:800;color:#fff}
+.glemi-book-domain{font-size:clamp(35px,7vw,100px);line-height:1.05;font-weight:800;letter-spacing:-.035em;margin:0 0 clamp(20px,3.5vw,46px)}
+.glemi-book-no-payment{display:flex;justify-content:center;align-items:center;gap:clamp(12px,2vw,25px);font-size:clamp(21px,4.2vw,58px);line-height:1.2;margin:0 0 22px}
+.glemi-book-check{background:white;color:#0878db;border-radius:50%;width:1.28em;height:1.28em;display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:1em;font-weight:800}
+.glemi-book-subtitle{color:#d2e8ff;font-size:clamp(16px,3.1vw,40px);line-height:1.35;margin:0}
+@media(max-width:650px){.glemi-book-banner{padding:30px 16px 34px}.glemi-book-banner h2{margin-bottom:13px}.glemi-book-no-payment{gap:10px}.glemi-book-subtitle{max-width:330px;margin:auto}}
