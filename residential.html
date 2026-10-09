@@ -219,7 +219,18 @@ body[data-page="residential"] .residential-promo-section img{
 </style>
 <link rel="canonical" href="https://glemi.ca/residential.html">
 <meta name="robots" content="index, follow">
-<style>.residential-journey{max-width:900px;margin:22px auto 28px;padding:26px 22px;border-radius:25px;background:#d5e7ff;border:1px solid #bad4f6;text-align:center;color:#11376e}.residential-journey h2{font-size:clamp(23px,4vw,35px);margin:0 0 24px}.residential-journey-track{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;position:relative}.residential-journey-track:before{content:"";position:absolute;top:25px;left:12%;right:12%;height:5px;background:#afc3de}.residential-journey-step{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;font-size:clamp(11px,2.6vw,16px);font-weight:800}.residential-journey-step b{display:grid;place-items:center;width:54px;height:54px;border:6px solid white;border-radius:50%;background:#e4e9f2;color:#8291a9;font-size:24px;box-shadow:0 0 0 1px #c5d1e1}.residential-journey-step.active b{background:#1765e8;color:#fff}.residential-journey-step.complete b{background:#2e8b72;color:#fff}@media(max-width:420px){.residential-journey{padding:20px 10px}.residential-journey-step b{width:45px;height:45px;font-size:19px}.residential-journey-track:before{top:21px}}</style></head>
+<style>.residential-journey{max-width:900px;margin:22px auto 28px;padding:26px 22px;border-radius:25px;background:#d5e7ff;border:1px solid #bad4f6;text-align:center;color:#11376e}.residential-journey h2{font-size:clamp(23px,4vw,35px);margin:0 0 24px}.residential-journey-track{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;position:relative}.residential-journey-track:before{content:"";position:absolute;top:25px;left:12%;right:12%;height:5px;background:#afc3de}.residential-journey-step{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;font-size:clamp(11px,2.6vw,16px);font-weight:800}.residential-journey-step b{display:grid;place-items:center;width:54px;height:54px;border:6px solid white;border-radius:50%;background:#e4e9f2;color:#8291a9;font-size:24px;box-shadow:0 0 0 1px #c5d1e1}.residential-journey-step.active b{background:#1765e8;color:#fff}.residential-journey-step.complete b{background:#2e8b72;color:#fff}@media(max-width:420px){.residential-journey{padding:20px 10px}.residential-journey-step b{width:45px;height:45px;font-size:19px}.residential-journey-track:before{top:21px}}</style><style id="glemi-your-details-visible-fix">
+.form-step[data-step="3"] .glemi-contact-fields{display:flex!important;flex-direction:column!important;gap:20px!important;width:100%!important}
+.form-step[data-step="3"] .glemi-contact-fields>.full-field{display:flex!important;flex-direction:column!important;width:100%!important;min-width:0!important;grid-column:1/-1!important;gap:9px!important;visibility:visible!important;opacity:1!important}
+.form-step[data-step="3"] .glemi-contact-fields>.full-field input,
+.form-step[data-step="3"] .glemi-contact-fields>.full-field textarea{box-sizing:border-box;min-width:0;max-width:100%}
+.form-step[data-step="3"] .glemi-contact-fields>.full-field>input,
+.form-step[data-step="3"] .glemi-contact-fields>.full-field>textarea{width:100%!important;display:block!important}
+.form-step[data-step="3"] .canada-phone{display:flex!important;width:100%!important;align-items:center}
+.form-step[data-step="3"] .canada-phone input{flex:1;min-width:0}
+.form-step[data-step="3"] .icon-label{display:flex!important;align-items:center;flex-wrap:wrap;gap:7px;font-weight:700}
+.form-step[data-step="3"] .promo-code-box{width:100%}
+</style></head>
 <body data-page="residential">
 <header class="header"><a class="brand-logo" href="index.html"><img src="glemi-logo.png" alt="GLEMI"></a><nav class="nav" id="nav"><a href="index.html">Home</a><a href="residential.html" class="active-link">Home Cleaning</a><a href="commercial.html">Commercial</a><a href="post-construction.html">Post-Construction</a></nav><a class="btn btn-secondary header-cta" href="index.html#servicios">Change service</a><button class="menu-btn" id="menuBtn">☰</button></header>
 <main>
@@ -239,8 +250,8 @@ body[data-page="residential"] .residential-promo-section img{
 <div class="calendar-section"><label class="form-label">Select a date and time *</label><div class="calendar-header"><button type="button" id="prevMonth">‹</button><strong id="monthTitle"></strong><button type="button" id="nextMonth">›</button></div><div class="calendar-week"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="calendar" id="calendar"></div><div class="legend"><span><i class="available"></i> Available</span><span><i class="limited"></i> Limited availability</span><span><i class="blocked"></i> Unavailable</span></div><div class="time-section"><label>Available times</label><div id="times" class="time-grid"><span class="empty">Select an available day</span></div></div></div>
 <div class="step-actions"><button type="button" class="btn btn-secondary back">← Back</button><button type="button" class="btn btn-primary" id="continueDetails">Continue to your details →</button></div></div>
 <div class="form-step" data-step="3"><div class="field-grid glemi-contact-fields">
-<div class="full-field"><span class="icon-label"><i class="field-icon">🎁</i>Promotional code <small>(optional — 10% off with WELCOME)</small></span><div class="promo-code-box">
-  <label for="promoCode"><strong>Promotional code</strong></label>
+<div class="full-field promo-contact-field"><div class="promo-code-box">
+  <label for="promoCode"><strong>🎁 Promotional code</strong> <small>(optional — 10% off with WELCOME)</small></label>
   <div class="promo-code-row">
     <input id="promoCode" type="text" autocomplete="off" placeholder="Enter promo code">
     <button type="button" id="applyPromoCode">APPLY</button>
