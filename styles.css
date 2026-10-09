@@ -542,3 +542,11 @@ body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-lo
 .glemi-book-check{background:white;color:#0878db;border-radius:50%;width:1.28em;height:1.28em;display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:1em;font-weight:800}
 .glemi-book-subtitle{color:#d2e8ff;font-size:clamp(16px,3.1vw,40px);line-height:1.35;margin:0}
 @media(max-width:650px){.glemi-book-banner{padding:30px 16px 34px}.glemi-book-banner h2{margin-bottom:13px}.glemi-book-no-payment{gap:10px}.glemi-book-subtitle{max-width:330px;margin:auto}}
+
+/* GLEMI: lighter booking progress card, preserving contrast */
+#how-it-works .glemi-journey{background:#cfe3ff!important;border:1px solid #a9cbf5!important;box-shadow:0 12px 30px rgba(31,100,186,.12)!important}
+#how-it-works .glemi-journey-title{color:#103b78!important}
+#how-it-works .glemi-journey-step{color:#536d92!important}
+#how-it-works .glemi-journey-step.active,#how-it-works .glemi-journey-step.complete{color:#10437f!important}
+#how-it-works .glemi-journey-track:before{background:#a5bedf!important}
+#how-it-works .glemi-journey-track:after{background:#1765e8!important}
