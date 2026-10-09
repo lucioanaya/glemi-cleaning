@@ -550,3 +550,16 @@ body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-lo
 #how-it-works .glemi-journey-step.active,#how-it-works .glemi-journey-step.complete{color:#10437f!important}
 #how-it-works .glemi-journey-track:before{background:#a5bedf!important}
 #how-it-works .glemi-journey-track:after{background:#1765e8!important}
+
+/* GLEMI banner refresh — light brand background, strong dark text */
+.glemi-book-banner{background:#e7f0ff!important;color:#071b3e!important;padding:clamp(32px,5vw,68px) 18px!important}
+.glemi-book-banner::before,.glemi-book-banner::after{display:none!important}
+.glemi-book-kicker{font-size:clamp(12px,1.15vw,16px);letter-spacing:.1em;font-weight:800;color:#1259c7;margin:0 0 16px}
+.glemi-book-banner h2{color:#071b3e!important;font-size:clamp(30px,4.7vw,64px)!important}
+.glemi-book-domain{color:#0755bc!important;font-size:clamp(36px,6vw,82px)!important;margin-bottom:clamp(20px,3vw,36px)!important}
+.glemi-book-no-payment{color:#071b3e!important;font-size:clamp(19px,2.8vw,38px)!important}
+.glemi-book-check{background:#0869df!important;color:#fff!important}
+.glemi-book-subtitle{color:#18365c!important;font-size:clamp(16px,2vw,25px)!important;font-weight:600;max-width:760px;margin:0 auto 26px!important}
+.glemi-book-cta{display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:15px 26px;border-radius:14px;background:#075dd7;color:#fff!important;text-decoration:none;font-size:clamp(15px,1.5vw,19px);font-weight:800;box-shadow:0 8px 20px rgba(7,93,215,.16);transition:background .2s,transform .2s}
+.glemi-book-cta:hover,.glemi-book-cta:focus-visible{background:#0649a9;transform:translateY(-1px)}
+@media(max-width:650px){.glemi-book-banner{padding:32px 16px 38px!important}.glemi-book-cta{width:min(100%,330px)}}
