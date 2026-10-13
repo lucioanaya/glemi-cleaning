@@ -71,3 +71,35 @@ body:has(#appFriw:not(.hidden)){background:#edf3fa;color:var(--glemi-ink)}
  #appFriw .schedule-row>label{min-width:0;overflow-wrap:anywhere}
  #appFriw .schedule-row>input[type="checkbox"]{justify-self:start}
 }
+
+/* Refined mobile navigation and appointment cards */
+@media(max-width:700px){
+ #appFriw .glemi-mobile-top{position:sticky;top:0;z-index:45;height:64px;padding:10px 18px;box-shadow:0 5px 18px #071c3420}
+ #appFriw .glemi-mobile-top img{width:40px;height:40px}
+ #appFriw .glemi-mobile-top button{width:42px;height:42px;border-radius:13px}
+ #appFriw .sidebar{top:0;left:auto;right:0;width:min(300px,84vw);height:100dvh;max-height:100dvh;border-radius:22px 0 0 22px;padding:90px 18px 28px;box-shadow:-18px 0 55px #0007;z-index:60}
+ #appFriw .sidebar nav{grid-template-columns:1fr;gap:8px}
+ #appFriw .nav-btn{width:100%;text-align:left;padding:15px 18px;border-radius:13px}
+ #appFriw .sidebar #logoutBtn{margin-top:12px}
+ #appFriw .glemi-admin-hero{height:126px}
+ #appFriw .glemi-admin-hero-content{padding:18px 20px}
+ #appFriw .glemi-admin-hero-content span{font-size:9px}
+ #appFriw .glemi-admin-hero h1{font-size:24px}
+ #appFriw .glemi-admin-hero p{font-size:12px}
+ #appFriw .main-panel{padding:0 12px 28px}
+ #appFriw .glemi-mobile-top,#appFriw .glemi-admin-hero{margin-left:-12px;margin-right:-12px}
+ #appFriw .topbar{margin:-8px 0 15px;padding:14px 16px;border-radius:18px}
+ #appFriw .card{padding:17px 15px;border-radius:20px}
+ #appFriw .card-head{align-items:center;gap:12px}
+ #appFriw .card-head h3{font-size:22px}
+ #appFriw .card-head .primary.small{padding:11px 13px;font-size:12px}
+ #appFriw .filters{display:grid;grid-template-columns:1fr;gap:10px;margin:18px 0}
+ #appFriw .filters input,#appFriw .filters select{width:100%;min-height:48px;font-size:15px}
+ #appFriw .appointment-item{display:flex;flex-direction:column;align-items:stretch;gap:12px;margin:12px 0;padding:17px 16px!important;border:1px solid #e2eaf4!important;border-radius:17px;background:#fff;box-shadow:0 5px 16px #102b4b0b}
+ #appFriw .appointment-item>*{min-width:0;max-width:100%}
+ #appFriw .appointment-item strong{font-size:17px;overflow-wrap:anywhere}
+ #appFriw .appointment-item button{min-height:39px}
+ #appFriw .appointment-item .actions{display:flex;flex-wrap:wrap;gap:8px}
+ #appFriw .appointment-item .actions button{flex:1;min-width:75px}
+ #appFriw #appointmentList,#appFriw #dashboardAppointments{min-width:0}
+}
