@@ -81,7 +81,30 @@ function renderStats(){el('statPending').textContent=appointments.filter(x=>x.st
 function bindAppointmentActions(root){root.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editAppointment(b.dataset.edit));root.querySelectorAll('[data-confirm]').forEach(b=>b.onclick=()=>setStatus(b.dataset.confirm,'confirmed'));root.querySelectorAll('[data-cancel]').forEach(b=>b.onclick=()=>setStatus(b.dataset.cancel,'cancelled'))}
 function renderAppointments(){const q=(el('appointmentSearch').value||'').toLowerCase(),f=el('appointmentFilter').value;const arr=appointments.filter(a=>(f==='all'||a.status===f)&&`${a.client_name} ${a.service} ${a.appointment_date}`.toLowerCase().includes(q));el('appointmentList').innerHTML=arr.map(appointmentHTML).join('')||'<p class="muted">No results found.</p>';bindAppointmentActions(el('appointmentList'))}
 el('appointmentSearch').oninput=renderAppointments;el('appointmentFilter').onchange=renderAppointments;el('newAppointmentBtn').onclick=()=>openAppointment();
-async function notifyBookingChange(id,previous){try{const {data,error}=await sb.functions.invoke('notify-booking-change',{body:{appointment_id:id,previous}});if(error||!data?.ok){console.error('Booking notification failed',error||data);window.alert('The appointment was saved, but the customer email could not be sent. Please contact the customer directly.');return false}if(data.skipped)window.alert('The appointment was saved, but no notification was sent: '+data.reason);return true}catch(error){console.error(error);window.alert('The appointment was saved, but the customer email could not be sent.');return false}}
+async function notifyBookingChange(id,previous){
+ try{
+  const {data:sessionData,error:sessionError}=await sb.auth.getSession();
+  const token=sessionData?.session?.access_token;
+  if(sessionError||!token)throw new Error('Your admin session has expired. Sign in again.');
+  const response=await fetch(cfg.url+'/functions/v1/notify-booking-change',{
+   method:'POST',
+   headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'apikey':cfg.key},
+   body:JSON.stringify({appointment_id:id,previous})
+  });
+  const result=await response.json().catch(()=>({error:'Invalid email service response'}));
+  if(!response.ok||!result.ok||result.skipped){
+   const reason=result.error||result.reason||('HTTP '+response.status);
+   window.alert('Appointment saved, but the notification email was NOT sent. '+reason);
+   return false;
+  }
+  window.alert('Appointment saved. Email notification accepted by the email provider for delivery.');
+  return true;
+ }catch(error){
+  console.error('Booking notification error',error);
+  window.alert('Appointment saved, but the email could not be sent: '+(error?.message||'Connection error'));
+  return false;
+ }
+}
 async function setStatus(id,status){if(status==='cancelled'&&!window.confirm('Are you sure you want to cancel this appointment?'))return;const previous=appointments.find(a=>a.id===id);const {error}=await sb.from('appointments').update({status}).eq('id',id);if(error){window.alert('Could not update the appointment: '+error.message);return}await notifyBookingChange(id,previous);await loadAll()}
 function openAppointment(a={}){el('appointmentDialogTitle').textContent=a.id?'Edit appointment':'New appointment';el('appointmentId').value=a.id||'';el('appointmentClient').value=a.client_name||'';el('appointmentService').value=a.service||'Residential Cleaning';el('appointmentDate').value=a.appointment_date||'';el('appointmentTime').value=(a.appointment_time||'').slice(0,5);el('appointmentPhone').value=a.phone||'';el('appointmentEmail').value=a.email||'';el('appointmentAddress').value=a.address||'';el('appointmentTotal').value=a.total_cad||'';el('appointmentStatus').value=a.status||'pending';el('appointmentDialog').showModal()}
 function editAppointment(id){openAppointment(appointments.find(x=>x.id===id)||{})}
