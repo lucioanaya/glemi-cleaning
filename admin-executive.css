@@ -60,3 +60,14 @@ body:has(#appFriw:not(.hidden)){background:#edf3fa;color:var(--glemi-ink)}
 #appFriw .card-head{flex-wrap:wrap}
 #appFriw .card-head h3{font-size:19px}
 }
+/* Mobile working-hours overflow fix */
+#appFriw .schedule-grid,#appFriw .schedule-row{min-width:0;max-width:100%}
+@media(max-width:700px){
+ html,body{max-width:100%;overflow-x:hidden}
+ #appFriw .main-panel,#appFriw .panel-view,#appFriw .card,#appFriw .schedule-grid{min-width:0;max-width:100%}
+ #appFriw .schedule-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;padding:12px;align-items:center}
+ #appFriw .schedule-row>*{min-width:0;max-width:100%}
+ #appFriw .schedule-row>input[type="time"]{width:100%;min-width:0;padding:10px 5px;font-size:14px}
+ #appFriw .schedule-row>label{min-width:0;overflow-wrap:anywhere}
+ #appFriw .schedule-row>input[type="checkbox"]{justify-self:start}
+}
