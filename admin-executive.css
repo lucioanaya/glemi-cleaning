@@ -103,3 +103,20 @@ body:has(#appFriw:not(.hidden)){background:#edf3fa;color:var(--glemi-ink)}
  #appFriw .appointment-item .actions button{flex:1;min-width:75px}
  #appFriw #appointmentList,#appFriw #dashboardAppointments{min-width:0}
 }
+
+/* Mobile executive dashboard: compact, desktop-inspired */
+@media(max-width:700px){
+ #appFriw .glemi-mobile-top{height:66px;background:#0d1c34}
+ #appFriw .glemi-admin-hero{height:175px;background-position:center 48%}
+ #appFriw .glemi-admin-hero-content{padding:22px}
+ #appFriw .glemi-admin-hero h1{font-size:29px;letter-spacing:-.035em}
+ #appFriw .glemi-admin-hero p{font-size:14px}
+ #appFriw .sidebar{top:0;right:0;left:auto;width:min(290px,80vw);height:100dvh;max-height:100dvh;padding:94px 15px 25px;gap:16px;overflow-y:auto;border-radius:20px 0 0 20px}
+ #appFriw .sidebar nav{display:flex;flex-direction:column;gap:3px}
+ #appFriw .sidebar .nav-btn{font-size:14px;padding:13px 17px;min-height:46px;border-radius:11px}
+ #appFriw .sidebar #logoutBtn{font-size:14px;margin-top:8px}
+ #appFriw .topbar{border-radius:18px;padding:15px 17px}
+ #appFriw .stats article{min-height:122px}
+ #appFriw .card{box-shadow:0 7px 24px #1427470d}
+ #appFriw .appointment-item{padding:17px!important}
+}
