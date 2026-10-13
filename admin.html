@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,10 +41,10 @@
         <nav id="sideNav">
           <button class="nav-btn active" data-view="dashboard">Dashboard</button>
           <button class="nav-btn" data-view="appointments">Appointments</button>
-          <button class="nav-btn" data-view="schedule">Calendario</button>
-          <button class="nav-btn" data-view="pricing">Precios</button>
+          <button class="nav-btn" data-view="schedule">Calendar</button>
+          <button class="nav-btn" data-view="pricing">Pricing</button>
           <button class="nav-btn" data-view="content">Website</button>
-          <button class="nav-btn" data-view="users">Usuarios</button>
+          <button class="nav-btn" data-view="users">Users</button>
         </nav>
         <button id="logoutBtn" class="ghost danger-text">Sign Out</button>
       </aside>
@@ -54,7 +54,7 @@
         <div class="glemi-admin-hero"><div class="glemi-admin-hero-content"><span>GLEMI · CLEANING & PROPERTY SERVICES</span><h1>Welcome to GLEMI</h1><p>Your business, beautifully organized.</p></div></div>
         <header class="topbar">
           <div>
-            <p class="eyebrow">PANEL PRIVADO</p>
+            <p class="eyebrow">PRIVATE PANEL</p>
             <h2 id="pageTitle">Dashboard</h2>
           </div>
           <div class="user-chip"><span id="currentUserName"></span><small id="currentUserRole"></small></div>
@@ -146,7 +146,7 @@
 
         <section id="users" class="panel-view">
           <div class="card">
-            <div class="card-head"><div><p class="eyebrow">ACCESO PRIVADO</p><h3>Usuarios</h3><p class="muted">Este panel está limitado a 2 cuentas: la dueña (Owner) y el administrador (Admin).</p></div></div>
+            <div class="card-head"><div><p class="eyebrow">PRIVATE ACCESS</p><h3>Users</h3><p class="muted">This panel is limited to two accounts: Owner and Administrator.</p></div></div>
             <div id="usersList"></div>
             <div id="createAdminBox" class="user-create-box hidden">
               <h4>Agregar la segunda cuenta · Admin</h4>
@@ -154,7 +154,7 @@
               <div class="create-admin-grid">
                 <input id="newAdminName" placeholder="Nombre">
                 <input id="newAdminEmail" type="email" placeholder="Correo">
-                <input id="newAdminPassword" type="password" minlength="8" placeholder="Contraseña (mínimo 8 caracteres)">
+                <input id="newAdminPassword" type="password" minlength="8" placeholder="Password (minimum 8 characters)">
                 <button id="createAdminBtn" class="primary" type="button">Crear cuenta Admin</button>
               </div>
             </div>
@@ -184,6 +184,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=20261001-glemi-new-key"></script>
 
-<script src="admin.js?v=20261013-actions-fix"></script><script src="admin-executive.js?v=1"></script>
+<script src="admin.js?v=20261013-english"></script><script src="admin-executive.js?v=1"></script>
 </body>
 </html>
