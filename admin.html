@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex,nofollow">
   <title>GLEMI Admin</title>
-  <link rel="stylesheet" href="admin.css"><link rel="stylesheet" href="admin-executive.css?v=4">
+  <link rel="stylesheet" href="admin.css"><link rel="stylesheet" href="admin-executive.css?v=5">
 </head>
 <body>
   <main class="admin-shell">
@@ -48,7 +48,13 @@
         </nav>
         <button id="logoutBtn" class="ghost danger-text">Sign Out</button>
       </aside>
-
+      <nav class="glemi-bottom-nav" aria-label="Mobile navigation">
+        <button type="button" data-view="dashboard"><span class="nav-symbol">⌂</span><span>Home</span></button>
+        <button type="button" data-view="appointments"><span class="nav-symbol">▤</span><span>Bookings</span></button>
+        <button type="button" data-view="schedule"><span class="nav-symbol">▦</span><span>Calendar</span></button>
+        <button type="button" data-view="pricing"><span class="nav-symbol">＄</span><span>Pricing</span></button>
+        <button type="button" class="glemi-more-tab"><span class="nav-symbol">☰</span><span>More</span></button>
+      </nav>
       <div class="main-panel">
         <div class="glemi-mobile-top"><img src="glemi-logo.png" alt="GLEMI"><span>GLEMI ADMIN</span><button id="glemiMenuToggle" type="button" aria-label="Open navigation" aria-expanded="false">☰</button></div>
         <div class="glemi-admin-hero"><div class="glemi-admin-hero-content"><span>GLEMI · CLEANING & PROPERTY SERVICES</span><h1>Welcome to GLEMI</h1><p>Your business, beautifully organized.</p></div></div>
@@ -184,6 +190,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js?v=20261001-glemi-new-key"></script>
 
-<script src="admin.js?v=20261013-notify-diagnostics2"></script><script src="admin-executive.js?v=1"></script>
+<script src="admin.js?v=20261013-notify-diagnostics2"></script><script src="admin-executive.js?v=2"></script>
 </body>
 </html>
