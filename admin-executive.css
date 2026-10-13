@@ -138,3 +138,11 @@ body:has(#appFriw:not(.hidden)){background:#edf3fa;color:var(--glemi-ink)}
  #appFriw .sidebar nav button{text-align:center!important;padding:12px 5px!important}
  #appFriw .sidebar #logoutBtn{margin-top:0}
 }
+
+/* GLEMI light blue mobile bottom navigation */
+@media(max-width:700px){
+ #appFriw .glemi-bottom-nav{background:#dceeff;border-top:1px solid #b8d9f8;box-shadow:0 -8px 26px #4585b32a}
+ #appFriw .glemi-bottom-nav button{color:#32618e}
+ #appFriw .glemi-bottom-nav button.active{background:#83c5fa;color:#073e78;box-shadow:inset 0 0 0 1px #6bb5f0}
+ #appFriw .glemi-bottom-nav button .nav-symbol{color:inherit}
+}
