@@ -1,0 +1,62 @@
+/* GLEMI Executive — scoped to private admin interface only */
+:root{--glemi-navy:#101e36;--glemi-blue:#1268d6;--glemi-ink:#14223e}
+body:has(#appFriw:not(.hidden)){background:#edf3fa;color:var(--glemi-ink)}
+#appFriw.app{grid-template-columns:242px minmax(0,1fr)}
+#appFriw .sidebar{background:linear-gradient(165deg,#0d1b31,#152b4c);padding:22px 14px;gap:28px;box-shadow:8px 0 28px #10244010}
+#appFriw .brand-row{display:flex;flex-direction:column;text-align:center;gap:10px;padding:6px 0 12px}
+#appFriw .brand-row img{width:96px;height:96px;object-fit:contain;background:white;border-radius:18px;padding:5px}
+#appFriw .brand-row div{gap:4px}
+#appFriw .brand-row strong{letter-spacing:.17em;font-size:18px}
+#appFriw .sidebar nav{gap:8px}
+#appFriw .nav-btn{padding:14px 17px;font-size:14px;border-radius:11px;transition:background .15s}
+#appFriw .nav-btn.active,#appFriw .nav-btn:hover{background:linear-gradient(110deg,#1267cc,#277fe5);color:white;box-shadow:0 6px 16px #0002}
+#appFriw .main-panel{padding:0 24px 32px;min-width:0}
+#appFriw .glemi-admin-hero{height:205px;margin:0 -24px 0;position:relative;background:linear-gradient(90deg,#0e2036df,#102c4590 42%,#1a2e3d15),url('admin-hero.jpg') center 42%/cover,linear-gradient(115deg,#192d48,#c5d8e6);display:flex;align-items:center;color:white}
+#appFriw .glemi-admin-hero-content{padding:28px 34px}
+#appFriw .glemi-admin-hero-content span{font-size:11px;letter-spacing:.15em;font-weight:700;opacity:.9}
+#appFriw .glemi-admin-hero h1{font-size:clamp(27px,3vw,42px);margin:9px 0 5px}
+#appFriw .glemi-admin-hero p{margin:0;color:#f0f6ff}
+#appFriw .topbar{margin:-16px 0 22px;position:relative;background:#ffffffef;border:1px solid #e5edf5;border-radius:16px;padding:17px 22px;box-shadow:0 10px 24px #14274710;gap:12px}
+#appFriw .topbar h2{font-size:23px}
+#appFriw .eyebrow{color:#7587a1}
+#appFriw .user-chip{background:#edf5ff;border-color:#dce9f7}
+#appFriw .stats{gap:15px}
+#appFriw .stats article,#appFriw .card{border:1px solid #e3ebf4;border-radius:19px;box-shadow:0 8px 26px #1630520c}
+#appFriw .stats article{padding:22px;position:relative;overflow:hidden}
+#appFriw .stats article:before{content:'▦';display:grid;place-items:center;width:37px;height:37px;border-radius:12px;background:#e5f1ff;color:#1773e0;font-size:22px;margin-bottom:10px}
+#appFriw .stats article:nth-child(2):before{content:'✓';background:#dcf8ed;color:#14865e}
+#appFriw .stats article:nth-child(3):before{content:'◷';background:#eee8ff;color:#7351c9}
+#appFriw .stats article:nth-child(4):before{content:'♧';background:#fff1d2;color:#bc7b0b}
+#appFriw .stats strong{font-size:32px;color:#152747}
+#appFriw .card{padding:24px}
+#appFriw .card-head h3{font-size:21px;color:#142440}
+#appFriw .primary{background:#126dd9;box-shadow:0 5px 12px #126dd921}
+#appFriw .appointment-item{border-color:#e9eff7}
+#appFriw .glemi-mobile-top{display:none}
+@media(max-width:980px){#appFriw.app{grid-template-columns:210px minmax(0,1fr)}#appFriw .main-panel{padding:0 16px 24px}#appFriw .glemi-admin-hero{margin:0 -16px}#appFriw .stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){
+#appFriw.app{display:block}
+#appFriw .sidebar{display:none;position:fixed;z-index:50;top:65px;left:0;right:0;width:auto;height:auto;max-height:calc(100dvh - 65px);overflow:auto;border-radius:0 0 18px 18px;box-shadow:0 18px 40px #0005}
+#appFriw.glemi-menu-open .sidebar{display:flex}
+#appFriw .sidebar .brand-row{display:none}
+#appFriw .sidebar nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+#appFriw .nav-btn{padding:15px 12px}
+#appFriw .main-panel{padding:0 14px 24px}
+#appFriw .glemi-mobile-top{display:flex;align-items:center;gap:10px;height:65px;padding:7px 14px;background:#0e1e36;color:white;margin:0 -14px}
+#appFriw .glemi-mobile-top img{height:43px;width:43px;object-fit:contain;background:white;border-radius:9px}
+#appFriw .glemi-mobile-top span{font-weight:800;letter-spacing:.13em;font-size:14px}
+#appFriw .glemi-mobile-top button{margin-left:auto;background:#1b3761;color:white;border:1px solid #486286;border-radius:10px;font-size:24px;width:43px;height:42px}
+#appFriw .glemi-admin-hero{height:170px;margin:0 -14px}
+#appFriw .glemi-admin-hero-content{padding:20px}
+#appFriw .glemi-admin-hero h1{font-size:29px}
+#appFriw .topbar{margin:-10px 0 16px;padding:14px;align-items:flex-start}
+#appFriw .topbar h2{font-size:21px}
+#appFriw .user-chip{padding:8px;font-size:12px;max-width:130px}
+#appFriw .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#appFriw .stats article{padding:14px}
+#appFriw .stats strong{font-size:27px}
+#appFriw .card{padding:16px}
+#appFriw .appointment-item{grid-template-columns:1fr;gap:8px}
+#appFriw .card-head{flex-wrap:wrap}
+#appFriw .card-head h3{font-size:19px}
+}
