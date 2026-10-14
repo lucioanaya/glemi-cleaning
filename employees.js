@@ -148,7 +148,7 @@ async function recommend(){
     details.append(text('small',lookupPending.has(id)?'Finding the client address automatically…':lookupFailed.has(id)?'Could not confidently locate this address. Please verify it on Service Map.':'Looking up the client address…'));
    }else{
     details.append(text('small','Registered employee · not assigned.'));
-    details.append(text('small','Locate this employee’s address to calculate distance and estimated arrival.'));
+    details.append(text('small',bounds(employee)?'Employee coordinates ready; client location unavailable.':'Employee coordinates unavailable in this session. Open Employees and check address.'));
    }
    line.append(details);card.append(line);
    const controls=document.createElement('div');controls.className='glemi-employee-choice';
