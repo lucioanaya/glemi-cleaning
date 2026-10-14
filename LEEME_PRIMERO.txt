@@ -1,0 +1,8 @@
+GLEMI - Geoapify: tres archivos completos
+
+Sube employees.js, service-map.js y admin.html a la RAIZ de lucioanaya/glemi-cleaning, REEMPLAZANDO los archivos con el mismo nombre.
+NO subas el ZIP como archivo del sitio: extraelo primero. NO publiques tu clave API.
+
+Requisitos: funcion glemi-geoapify desplegada en Supabase; secreto GEOAPIFY_API_KEY guardado en el proyecto correcto; acceso de administrador a GLEMI.
+
+Despues de subir, espera el despliegue de Vercel. Abre el panel de administracion > Service Map > Find address. Verifica la ubicacion antes de asignar un empleado. Las rutas son estimaciones, no trafico en vivo.

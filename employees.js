@@ -5,11 +5,21 @@ const db=window.supabase?.createClient(cfg.url,cfg.key);
 const bounds=p=>p&&Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lon))&&Number(p.lat)>=48.95&&Number(p.lat)<=49.58&&Number(p.lon)>=-123.55&&Number(p.lon)<=-122.30;
 let employees=[],locations={},photos={},loaded=false,rendering=false,bookings=[],assignments=[];
 const autoLocations={},lookupPending=new Set(),lookupFailed=new Set(),preferredEmployees=new Map();
+const routeCache=new Map(),routeInFlight=new Set();
+async function geoapi(action,params){const {data,error}=await db.functions.invoke('glemi-geoapify',{body:{action,...params}});if(error||data?.error)throw Error(data?.error||error?.message||'Geoapify unavailable');return data;}
 const msg=s=>{$('employeeMessage').textContent=s};
 const text=(tag,s)=>{const el=document.createElement(tag);el.textContent=s||'';return el};
 function reset(){ $('employeeForm').reset();$('employeeId').value='';}
 $('employeeReset').onclick=reset;
 async function geocode(address){
+ try{
+  const data=await geoapi('geocode',{address});
+  const match=(data.candidates||[]).find(c=>bounds(c)&&c.confidence>=0.85&&c.housenumber);
+  if(match)return {lat:match.lat,lon:match.lon,score:100,address:match.formatted_address};
+  if(data.candidates?.length)throw Error('No confident building match. Include street number, city and postal code.');
+ }catch(err){
+  if(!String(err.message).includes('GEOAPIFY_NOT_CONFIGURED'))throw err;
+ }
  const url=new URL('https://geocoder.api.gov.bc.ca/addresses.json');
  url.searchParams.set('addressString',address);url.searchParams.set('maxResults','5');url.searchParams.set('provinceCode','BC');
  const res=await fetch(url);if(!res.ok)throw Error('BC address search is unavailable');
@@ -101,13 +111,19 @@ async function recommend(){
    if(!available.length){card.append(text('small','No employees available for this date.'));continue}
    const canCompare=bounds(p);
    const ranked=canCompare?available.filter(bounds).map(e=>({e,d:km(p,e)})).filter(item=>Number.isFinite(item.d)).sort((a,b)=>a.d-b.d):[];
-   // The nearest worker is a suggestion, never an automatic assignment.
-   // The administrator can preview any other registered employee per booking.
    const suggested=ranked[0]?.e||available[0];
    const selectedId=preferredEmployees.get(id);
    const employee=available.find(e=>e.id===current?.employee_id)||available.find(e=>e.id===selectedId)||suggested;
-   const distance=ranked.find(item=>item.e.id===employee.id);
-   const best=distance||null;
+   const best=ranked.find(item=>item.e.id===employee.id)||null;
+   const routeKey=best?JSON.stringify([id,employee.id,Number(p.lat),Number(p.lon),Number(employee.lat),Number(employee.lon)]):null;
+   if(routeKey&&!routeCache.has(routeKey)&&!routeInFlight.has(routeKey)){
+    routeInFlight.add(routeKey);
+    geoapi('route',{from:{lat:employee.lat,lon:employee.lon},to:{lat:p.lat,lon:p.lon}})
+     .then(result=>routeCache.set(routeKey,result))
+     .catch(()=>routeCache.set(routeKey,null))
+     .finally(()=>{routeInFlight.delete(routeKey);recommend()});
+   }
+   const driving=routeKey?routeCache.get(routeKey):null;
    const line=document.createElement('div');line.className='glemi-nearby-line';
    if(employee.photo_path&&photos[employee.id]){
     const img=document.createElement('img');img.src=photos[employee.id];img.alt='Photo of '+employee.full_name;line.append(img);
@@ -118,9 +134,13 @@ async function recommend(){
    details.append(text('strong',employee.full_name));
    const role=text('span',employee.job_role||'Cleaner');role.className='glemi-role-badge';details.append(role);
    if(best){
-    details.append(text('small','Distance: '+best.d.toFixed(1)+' km (straight line).'+(autoLocations[id]&&!locations[id]?' · Suggested address, not verified.':'')));
-    const estimate=Math.max(5,Math.round((best.d*1.4/25*60)/5)*5);
-    details.append(text('small','Estimated arrival: ~'+estimate+' min by car (rough estimate, not a real route).'));
+    if(driving){
+     details.append(text('small','Driving distance: '+(driving.distance_m/1000).toFixed(1)+' km'+(autoLocations[id]&&!locations[id]?' · Suggested address, not verified.':'')));
+     details.append(text('small','Estimated drive: ~'+Math.ceil(driving.time_s/60)+' min (not live traffic).'));
+    }else{
+     details.append(text('small','Straight-line distance: '+best.d.toFixed(1)+' km'+(autoLocations[id]&&!locations[id]?' · Suggested address, not verified.':'')));
+     details.append(text('small',routeInFlight.has(routeKey)?'Calculating driving route…':'Driving route unavailable; straight-line distance only.'));
+    }
     details.append(text('small',current?'Assigned to this booking.':'Available on this date · not assigned.'));
    }else if(!canCompare){
     details.append(text('small','Registered employee · not assigned.'));
@@ -141,8 +161,7 @@ async function recommend(){
    }
    select.addEventListener('change',()=>{preferredEmployees.set(id,select.value);recommend()});
    controls.append(label,select);card.append(controls);
-   const action=document.createElement('button');action.type='button';
-   action.className='glemi-assignment-button';
+   const action=document.createElement('button');action.type='button';action.className='glemi-assignment-button';
    action.textContent=current?'Remove assignment':'Assign employee';
    action.addEventListener('click',async()=>{
     action.disabled=true;
@@ -171,6 +190,13 @@ async function autoLocate(){
  for(const b of pending){
   lookupPending.add(b.id);recommend();
   try{
+   let usedGeoapify=false;
+   try{
+    const result=await geoapi('geocode',{address:b.address});usedGeoapify=true;
+    const match=(result.candidates||[]).find(c=>bounds(c)&&c.confidence>=0.85&&c.housenumber);
+    if(match)autoLocations[b.id]=match;else lookupFailed.add(b.id);
+   }catch(err){if(!String(err.message).includes('GEOAPIFY_NOT_CONFIGURED'))throw err}
+   if(usedGeoapify)continue;
    const u=new URL('https://geocoder.api.gov.bc.ca/addresses.json');
    u.searchParams.set('addressString',b.address);u.searchParams.set('provinceCode','BC');u.searchParams.set('maxResults','3');
    const res=await fetch(u);if(!res.ok)throw Error('Geocoder unavailable');
