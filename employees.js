@@ -33,8 +33,8 @@ async function refresh(){
  if(!db)return;
  const [e,l,a]=await Promise.all([db.from('cleaning_employees').select('*').order('full_name'),db.from('service_map_locations').select('appointment_id,lat,lon,verified'),db.from('booking_employee_assignments').select('appointment_id,employee_id,service_date')]);
  if(e.error){msg('Cannot load employees: '+e.error.message);return}
- if(a.error){msg('Cannot load employee availability: '+a.error.message);loaded=false;return}employees=e.data||[];assignments=a.data||[];locations={};
- if(l.error){console.warn('GLEMI map coordinates:',l.error.message)}
+ if(a.error){msg('Cannot load employee availability: '+a.error.message);loaded=false;return}employees=e.data||[];assignments=a.data||[];
+ if(l.error){console.warn('GLEMI map coordinates:',l.error.message);msg('Map coordinates could not be loaded: '+l.error.message)}
  for(const p of l.data||[])if(bounds(p))locations[String(p.appointment_id)]=p;
  await Promise.all(employees.filter(e=>e.photo_path).map(async e=>{
    const {data}=await db.storage.from('glemi-employee-photos').createSignedUrl(e.photo_path,3600);
