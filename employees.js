@@ -3,7 +3,8 @@
 const $=id=>document.getElementById(id),cfg=window.GLEMI_SUPABASE;
 const db=window.supabase?.createClient(cfg.url,cfg.key);
 const bounds=p=>p&&p.lat>=48.95&&p.lat<=49.58&&p.lon>=-123.55&&p.lon<=-122.30;
-let employees=[],locations={},photos={},loaded=false,rendering=false;
+let employees=[],locations={},photos={},loaded=false,rendering=false,bookings=[];
+const autoLocations={},lookupPending=new Set(),lookupFailed=new Set();
 const msg=s=>{$('employeeMessage').textContent=s};
 const text=(tag,s)=>{const el=document.createElement(tag);el.textContent=s||'';return el};
 function reset(){ $('employeeForm').reset();$('employeeId').value='';}
@@ -28,7 +29,7 @@ async function refresh(){
    const {data}=await db.storage.from('glemi-employee-photos').createSignedUrl(e.photo_path,3600);
    if(data?.signedUrl)photos[e.id]=data.signedUrl;
  }));
- loaded=true;drawEmployees();recommend();
+ loaded=true;drawEmployees();recommend();autoLocate();
 }
 function drawEmployees(){
  const list=$('employeeList');list.replaceChildren();
@@ -40,11 +41,11 @@ function drawEmployees(){
    if(e.photo_path){pic.src=photos[e.id]||'';pic.alt='Employee photo'}
    card.append(pic);
    const info=document.createElement('div');info.className='glemi-employee-info';
-   for(const s of [e.full_name,e.email,e.phone,e.address])info.append(text('p',s));
+   for(const s of [e.full_name,e.job_role||'Cleaner',e.email,e.phone,e.address])info.append(text('p',s));
    if(!bounds(e))info.append(text('small','Address not located yet'));
    card.append(info);
    const edit=text('button','Edit');edit.type='button';edit.onclick=()=>{
-     $('employeeId').value=e.id;$('employeeName').value=e.full_name;$('employeeEmail').value=e.email;$('employeePhone').value=e.phone;$('employeeAddress').value=e.address;
+     $('employeeId').value=e.id;$('employeeName').value=e.full_name;$('employeeEmail').value=e.email;$('employeePhone').value=e.phone;$('employeeAddress').value=e.address;$('employeeRole').value=e.job_role||'Cleaner';
      $('employeeForm').scrollIntoView({behavior:'smooth',block:'start'});
    };
    const remove=text('button','Remove');remove.type='button';remove.onclick=async()=>{
@@ -74,7 +75,7 @@ $('employeeForm').addEventListener('submit',async ev=>{
      const upload=await db.storage.from('glemi-employee-photos').upload(photo_path,photo,{contentType:photo.type});
      if(upload.error)throw Error(upload.error.message);
    }
-   const record={full_name:$('employeeName').value.trim(),email:$('employeeEmail').value.trim(),phone:$('employeePhone').value.trim(),address,lat:position.lat,lon:position.lon,photo_path,updated_at:new Date().toISOString()};
+   const record={job_role:$('employeeRole').value,full_name:$('employeeName').value.trim(),email:$('employeeEmail').value.trim(),phone:$('employeePhone').value.trim(),address,lat:position.lat,lon:position.lon,photo_path,updated_at:new Date().toISOString()};
    const result=id?await db.from('cleaning_employees').update(record).eq('id',id):await db.from('cleaning_employees').insert(record);
    if(result.error)throw Error(result.error.message);
    if(previous?.photo_path&&photo&&previous.photo_path!==photo_path)await db.storage.from('glemi-employee-photos').remove([previous.photo_path]);
@@ -91,7 +92,7 @@ async function recommend(){
   const cards=[...document.querySelectorAll('[data-employee-booking]')];
   const active=employees.filter(e=>e.active);
   for(const card of cards){
-   const id=card.dataset.employeeBooking,p=locations[id];card.replaceChildren();
+   const id=card.dataset.employeeBooking,p=locations[id]||autoLocations[id];card.replaceChildren();
    if(!active.length){card.append(text('small','No employees registered yet. Add an employee in Employees.'));continue}
    const canCompare=bounds(p);
    const ranked=canCompare?active.filter(bounds).map(e=>({e,d:km(p,e)})).sort((a,b)=>a.d-b.d):[];
@@ -107,14 +108,15 @@ async function recommend(){
    }
    const details=document.createElement('div');
    details.append(text('strong',employee.full_name));
+   const role=text('span',employee.job_role||'Cleaner');role.className='glemi-role-badge';details.append(role);
    if(best){
-    details.append(text('small','Distance: '+best.d.toFixed(1)+' km (straight line).'));
+    details.append(text('small','Distance: '+best.d.toFixed(1)+' km (straight line).'+(autoLocations[id]&&!locations[id]?' · Suggested address, not verified.':'')));
     const estimate=Math.max(5,Math.round((best.d*1.4/25*60)/5)*5);
     details.append(text('small','Estimated arrival: ~'+estimate+' min by car (rough estimate, not a real route).'));
     details.append(text('small','Availability not checked.'));
    }else if(!canCompare){
     details.append(text('small','Registered employee · not assigned.'));
-    details.append(text('small','Locate this booking on Service Map first to calculate distance and estimated arrival.'));
+    details.append(text('small',lookupPending.has(id)?'Finding the client address automatically…':lookupFailed.has(id)?'Could not confidently locate this address. Please verify it on Service Map.':'Looking up the client address…'));
    }else{
     details.append(text('small','Registered employee · not assigned.'));
     details.append(text('small','Locate this employee’s address to calculate distance and estimated arrival.'));
@@ -125,6 +127,26 @@ async function recommend(){
 }
 window.addEventListener('glemi:employees-open',refresh);
 window.addEventListener('glemi:recommendations-refresh',()=>{if(loaded)recommend();else refresh()});
-window.addEventListener('glemi:appointments-loaded',()=>refresh());
+async function autoLocate(){
+ if(!loaded||!bookings.length)return;
+ const pending=bookings.filter(b=>b.status==='confirmed'&&b.address&&!bounds(locations[b.id])&&!bounds(autoLocations[b.id])&&!lookupPending.has(b.id)&&!lookupFailed.has(b.id)).slice(0,12);
+ for(const b of pending){
+  lookupPending.add(b.id);recommend();
+  try{
+   const u=new URL('https://geocoder.api.gov.bc.ca/addresses.json');
+   u.searchParams.set('addressString',b.address);u.searchParams.set('provinceCode','BC');u.searchParams.set('maxResults','3');
+   const res=await fetch(u);if(!res.ok)throw Error('Geocoder unavailable');
+   const json=await res.json();
+   const matches=(json.features||[]).map(f=>({lat:+f.geometry?.coordinates?.[1],lon:+f.geometry?.coordinates?.[0],score:+f.properties?.score||0,precision:f.properties?.precision||''})).filter(bounds).sort((a,b)=>b.score-a.score);
+   // Only suggest a coordinate for strong, unambiguous address matches.
+   if(matches.length&&matches[0].score>=85&&(matches.length===1||matches[0].score-matches[1].score>=8)){
+    autoLocations[b.id]=matches[0];
+   }else lookupFailed.add(b.id);
+  }catch(e){lookupFailed.add(b.id)}
+  finally{lookupPending.delete(b.id);recommend()}
+ }
+}
+window.addEventListener('glemi:appointments-loaded',event=>{bookings=Array.isArray(event.detail)?event.detail:[];refresh().then(autoLocate)});
+
 window.addEventListener('glemi:map-open',()=>refresh());
 })();

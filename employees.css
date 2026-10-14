@@ -17,3 +17,14 @@
 .glemi-map-nearby .glemi-nearby-line img,.glemi-nearby-placeholder{width:54px;height:54px;flex-shrink:0;border-radius:50%;object-fit:cover}
 .glemi-nearby-placeholder{display:grid;place-items:center;background:#dbe7f5;font-size:25px}
 .glemi-map-nearby .glemi-nearby-line small{line-height:1.4}
+
+.glemi-employee-form select{width:100%;min-width:0;padding:12px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;color:#172f50}
+.glemi-role-badge{display:inline-block;margin:5px 0 6px;padding:4px 9px;border-radius:20px;background:#d9eafa;color:#153b63;font-size:12px;font-weight:700}
+.glemi-booking-details{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0}
+.glemi-booking-detail-row{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #e0e7f1;border-radius:12px;padding:10px;min-width:0}
+.glemi-booking-detail-row:last-child{grid-column:1/-1}
+.glemi-booking-detail-icon{font-size:20px;flex:none}
+.glemi-booking-detail-row small{display:block;color:#60728c;font-size:11px;font-weight:600;margin-bottom:3px}
+.glemi-booking-detail-row strong{display:block;color:#102f52;font-size:14px;overflow-wrap:anywhere}
+.glemi-map-nearby .glemi-nearby-line strong{display:block;color:#112c4d;font-size:16px}
+@media(max-width:390px){.glemi-booking-details{grid-template-columns:1fr}.glemi-booking-detail-row:last-child{grid-column:auto}}
