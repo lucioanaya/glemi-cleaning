@@ -5,13 +5,13 @@ const db=window.supabase?.createClient(cfg.url,cfg.key);
 const bounds=p=>p&&Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lon))&&Number(p.lat)>=48.95&&Number(p.lat)<=49.58&&Number(p.lon)>=-123.55&&Number(p.lon)<=-122.30;
 let employees=[],locations={},photos={},loaded=false,rendering=false,rerenderRequested=false,bookings=[],assignments=[];
 const autoLocations={},lookupPending=new Set(),lookupFailed=new Set(),preferredEmployees=new Map();
-const routeCache=new Map(),routeInFlight=new Set(),pointRequests=new Set();
+const routeCache=new Map(),routeInFlight=new Set(),pointRequests=new Set(),pointAttempted=new Set(),pointErrors=new Map();
 async function fetchMissingPoint(id){
- if(pointRequests.has(id))return;
- pointRequests.add(id);
+ if(pointRequests.has(id)||pointAttempted.has(id))return;
+ pointRequests.add(id);pointAttempted.add(id);
  try{
   const {data,error}=await db.from('service_map_locations').select('appointment_id,lat,lon,verified').eq('appointment_id',id).maybeSingle();
-  if(error){console.warn('GLEMI booking location lookup:',error.message);return;}
+  if(error){pointErrors.set(id,error.message);console.warn('GLEMI booking location lookup:',error.message);recommend();return;}
   if(bounds(data)){locations[String(data.appointment_id)]=data;recommend();}
  }finally{pointRequests.delete(id)}
 }
@@ -120,7 +120,7 @@ async function recommend(){
    if(!active.length){card.append(text('small','No employees registered yet. Add an employee in Employees.'));continue}
    if(!available.length){card.append(text('small','No employees available for this date.'));continue}
    const canCompare=bounds(p);
-   if(!canCompare&&!pointRequests.has(id))fetchMissingPoint(id).catch(err=>console.warn('GLEMI booking location:',err));
+   if(!canCompare&&!pointRequests.has(id)&&!pointAttempted.has(id))fetchMissingPoint(id).catch(err=>{pointErrors.set(id,err.message);console.warn('GLEMI booking location:',err);recommend()});
    const ranked=canCompare?available.filter(bounds).map(e=>({e,d:km(p,e)})).filter(item=>Number.isFinite(item.d)).sort((a,b)=>a.d-b.d):[];
    const suggested=ranked[0]?.e||available[0];
    const selectedId=preferredEmployees.get(id);
@@ -159,6 +159,8 @@ async function recommend(){
    }else{
     details.append(text('small','Registered employee · not assigned.'));
     details.append(text('small',bounds(employee)?'Employee coordinates ready; client location unavailable.':'Employee coordinates unavailable in this session. Open Employees and check address.'));
+    const sharedPoints=window.GLEMI_SERVICE_MAP_POINTS?.()||{};
+    details.append(text('small','Location diagnostic: '+(pointErrors.get(id)?'Supabase error: '+pointErrors.get(id):pointRequests.has(id)?'Reading Supabase…':pointAttempted.has(id)?'No matching location returned':'Waiting for location')+' · map pin '+(sharedPoints[id]?'present':'missing')+' · saved coordinates '+(locations[id]?'present':'missing')));
    }
    line.append(details);card.append(line);
    const controls=document.createElement('div');controls.className='glemi-employee-choice';
