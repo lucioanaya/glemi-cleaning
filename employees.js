@@ -3,7 +3,7 @@
 const $=id=>document.getElementById(id),cfg=window.GLEMI_SUPABASE;
 const db=window.supabase?.createClient(cfg.url,cfg.key);
 const bounds=p=>p&&Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lon))&&Number(p.lat)>=48.95&&Number(p.lat)<=49.58&&Number(p.lon)>=-123.55&&Number(p.lon)<=-122.30;
-let employees=[],locations={},photos={},loaded=false,rendering=false,bookings=[],assignments=[];
+let employees=[],locations={},photos={},loaded=false,rendering=false,rerenderRequested=false,bookings=[],assignments=[];
 const autoLocations={},lookupPending=new Set(),lookupFailed=new Set(),preferredEmployees=new Map();
 const routeCache=new Map(),routeInFlight=new Set();
 async function geoapi(action,params){const {data,error}=await db.functions.invoke('glemi-geoapify',{body:{action,...params}});if(error||data?.error)throw Error(data?.error||error?.message||'Geoapify unavailable');return data;}
@@ -98,7 +98,7 @@ function km(a,b){const rad=x=>x*Math.PI/180,R=6371,dlat=rad*(b.lat-a.lat),dlon=r
  return R*2*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));
 }
 async function recommend(){
- if(!loaded||rendering)return;rendering=true;
+ if(!loaded||rendering){if(rendering)rerenderRequested=true;return;}rendering=true;
  try{
   const cards=[...document.querySelectorAll('[data-employee-booking]')];
   const active=employees.filter(e=>e.active!==false);
@@ -181,7 +181,7 @@ async function recommend(){
    const note=text('small',current?'Assigned · Not available for other bookings on this date.':'Available suggestion · Not assigned yet.');
    note.className='glemi-not-assigned';card.append(note);
   }
- }finally{rendering=false}
+ }finally{rendering=false;if(rerenderRequested){rerenderRequested=false;queueMicrotask(recommend)}}
 }
 window.addEventListener('glemi:employees-open',refresh);
 window.addEventListener('glemi:recommendations-refresh',()=>{if(loaded){recommend();}else refresh()});
