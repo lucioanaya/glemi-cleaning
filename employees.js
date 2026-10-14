@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id),cfg=window.GLEMI_SUPABASE;
 const db=window.supabase?.createClient(cfg.url,cfg.key);
 const bounds=p=>p&&p.lat>=48.95&&p.lat<=49.58&&p.lon>=-123.55&&p.lon<=-122.30;
 let employees=[],locations={},photos={},loaded=false,rendering=false,bookings=[];
-const autoLocations={},lookupPending=new Set(),lookupFailed=new Set();
+const autoLocations={},lookupPending=new Set(),lookupFailed=new Set(),preferredEmployees=new Map();
 const msg=s=>{$('employeeMessage').textContent=s};
 const text=(tag,s)=>{const el=document.createElement(tag);el.textContent=s||'';return el};
 function reset(){ $('employeeForm').reset();$('employeeId').value='';}
@@ -96,10 +96,13 @@ async function recommend(){
    if(!active.length){card.append(text('small','No employees registered yet. Add an employee in Employees.'));continue}
    const canCompare=bounds(p);
    const ranked=canCompare?active.filter(bounds).map(e=>({e,d:km(p,e)})).sort((a,b)=>a.d-b.d):[];
-   const best=ranked[0];
-   // Without booking coordinates there is no reliable nearest employee. Show a
-   // registered employee as an unassigned preview, never as a recommendation.
-   const employee=best?.e||active[0];
+   // The nearest worker is a suggestion, never an automatic assignment.
+   // The administrator can preview any other registered employee per booking.
+   const suggested=ranked[0]?.e||active[0];
+   const selectedId=preferredEmployees.get(id);
+   const employee=active.find(e=>e.id===selectedId)||suggested;
+   const distance=ranked.find(item=>item.e.id===employee.id);
+   const best=distance||null;
    const line=document.createElement('div');line.className='glemi-nearby-line';
    if(employee.photo_path&&photos[employee.id]){
     const img=document.createElement('img');img.src=photos[employee.id];img.alt='Photo of '+employee.full_name;line.append(img);
@@ -122,6 +125,19 @@ async function recommend(){
     details.append(text('small','Locate this employee’s address to calculate distance and estimated arrival.'));
    }
    line.append(details);card.append(line);
+   const controls=document.createElement('div');controls.className='glemi-employee-choice';
+   const label=text('label','View another employee');label.htmlFor='employee-choice-'+id;
+   const select=document.createElement('select');select.id='employee-choice-'+id;
+   for(const e of active){
+    const option=document.createElement('option');option.value=e.id;
+    const match=ranked.find(item=>item.e.id===e.id);
+    option.textContent=e.full_name+(match?' · '+match.d.toFixed(1)+' km':' · location unavailable');
+    option.selected=e.id===employee.id;select.append(option);
+   }
+   select.addEventListener('change',()=>{preferredEmployees.set(id,select.value);recommend()});
+   controls.append(label,select);card.append(controls);
+   const note=text('small','Suggested only · No employee has been assigned.');
+   note.className='glemi-not-assigned';card.append(note);
   }
  }finally{rendering=false}
 }
