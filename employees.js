@@ -125,13 +125,13 @@ async function recommend(){
    const suggested=ranked[0]?.e||available[0];
    const selectedId=preferredEmployees.get(id);
    const employee=available.find(e=>e.id===current?.employee_id)||available.find(e=>e.id===selectedId)||suggested;
-   const best=ranked.find(item=>item.e.id===employee.id)||null;
+   const best=canCompare&&bounds(employee)?{e:employee,d:km(p,employee)}:null;
    const routeKey=best?JSON.stringify([id,employee.id,Number(p.lat),Number(p.lon),Number(employee.lat),Number(employee.lon)]):null;
    if(routeKey&&!routeCache.has(routeKey)&&!routeInFlight.has(routeKey)){
     routeInFlight.add(routeKey);
     geoapi('route',{from:{lat:employee.lat,lon:employee.lon},to:{lat:p.lat,lon:p.lon}})
      .then(result=>routeCache.set(routeKey,result))
-     .catch(()=>routeCache.set(routeKey,null))
+     .catch(err=>{console.warn('GLEMI Geoapify driving route:',err);routeCache.set(routeKey,{error:err.message||'Routing failed'})})
      .finally(()=>{routeInFlight.delete(routeKey);recommend()});
    }
    const driving=routeKey?routeCache.get(routeKey):null;
@@ -150,7 +150,7 @@ async function recommend(){
      details.append(text('small','Estimated drive: ~'+Math.ceil(driving.time_s/60)+' min (not live traffic).'));
     }else{
      details.append(text('small','Straight-line distance: '+best.d.toFixed(1)+' km'+(autoLocations[id]&&!locations[id]?' · Suggested address, not verified.':'')));
-     details.append(text('small',routeInFlight.has(routeKey)?'Calculating driving route…':'Driving route unavailable; straight-line distance only.'));
+     details.append(text('small',routeInFlight.has(routeKey)?'Calculating driving route…':driving?.error?'Driving route error: '+driving.error:'Driving route unavailable; straight-line distance only.'));
     }
     details.append(text('small',current?'Assigned to this booking.':'Available on this date · not assigned.'));
    }else if(!canCompare){
@@ -158,7 +158,7 @@ async function recommend(){
     details.append(text('small',lookupPending.has(id)?'Finding the client address automatically…':lookupFailed.has(id)?'Could not confidently locate this address. Please verify it on Service Map.':'Looking up the client address…'));
    }else{
     details.append(text('small','Registered employee · not assigned.'));
-    details.append(text('small',bounds(employee)?'Employee coordinates ready; client location unavailable.':'Employee coordinates unavailable in this session. Open Employees and check address.'));
+    details.append(text('small',!bounds(employee)?'Employee coordinates unavailable. Check the employee address.':!canCompare?'Client coordinates unavailable. Verify the booking pin.':'Could not compare coordinates.'));
     const sharedPoints=window.GLEMI_SERVICE_MAP_POINTS?.()||{};
     details.append(text('small','Location diagnostic: '+(pointErrors.get(id)?'Supabase error: '+pointErrors.get(id):pointRequests.has(id)?'Reading Supabase…':pointAttempted.has(id)?'No matching location returned':'Waiting for location')+' · map pin '+(sharedPoints[id]?'present':'missing')+' · saved coordinates '+(locations[id]?'present':'missing')));
    }
