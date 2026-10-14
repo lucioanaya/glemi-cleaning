@@ -101,7 +101,7 @@ async function recommend(){
  if(!loaded||rendering)return;rendering=true;
  try{
   const cards=[...document.querySelectorAll('[data-employee-booking]')];
-  const active=employees.filter(e=>e.active);
+  const active=employees.filter(e=>e.active!==false);
   for(const card of cards){
    const id=card.dataset.employeeBooking,p=locations[id]||autoLocations[id];card.replaceChildren();
    const booking=bookings.find(b=>String(b.id)===id);
@@ -135,7 +135,7 @@ async function recommend(){
    details.append(text('strong',employee.full_name));
    const role=text('span',employee.job_role||'Cleaner');role.className='glemi-role-badge';details.append(role);
    if(best){
-    if(driving){
+    if(driving&&Number.isFinite(+driving.distance_m)&&Number.isFinite(+driving.time_s)){
      details.append(text('small','Driving distance: '+(driving.distance_m/1000).toFixed(1)+' km'+(autoLocations[id]&&!locations[id]?' · Suggested address, not verified.':'')));
      details.append(text('small','Estimated drive: ~'+Math.ceil(driving.time_s/60)+' min (not live traffic).'));
     }else{
@@ -184,7 +184,7 @@ async function recommend(){
  }finally{rendering=false}
 }
 window.addEventListener('glemi:employees-open',refresh);
-window.addEventListener('glemi:recommendations-refresh',()=>{if(loaded)recommend();else refresh()});
+window.addEventListener('glemi:recommendations-refresh',()=>{if(loaded){recommend();}else refresh()});
 async function autoLocate(){
  if(!loaded||!bookings.length)return;
  const pending=bookings.filter(b=>['pending','confirmed'].includes(b.status)&&b.address&&!bounds(locations[b.id])&&!bounds(autoLocations[b.id])&&!lookupPending.has(b.id)&&!lookupFailed.has(b.id)).slice(0,12);
