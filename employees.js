@@ -34,7 +34,8 @@ async function refresh(){
  const [e,l,a]=await Promise.all([db.from('cleaning_employees').select('*').order('full_name'),db.from('service_map_locations').select('appointment_id,lat,lon,verified'),db.from('booking_employee_assignments').select('appointment_id,employee_id,service_date')]);
  if(e.error){msg('Cannot load employees: '+e.error.message);return}
  if(a.error){msg('Cannot load employee availability: '+a.error.message);loaded=false;return}employees=e.data||[];assignments=a.data||[];locations={};
- for(const p of l.data||[])if(bounds(p))locations[p.appointment_id]=p;
+ if(l.error){console.warn('GLEMI map coordinates:',l.error.message)}
+ for(const p of l.data||[])if(bounds(p))locations[String(p.appointment_id)]=p;
  await Promise.all(employees.filter(e=>e.photo_path).map(async e=>{
    const {data}=await db.storage.from('glemi-employee-photos').createSignedUrl(e.photo_path,3600);
    if(data?.signedUrl)photos[e.id]=data.signedUrl;
@@ -213,4 +214,5 @@ async function autoLocate(){
 window.addEventListener('glemi:appointments-loaded',event=>{bookings=Array.isArray(event.detail)?event.detail:[];refresh().then(autoLocate)});
 
 window.addEventListener('glemi:map-open',()=>refresh());
+window.addEventListener('glemi:map-points',event=>{for(const p of event.detail||[])if(bounds(p))locations[String(p.appointment_id)]=p;recommend()});
 })();
