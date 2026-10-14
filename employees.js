@@ -88,22 +88,39 @@ function km(a,b){const rad=x=>x*Math.PI/180,R=6371,dlat=rad*(b.lat-a.lat),dlon=r
 async function recommend(){
  if(!loaded||rendering)return;rendering=true;
  try{
- const cards=[...document.querySelectorAll('[data-employee-booking]')];
- for(const card of cards){
-  const id=card.dataset.employeeBooking,p=locations[id];card.replaceChildren();
-  if(!bounds(p)){card.append(text('small','Nearby employee: locate this booking on Service Map first.'));continue}
-  const ranked=employees.filter(e=>e.active&&bounds(e)).map(e=>({e,d:km(p,e)})).sort((a,b)=>a.d-b.d);
-  if(!ranked.length){card.append(text('small','No employees with a located home address yet.'));continue}
-  const best=ranked[0],line=document.createElement('div');line.className='glemi-nearby-line';
-  if(best.e.photo_path&&photos[best.e.id]){const img=document.createElement('img');img.src=photos[best.e.id];img.alt='Employee photo';line.append(img)}else{const fallback=text('span','👤');fallback.className='glemi-nearby-placeholder';line.append(fallback)}
-  const details=document.createElement('div');
-  details.append(text('strong',best.e.full_name));
-  details.append(text('small','Está a '+best.d.toFixed(1)+' km en línea recta.'));
-  const estimate=Math.max(5,Math.round((best.d*1.4/25*60)/5)*5);
-  details.append(text('small','Llegada estimada: ~'+estimate+' min en auto (orientativa, sin tráfico ni ruta real).'));
-  details.append(text('small','Disponibilidad no verificada.'));
-  line.append(details);card.append(line);
- }
+  const cards=[...document.querySelectorAll('[data-employee-booking]')];
+  const active=employees.filter(e=>e.active);
+  for(const card of cards){
+   const id=card.dataset.employeeBooking,p=locations[id];card.replaceChildren();
+   if(!active.length){card.append(text('small','No employees registered yet. Add an employee in Employees.'));continue}
+   const canCompare=bounds(p);
+   const ranked=canCompare?active.filter(bounds).map(e=>({e,d:km(p,e)})).sort((a,b)=>a.d-b.d):[];
+   const best=ranked[0];
+   // Without booking coordinates there is no reliable nearest employee. Show a
+   // registered employee as an unassigned preview, never as a recommendation.
+   const employee=best?.e||active[0];
+   const line=document.createElement('div');line.className='glemi-nearby-line';
+   if(employee.photo_path&&photos[employee.id]){
+    const img=document.createElement('img');img.src=photos[employee.id];img.alt='Photo of '+employee.full_name;line.append(img);
+   }else{
+    const fallback=text('span','👤');fallback.className='glemi-nearby-placeholder';line.append(fallback);
+   }
+   const details=document.createElement('div');
+   details.append(text('strong',employee.full_name));
+   if(best){
+    details.append(text('small','Distance: '+best.d.toFixed(1)+' km (straight line).'));
+    const estimate=Math.max(5,Math.round((best.d*1.4/25*60)/5)*5);
+    details.append(text('small','Estimated arrival: ~'+estimate+' min by car (rough estimate, not a real route).'));
+    details.append(text('small','Availability not checked.'));
+   }else if(!canCompare){
+    details.append(text('small','Registered employee · not assigned.'));
+    details.append(text('small','Locate this booking on Service Map first to calculate distance and estimated arrival.'));
+   }else{
+    details.append(text('small','Registered employee · not assigned.'));
+    details.append(text('small','Locate this employee’s address to calculate distance and estimated arrival.'));
+   }
+   line.append(details);card.append(line);
+  }
  }finally{rendering=false}
 }
 window.addEventListener('glemi:employees-open',refresh);
