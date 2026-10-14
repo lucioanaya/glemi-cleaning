@@ -38,3 +38,16 @@
 .glemi-booking-detail-row small,.glemi-booking-detail-row strong{display:block!important;position:static!important;float:none!important;width:auto!important;min-width:0!important;max-width:100%!important;letter-spacing:normal!important;white-space:normal!important;word-break:normal!important;overflow-wrap:break-word!important;writing-mode:horizontal-tb!important;text-orientation:mixed!important;text-align:left!important}
 .glemi-booking-detail-row strong{font-size:15px!important;line-height:1.4!important}
 .glemi-booking-detail-icon{display:inline-flex!important;flex:0 0 26px!important;align-items:center!important;justify-content:center!important;font-size:21px!important}
+
+/* Compact booking cards and optional employee selector */
+.glemi-booking-details{gap:6px!important;margin:9px 0!important}
+.glemi-booking-detail-row{padding:7px 10px!important;gap:8px!important;border-radius:9px!important}
+.glemi-booking-detail-icon{font-size:16px!important;flex-basis:20px!important}
+.glemi-booking-detail-row small{font-size:10px!important;margin-bottom:1px!important}
+.glemi-booking-detail-row strong{font-size:13px!important;line-height:1.25!important}
+.glemi-map-nearby{padding:9px 10px!important;margin:9px 0!important}
+.glemi-map-nearby .glemi-nearby-line img,.glemi-map-nearby .glemi-nearby-placeholder{width:42px!important;height:42px!important}
+.glemi-employee-choice{margin-top:9px;display:flex;flex-direction:column;gap:5px}
+.glemi-employee-choice label{font-size:12px;font-weight:700;color:#23476e}
+.glemi-employee-choice select{width:100%;min-width:0;padding:8px 10px;border:1px solid #bfd0e3;border-radius:8px;background:#fff;color:#153452;font-size:13px}
+.glemi-not-assigned{display:block;margin-top:7px;color:#61748c;font-size:11px}
