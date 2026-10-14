@@ -28,3 +28,13 @@
 .glemi-booking-detail-row strong{display:block;color:#102f52;font-size:14px;overflow-wrap:anywhere}
 .glemi-map-nearby .glemi-nearby-line strong{display:block;color:#112c4d;font-size:16px}
 @media(max-width:390px){.glemi-booking-details{grid-template-columns:1fr}.glemi-booking-detail-row:last-child{grid-column:auto}}
+
+/* Mobile booking detail cards: override inherited admin card layout */
+#service-map .glemi-booking-details,
+.glemi-booking-details{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:10px!important;width:100%!important;min-width:0!important;margin:14px 0!important}
+#service-map .glemi-booking-detail-row,
+.glemi-booking-detail-row{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;flex-wrap:nowrap!important;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;padding:12px 14px!important;gap:12px!important;text-align:left!important}
+.glemi-booking-detail-row > div{display:block!important;flex:1 1 auto!important;min-width:0!important;width:auto!important;text-align:left!important}
+.glemi-booking-detail-row small,.glemi-booking-detail-row strong{display:block!important;position:static!important;float:none!important;width:auto!important;min-width:0!important;max-width:100%!important;letter-spacing:normal!important;white-space:normal!important;word-break:normal!important;overflow-wrap:break-word!important;writing-mode:horizontal-tb!important;text-orientation:mixed!important;text-align:left!important}
+.glemi-booking-detail-row strong{font-size:15px!important;line-height:1.4!important}
+.glemi-booking-detail-icon{display:inline-flex!important;flex:0 0 26px!important;align-items:center!important;justify-content:center!important;font-size:21px!important}
