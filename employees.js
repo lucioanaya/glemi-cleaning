@@ -5,7 +5,16 @@ const db=window.supabase?.createClient(cfg.url,cfg.key);
 const bounds=p=>p&&Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lon))&&Number(p.lat)>=48.95&&Number(p.lat)<=49.58&&Number(p.lon)>=-123.55&&Number(p.lon)<=-122.30;
 let employees=[],locations={},photos={},loaded=false,rendering=false,rerenderRequested=false,bookings=[],assignments=[];
 const autoLocations={},lookupPending=new Set(),lookupFailed=new Set(),preferredEmployees=new Map();
-const routeCache=new Map(),routeInFlight=new Set();
+const routeCache=new Map(),routeInFlight=new Set(),pointRequests=new Set();
+async function fetchMissingPoint(id){
+ if(pointRequests.has(id))return;
+ pointRequests.add(id);
+ try{
+  const {data,error}=await db.from('service_map_locations').select('appointment_id,lat,lon,verified').eq('appointment_id',id).maybeSingle();
+  if(error){console.warn('GLEMI booking location lookup:',error.message);return;}
+  if(bounds(data)){locations[String(data.appointment_id)]=data;recommend();}
+ }finally{pointRequests.delete(id)}
+}
 async function geoapi(action,params){const {data,error}=await db.functions.invoke('glemi-geoapify',{body:{action,...params}});if(error||data?.error)throw Error(data?.error||error?.message||'Geoapify unavailable');return data;}
 const msg=s=>{$('employeeMessage').textContent=s};
 const text=(tag,s)=>{const el=document.createElement(tag);el.textContent=s||'';return el};
@@ -111,6 +120,7 @@ async function recommend(){
    if(!active.length){card.append(text('small','No employees registered yet. Add an employee in Employees.'));continue}
    if(!available.length){card.append(text('small','No employees available for this date.'));continue}
    const canCompare=bounds(p);
+   if(!canCompare&&!pointRequests.has(id))fetchMissingPoint(id).catch(err=>console.warn('GLEMI booking location:',err));
    const ranked=canCompare?available.filter(bounds).map(e=>({e,d:km(p,e)})).filter(item=>Number.isFinite(item.d)).sort((a,b)=>a.d-b.d):[];
    const suggested=ranked[0]?.e||available[0];
    const selectedId=preferredEmployees.get(id);
