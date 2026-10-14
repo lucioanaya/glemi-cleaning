@@ -1,0 +1,12 @@
+Paquete de preparación GLEMI / Geoapify
+
+Este paquete contiene un parche, NO los tres archivos finales del sitio. Para generar los archivos finales:
+1. Descarga desde GitHub los archivos originales employees.js, service-map.js y admin.html de la raíz de lucioanaya/glemi-cleaning.
+2. Coloca esos tres archivos en la misma carpeta que patch.py.
+3. En una PC con Python 3 ejecuta: python patch.py
+4. El programa actualiza los tres archivos en esa carpeta. Súbelos a la raíz del repositorio usando GitHub > Add file > Upload files, reemplazando los existentes.
+5. Espera a que Vercel termine el despliegue. En GLEMI Admin prueba Employees y Service Map.
+
+No publiques ni pegues tu clave Geoapify en ningún archivo. El acceso se realiza mediante la Edge Function glemi-geoapify.
+
+Precaución: el parche no se ha probado contra un despliegue real. Guarda copia de los archivos originales antes de reemplazarlos.
