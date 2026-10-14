@@ -51,3 +51,6 @@
 .glemi-employee-choice label{font-size:12px;font-weight:700;color:#23476e}
 .glemi-employee-choice select{width:100%;min-width:0;padding:8px 10px;border:1px solid #bfd0e3;border-radius:8px;background:#fff;color:#153452;font-size:13px}
 .glemi-not-assigned{display:block;margin-top:7px;color:#61748c;font-size:11px}
+
+.glemi-assignment-button{display:block;margin-top:8px;padding:8px 12px;border:0;border-radius:8px;background:#173f6e;color:white;font-size:12px;font-weight:700;cursor:pointer}
+.glemi-assignment-button:disabled{opacity:.55;cursor:wait}
