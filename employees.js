@@ -2,7 +2,7 @@
 'use strict';
 const $=id=>document.getElementById(id),cfg=window.GLEMI_SUPABASE;
 const db=window.supabase?.createClient(cfg.url,cfg.key);
-const bounds=p=>p&&p.lat>=48.95&&p.lat<=49.58&&p.lon>=-123.55&&p.lon<=-122.30;
+const bounds=p=>p&&Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lon))&&Number(p.lat)>=48.95&&Number(p.lat)<=49.58&&Number(p.lon)>=-123.55&&Number(p.lon)<=-122.30;
 let employees=[],locations={},photos={},loaded=false,rendering=false,bookings=[],assignments=[];
 const autoLocations={},lookupPending=new Set(),lookupFailed=new Set(),preferredEmployees=new Map();
 const msg=s=>{$('employeeMessage').textContent=s};
@@ -100,7 +100,7 @@ async function recommend(){
    if(!active.length){card.append(text('small','No employees registered yet. Add an employee in Employees.'));continue}
    if(!available.length){card.append(text('small','No employees available for this date.'));continue}
    const canCompare=bounds(p);
-   const ranked=canCompare?available.filter(bounds).map(e=>({e,d:km(p,e)})).sort((a,b)=>a.d-b.d):[];
+   const ranked=canCompare?available.filter(bounds).map(e=>({e,d:km(p,e)})).filter(item=>Number.isFinite(item.d)).sort((a,b)=>a.d-b.d):[];
    // The nearest worker is a suggestion, never an automatic assignment.
    // The administrator can preview any other registered employee per booking.
    const suggested=ranked[0]?.e||available[0];
