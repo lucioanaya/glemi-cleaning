@@ -1,85 +1,24 @@
 (()=>{
 'use strict';
-const byId=id=>document.getElementById(id);
-const MAP_CENTER=[49.22,-122.98]; // Metro Vancouver service area
-const SERVICE_BOUNDS=[[48.95,-123.55],[49.58,-122.30]]; // Greater Vancouver, including Langley and Maple Ridge
-let map=null,layer=null,bookings=[],active=false,loading=false,googleReady=null;
-const cached=(()=>{try{return JSON.parse(localStorage.getItem('glemi:geocodes:v1')||'{}')}catch{return {}}})();
-const save=()=>{try{localStorage.setItem('glemi:geocodes:v1',JSON.stringify(cached))}catch{}};
-const msg=s=>{if(byId('mapMessage'))byId('mapMessage').textContent=s};
-const clean=s=>String(s||'').trim();
-const addressKey=a=>clean(a).toLowerCase().replace(/\s+/g,' ');
-const activeBookings=()=>bookings.filter(b=>(b.status==='pending'||b.status==='confirmed')&&(byId('mapBookingStatus')?.value==='all'||b.status===byId('mapBookingStatus').value)&&[b.client_name,b.address,b.service,b.appointment_date].join(' ').toLowerCase().includes(clean(byId('mapBookingSearch')?.value).toLowerCase()));
-const GOOGLE_KEY=(window.GLEMI_GOOGLE_MAPS_KEY||'').trim();
-function loadGoogle(){
- if(window.google?.maps)return Promise.resolve();
- if(googleReady)return googleReady;
- if(!GOOGLE_KEY||GOOGLE_KEY==='PASTE_YOUR_RESTRICTED_BROWSER_KEY_HERE')return Promise.reject(Error('Google Maps API key not configured. Follow GOOGLE-MAPS-SETUP.txt.'));
- googleReady=new Promise((resolve,reject)=>{
-  const callback='glemiGoogleMapsLoaded';
-  window[callback]=()=>{delete window[callback];resolve()};
-  const script=document.createElement('script');script.async=true;
-  script.src='https://maps.googleapis.com/maps/api/js?key='+encodeURIComponent(GOOGLE_KEY)+'&v=weekly&callback='+callback+'&region=CA&language=en';
-  script.onerror=()=>reject(Error('Google Maps failed to load. Check the API key and allowed domains.'));
-  document.head.append(script);
- });return googleReady;
-}
-function insideBounds(lat,lng){return lat>=SERVICE_BOUNDS[0][0]&&lat<=SERVICE_BOUNDS[1][0]&&lng>=SERVICE_BOUNDS[0][1]&&lng<=SERVICE_BOUNDS[1][1]}
-function init(){
- if(map||!window.google?.maps)return;
- map=new google.maps.Map(byId('glemiServiceMap'),{center:{lat:MAP_CENTER[0],lng:MAP_CENTER[1]},zoom:10,restriction:{latLngBounds:{south:SERVICE_BOUNDS[0][0],west:SERVICE_BOUNDS[0][1],north:SERVICE_BOUNDS[1][0],east:SERVICE_BOUNDS[1][1]},strictBounds:true},streetViewControl:false,mapTypeControl:false,fullscreenControl:true});
- layer=[];
-}
-function route(address){return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(address+', British Columbia, Canada');}
-function item(b){
- const card=document.createElement('article');card.className='glemi-map-booking';
- const name=document.createElement('strong');name.textContent=b.client_name||'Customer';card.append(name);
- const badge=document.createElement('span');badge.className='glemi-map-status '+b.status;badge.textContent=b.status;card.append(badge);
- for(const txt of [b.service,[b.appointment_date,clean(b.appointment_time).slice(0,5)].filter(Boolean).join(' · '),b.address]){const p=document.createElement('p');p.textContent=txt||'Address not provided';card.append(p)}
- const actions=document.createElement('div');actions.className='glemi-map-actions';
- const key=addressKey(b.address),point=cached[key];
- const btn=document.createElement('button');btn.type='button';btn.textContent=point?'Show on map':'Locate address';btn.disabled=!clean(b.address)||loading;
- btn.addEventListener('click',async()=>{if(cached[key]){map?.setCenter({lat:cached[key].lat,lng:cached[key].lon});map?.setZoom(15);return}await locate(b)});actions.append(btn);
- if(clean(b.address)){const a=document.createElement('a');a.href=route(b.address);a.target='_blank';a.rel='noopener noreferrer';a.textContent='Directions ↗';actions.append(a)}
- card.append(actions);return card;
-}
-function draw(){
- const rows=activeBookings();
- byId('mapPendingCount').textContent=bookings.filter(b=>b.status==='pending').length+' pending';
- byId('mapConfirmedCount').textContent=bookings.filter(b=>b.status==='confirmed').length+' confirmed';
- byId('mapLocatedCount').textContent=bookings.filter(b=>cached[addressKey(b.address)]).length+' located';
- const list=byId('mapBookingList');list.replaceChildren();
- if(!rows.length){const p=document.createElement('p');p.className='muted';p.textContent='No active bookings match these filters.';list.append(p)}
- rows.forEach(b=>list.append(item(b)));
- if(!map||!layer)return;
- layer.forEach(m=>m.setMap(null));layer=[];const bounds=new google.maps.LatLngBounds();let hasPins=false;
- for(const b of rows){const pt=cached[addressKey(b.address)];if(!pt||!insideBounds(pt.lat,pt.lon))continue;
-  const position={lat:pt.lat,lng:pt.lon};bounds.extend(position);hasPins=true;
-  const marker=new google.maps.Marker({map,position,title:b.client_name||'Customer',icon:{path:google.maps.SymbolPath.CIRCLE,scale:10,fillColor:b.status==='confirmed'?'#17a778':'#f0b74d',fillOpacity:1,strokeColor:b.status==='confirmed'?'#087f5b':'#ba7916',strokeWeight:3}});layer.push(marker);
-  const popup=document.createElement('div');popup.className='glemi-map-popup';for(const str of [b.client_name,b.service,b.appointment_date+' '+clean(b.appointment_time).slice(0,5),b.address]){const line=document.createElement('div');line.textContent=str||'';popup.append(line)}const a=document.createElement('a');a.href=route(b.address);a.target='_blank';a.rel='noopener noreferrer';a.textContent='Open directions';popup.append(a);
-  const info=new google.maps.InfoWindow({content:popup});marker.addListener('click',()=>info.open({anchor:marker,map}));
- }
- if(hasPins){map.fitBounds(bounds,40);if(map.getZoom()>14)map.setZoom(14)}else{map.setCenter({lat:MAP_CENTER[0],lng:MAP_CENTER[1]});map.setZoom(10)}
-}
-async function locate(b){
- if(loading||!clean(b.address))return;
- loading=true;draw();msg('Locating address with Google Maps…');
- try{
-  await loadGoogle();init();
-  const geocoder=new google.maps.Geocoder();
-  const raw=clean(b.address);
-  const query=/\b(?:BC|British Columbia|Canada)\b/i.test(raw)?raw:raw+', Metro Vancouver, British Columbia, Canada';
-  const result=await geocoder.geocode({address:query,region:'ca',componentRestrictions:{country:'CA'},bounds:new google.maps.LatLngBounds({lat:SERVICE_BOUNDS[0][0],lng:SERVICE_BOUNDS[0][1]},{lat:SERVICE_BOUNDS[1][0],lng:SERVICE_BOUNDS[1][1]})});
-  const hits=(result.results||[]).filter(x=>{const p=x.geometry?.location;return p&&insideBounds(p.lat(),p.lng())});
-  const exact=hits.filter(x=>!x.partial_match&&x.geometry.location_type==='ROOFTOP'&&x.types.includes('street_address'));
-  if(exact.length!==1){msg(hits.length?'Address needs confirmation. Add the city or postal code to the booking, then locate again.':'Address not found in Metro Vancouver. Check the street and house number.');return}
-  const hit=exact[0],lat=hit.geometry.location.lat(),lon=hit.geometry.location.lng();
-  cached[addressKey(b.address)]={lat,lon};save();msg('Address located with Google Maps. Verify the marker before assigning a cleaner.');
- }catch(e){msg('Unable to locate address: '+(e.message||'Check Google Maps configuration.'))}
- finally{loading=false;draw()}
-}
-window.addEventListener('glemi:appointments-loaded',e=>{bookings=Array.isArray(e.detail)?e.detail:[];if(active)draw()});
-window.addEventListener('glemi:map-open',async()=>{active=true;try{await loadGoogle();init();draw()}catch(e){msg(e.message||'Google Maps unavailable')}});
-byId('mapBookingSearch')?.addEventListener('input',draw);
-byId('mapBookingStatus')?.addEventListener('change',draw);
+const $=id=>document.getElementById(id), CENTER=[49.22,-122.98], LIMIT=[[48.95,-123.55],[49.58,-122.30]];
+let map,layer,rows=[],opened=false,busy=false,editMarker=null,editBooking=null,points={};
+const cfg=window.GLEMI_SUPABASE;
+const db=cfg&&window.supabase?window.supabase.createClient(cfg.url,cfg.key):null;
+const key=b=>String(b.id),clean=s=>String(s||'').trim();
+const within=p=>p&&Number.isFinite(+p.lat)&&Number.isFinite(+p.lon)&&+p.lat>=LIMIT[0][0]&&+p.lat<=LIMIT[1][0]&&+p.lon>=LIMIT[0][1]&&+p.lon<=LIMIT[1][1];
+const note=s=>{if($('mapMessage'))$('mapMessage').textContent=s};
+const selected=()=>rows.filter(b=>['pending','confirmed'].includes(b.status)&&($('mapBookingStatus')?.value==='all'||$('mapBookingStatus')?.value===b.status)&&[b.client_name,b.address,b.service,b.appointment_date].join(' ').toLowerCase().includes(clean($('mapBookingSearch')?.value).toLowerCase()));
+const route=b=>{const p=points[key(b)];return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(p&&within(p)?`${p.lat},${p.lon}`:clean(b.address)+', Metro Vancouver, British Columbia, Canada')+'&travelmode=driving'};
+async function loadPoints(){if(!db)return;const {data,error}=await db.from('service_map_locations').select('appointment_id,lat,lon,formatted_address,verified');if(error){note('Map locations cannot be shared yet. Check the Supabase setup.');return}points={};for(const p of data||[])if(within(p))points[String(p.appointment_id)]=p;draw()}
+async function persist(b,p,verified){if(!db)throw Error('Supabase is not configured');const {error}=await db.from('service_map_locations').upsert({appointment_id:b.id,lat:+p.lat,lon:+p.lon,formatted_address:clean(p.formatted_address)||clean(b.address),verified:!!verified},{onConflict:'appointment_id'});if(error)throw Error(error.message);points[key(b)]={...p,verified};draw()}
+function init(){if(map||!window.L)return;map=L.map('glemiServiceMap',{scrollWheelZoom:false,minZoom:9,maxBounds:LIMIT,maxBoundsViscosity:1}).setView(CENTER,10);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors',maxZoom:19}).addTo(map);layer=L.layerGroup().addTo(map)}
+function node(tag,content){const el=document.createElement(tag);el.textContent=content;return el}
+function button(label,handler){const b=node('button',label);b.type='button';b.disabled=busy;b.addEventListener('click',handler);return b}
+function card(b){const el=node('article','');el.className='glemi-map-booking';el.append(node('strong',b.client_name||'Customer'));const badge=node('span',b.status);badge.className='glemi-map-status '+b.status;el.append(badge);for(const t of [b.service,[b.appointment_date,clean(b.appointment_time).slice(0,5)].join(' · '),b.address])el.append(node('p',t||'Address missing'));const p=points[key(b)];if(p){const status=node('p',p.verified?'✓ Location verified':'⚠ Suggested location — verify pin');status.className=p.verified?'map-verified':'map-unverified';el.append(status)}const actions=node('div','');actions.className='glemi-map-actions';actions.append(button(p?'View pin':'Find address',()=>p?map?.setView([p.lat,p.lon],16):lookup(b)));if(p)actions.append(button('Adjust pin',()=>adjust(b)));const a=node('a','Directions ↗');a.href=route(b);a.target='_blank';a.rel='noopener noreferrer';actions.append(a);el.append(actions);return el}
+function draw(){if(!$('mapBookingList'))return;const active=selected();$('mapPendingCount').textContent=rows.filter(b=>b.status==='pending').length+' pending';$('mapConfirmedCount').textContent=rows.filter(b=>b.status==='confirmed').length+' confirmed';$('mapLocatedCount').textContent=rows.filter(b=>within(points[key(b)])).length+' located';$('mapBookingList').replaceChildren(...active.map(card));if(!active.length)$('mapBookingList').append(node('p','No active bookings match these filters.'));if(!layer)return;layer.clearLayers();let positions=[];for(const b of active){const p=points[key(b)];if(!within(p))continue;const pos=[+p.lat,+p.lon];positions.push(pos);const marker=L.circleMarker(pos,{radius:9,color:b.status==='confirmed'?'#087f5b':'#ba7916',weight:3,fillColor:b.status==='confirmed'?'#17a778':'#f0b74d',fillOpacity:.9}).addTo(layer);const pop=node('div','');for(const t of [b.client_name,b.address,p.verified?'Verified location':'Unverified location'])pop.append(node('div',t));const a=node('a','Google Maps directions');a.href=route(b);a.target='_blank';a.rel='noopener noreferrer';pop.append(a);marker.bindPopup(pop)}if(positions.length)map.fitBounds(positions,{padding:[35,35],maxZoom:13});else map.setView(CENTER,10)}
+async function lookup(b){if(busy||!clean(b.address))return;busy=true;draw();note('Searching BC address database…');try{const u=new URL('https://geocoder.api.gov.bc.ca/addresses.json');u.searchParams.set('addressString',clean(b.address));u.searchParams.set('maxResults','8');u.searchParams.set('provinceCode','BC');u.searchParams.set('autoComplete','false');const response=await fetch(u.toString(),{headers:{Accept:'application/json'}});if(!response.ok)throw Error('BC address service unavailable');const json=await response.json();const options=(json.features||[]).filter(f=>f.geometry?.coordinates?.length===2).map(f=>({lat:+f.geometry.coordinates[1],lon:+f.geometry.coordinates[0],formatted_address:f.properties?.fullAddress||'',score:+(f.properties?.score||0),precision:f.properties?.precision||''})).filter(within).sort((a,b)=>b.score-a.score);if(!options.length){note('No matching address in Metro Vancouver. Check the city or street name, or open Directions.');return}const best=options[0];await persist(b,best,false);map?.setView([best.lat,best.lon],17);note('Suggested address: '+best.formatted_address+'. Verify the pin before sending a cleaner.');adjust(b)}catch(e){note('Could not locate address: '+e.message)}finally{busy=false;draw()}}
+function adjust(b){const p=points[key(b)];if(!map||!within(p))return;if(editMarker){map.removeLayer(editMarker);editMarker=null}editBooking=b;map.setView([p.lat,p.lon],17);editMarker=L.marker([p.lat,p.lon],{draggable:true,autoPan:true}).addTo(map);const popup=node('div','');popup.append(node('strong','Drag this pin to the correct entrance.'));popup.append(node('p','Then press Save verified location.'));const save=button('Save verified location',async()=>{const latlng=editMarker.getLatLng();try{await persist(b,{lat:latlng.lat,lon:latlng.lng,formatted_address:p.formatted_address},true);map.removeLayer(editMarker);editMarker=null;editBooking=null;note('Verified coordinates saved in Supabase. Directions now use this exact pin.')}catch(e){note('Could not save location: '+e.message)}});popup.append(save);editMarker.bindPopup(popup).openPopup();note('Drag the pin to the correct entrance, then save the verified location.')}
+window.addEventListener('glemi:appointments-loaded',e=>{rows=Array.isArray(e.detail)?e.detail:[];if(opened){draw();loadPoints()}});
+window.addEventListener('glemi:map-open',()=>{opened=true;if(!window.L){note('Map library unavailable. Check your connection.');return}init();draw();loadPoints();setTimeout(()=>map?.invalidateSize(),150)});
+$('mapBookingSearch')?.addEventListener('input',draw);$('mapBookingStatus')?.addEventListener('change',draw);
 })();
