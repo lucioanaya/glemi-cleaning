@@ -95,10 +95,13 @@ async function recommend(){
   const ranked=employees.filter(e=>e.active&&bounds(e)).map(e=>({e,d:km(p,e)})).sort((a,b)=>a.d-b.d);
   if(!ranked.length){card.append(text('small','No employees with a located home address yet.'));continue}
   const best=ranked[0],line=document.createElement('div');line.className='glemi-nearby-line';
-  if(best.e.photo_path&&photos[best.e.id]){const img=document.createElement('img');img.src=photos[best.e.id];img.alt='Employee photo';line.append(img)}
+  if(best.e.photo_path&&photos[best.e.id]){const img=document.createElement('img');img.src=photos[best.e.id];img.alt='Employee photo';line.append(img)}else{const fallback=text('span','👤');fallback.className='glemi-nearby-placeholder';line.append(fallback)}
   const details=document.createElement('div');
-  details.append(text('strong','Nearby: '+best.e.full_name));
-  details.append(text('small',best.d.toFixed(1)+' km straight-line distance · availability not checked'));
+  details.append(text('strong',best.e.full_name));
+  details.append(text('small','Está a '+best.d.toFixed(1)+' km en línea recta.'));
+  const estimate=Math.max(5,Math.round((best.d*1.4/25*60)/5)*5);
+  details.append(text('small','Llegada estimada: ~'+estimate+' min en auto (orientativa, sin tráfico ni ruta real).'));
+  details.append(text('small','Disponibilidad no verificada.'));
   line.append(details);card.append(line);
  }
  }finally{rendering=false}
