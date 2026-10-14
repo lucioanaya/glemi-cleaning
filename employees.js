@@ -96,10 +96,17 @@ $('employeeForm').addEventListener('submit',async ev=>{
      if(upload.error)throw Error(upload.error.message);
    }
    const record={job_role:$('employeeRole').value,full_name:$('employeeName').value.trim(),email:$('employeeEmail').value.trim(),phone:$('employeePhone').value.trim(),address,lat:position.lat,lon:position.lon,photo_path,updated_at:new Date().toISOString()};
-   const result=id?await db.from('cleaning_employees').update(record).eq('id',id):await db.from('cleaning_employees').insert(record);
+   const result=id?await db.from('cleaning_employees').update(record).eq('id',id):await db.from('cleaning_employees').insert(record).select('id').single();
    if(result.error)throw Error(result.error.message);
+   let welcomeStatus='';
+   if(!id){
+    try{
+     const {data:mail,error:mailError}=await db.functions.invoke('send-employee-welcome',{body:{employee_id:result.data.id}});
+     welcomeStatus=mailError||mail?.error?' Employee saved, but welcome email could not be sent: '+(mail?.error||mailError?.message||'Unknown error'):' Welcome email sent to employee and GLEMI.';
+    }catch(mailError){welcomeStatus=' Employee saved, but welcome email could not be sent: '+mailError.message;}
+   }
    if(previous?.photo_path&&photo&&previous.photo_path!==photo_path)await db.storage.from('glemi-employee-photos').remove([previous.photo_path]);
-   reset();msg('Employee saved. Available employees will be suggested for pending and confirmed bookings.');await refresh();
+   reset();await refresh();msg('Employee saved. Available employees will be suggested for pending and confirmed bookings.'+welcomeStatus);
  }catch(e){msg(e.message)}finally{submit.disabled=false}
 });
 function km(a,b){const rad=x=>x*Math.PI/180,R=6371,dlat=rad*(b.lat-a.lat),dlon=rad*(b.lon-a.lon);
