@@ -7,3 +7,5 @@ GLEMI SERVICE MAP — Setup / use
 5. Tap Directions to open Google Maps. Verify approximate locations before travelling.
 
 The map uses OpenStreetMap/Leaflet. Each manual address lookup sends the address to OpenStreetMap Nominatim; no background/bulk lookup is performed. Coordinates are cached in that admin browser, not in Supabase, so other browsers must locate them separately. Employee locations and automatic distance assignment are not part of this phase.
+
+Map view: limited to Metro Vancouver (Vancouver, Burnaby, Richmond, Surrey, Coquitlam, Langley and surrounding cities). The map opens focused on the service area rather than all of British Columbia. Addresses outside the regional bounds are not placed as markers.

@@ -1,7 +1,8 @@
 (()=>{
 'use strict';
 const byId=id=>document.getElementById(id);
-const MAP_CENTER=[53.7267,-125.4]; // British Columbia overview; not a customer location
+const MAP_CENTER=[49.22,-122.98]; // Metro Vancouver service area
+const SERVICE_BOUNDS=[[48.95,-123.55],[49.58,-122.30]]; // Greater Vancouver, including Langley and Maple Ridge
 let map=null,layer=null,bookings=[],active=false,loading=false;
 const cached=(()=>{try{return JSON.parse(localStorage.getItem('glemi:geocodes:v1')||'{}')}catch{return {}}})();
 const save=()=>{try{localStorage.setItem('glemi:geocodes:v1',JSON.stringify(cached))}catch{}};
@@ -11,7 +12,7 @@ const addressKey=a=>clean(a).toLowerCase().replace(/\s+/g,' ');
 const activeBookings=()=>bookings.filter(b=>(b.status==='pending'||b.status==='confirmed')&&(byId('mapBookingStatus')?.value==='all'||b.status===byId('mapBookingStatus').value)&&[b.client_name,b.address,b.service,b.appointment_date].join(' ').toLowerCase().includes(clean(byId('mapBookingSearch')?.value).toLowerCase()));
 function init(){
  if(map||!window.L)return;
- map=L.map('glemiServiceMap',{scrollWheelZoom:false}).setView(MAP_CENTER,5);
+ map=L.map('glemiServiceMap',{scrollWheelZoom:false,minZoom:9,maxBounds:SERVICE_BOUNDS,maxBoundsViscosity:1}).setView(MAP_CENTER,10);
  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',maxZoom:19}).addTo(map);
  layer=L.layerGroup().addTo(map);
 }
@@ -38,11 +39,12 @@ function draw(){
  rows.forEach(b=>list.append(item(b)));
  if(!map||!layer)return;
  layer.clearLayers();const bounds=[];
- for(const b of rows){const pt=cached[addressKey(b.address)];if(!pt)continue;const pos=[pt.lat,pt.lon];bounds.push(pos);
+ for(const b of rows){const pt=cached[addressKey(b.address)];if(!pt||pt.lat<SERVICE_BOUNDS[0][0]||pt.lat>SERVICE_BOUNDS[1][0]||pt.lon<SERVICE_BOUNDS[0][1]||pt.lon>SERVICE_BOUNDS[1][1])continue;const pos=[pt.lat,pt.lon];bounds.push(pos);
  const marker=L.circleMarker(pos,{radius:9,color:b.status==='confirmed'?'#087f5b':'#ba7916',weight:3,fillColor:b.status==='confirmed'?'#17a778':'#f0b74d',fillOpacity:.9}).addTo(layer);
  const popup=document.createElement('div');popup.className='glemi-map-popup';for(const str of [b.client_name,b.service,b.appointment_date+' '+clean(b.appointment_time).slice(0,5),b.address]){const line=document.createElement('div');line.textContent=str||'';popup.append(line)}const a=document.createElement('a');a.href=route(b.address);a.target='_blank';a.rel='noopener noreferrer';a.textContent='Open directions';popup.append(a);marker.bindPopup(popup);
  }
  if(bounds.length)map.fitBounds(bounds,{padding:[35,35],maxZoom:13});
+ else map.setView(MAP_CENTER,10);
 }
 let lastLookup=0;
 async function locate(b){
@@ -58,6 +60,7 @@ async function locate(b){
   const hits=await response.json();if(!Array.isArray(hits)||!hits.length){msg('Address not found. Verify its spelling or use Directions to check it in Google Maps.');return}
   const hit=hits[0];const lat=Number(hit.lat),lon=Number(hit.lon);
   if(!Number.isFinite(lat)||!Number.isFinite(lon))throw Error('Invalid map coordinates');
+  if(lat<SERVICE_BOUNDS[0][0]||lat>SERVICE_BOUNDS[1][0]||lon<SERVICE_BOUNDS[0][1]||lon>SERVICE_BOUNDS[1][1]){msg('Address is outside the Metro Vancouver service map. Verify the address before adding it.');return}
   cached[addressKey(b.address)]={lat,lon};save();msg('Address located. Verify the marker before assigning a cleaner.');
  }catch(e){msg('Unable to locate this address. '+(e.message||'Please try again.'))}
  finally{loading=false;draw()}
