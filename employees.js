@@ -3,7 +3,7 @@
 const $=id=>document.getElementById(id),cfg=window.GLEMI_SUPABASE;
 const db=window.supabase?.createClient(cfg.url,cfg.key);
 const bounds=p=>p&&p.lat>=48.95&&p.lat<=49.58&&p.lon>=-123.55&&p.lon<=-122.30;
-let employees=[],locations={},photos={},loaded=false,rendering=false,bookings=[];
+let employees=[],locations={},photos={},loaded=false,rendering=false,bookings=[],assignments=[];
 const autoLocations={},lookupPending=new Set(),lookupFailed=new Set(),preferredEmployees=new Map();
 const msg=s=>{$('employeeMessage').textContent=s};
 const text=(tag,s)=>{const el=document.createElement(tag);el.textContent=s||'';return el};
@@ -21,9 +21,9 @@ async function geocode(address){
 }
 async function refresh(){
  if(!db)return;
- const [e,l]=await Promise.all([db.from('cleaning_employees').select('*').order('full_name'),db.from('service_map_locations').select('appointment_id,lat,lon,verified')]);
+ const [e,l,a]=await Promise.all([db.from('cleaning_employees').select('*').order('full_name'),db.from('service_map_locations').select('appointment_id,lat,lon,verified'),db.from('booking_employee_assignments').select('appointment_id,employee_id,service_date')]);
  if(e.error){msg('Cannot load employees: '+e.error.message);return}
- employees=e.data||[];locations={};
+ if(a.error){msg('Cannot load employee availability: '+a.error.message);loaded=false;return}employees=e.data||[];assignments=a.data||[];locations={};
  for(const p of l.data||[])if(bounds(p))locations[p.appointment_id]=p;
  await Promise.all(employees.filter(e=>e.photo_path).map(async e=>{
    const {data}=await db.storage.from('glemi-employee-photos').createSignedUrl(e.photo_path,3600);
@@ -79,7 +79,7 @@ $('employeeForm').addEventListener('submit',async ev=>{
    const result=id?await db.from('cleaning_employees').update(record).eq('id',id):await db.from('cleaning_employees').insert(record);
    if(result.error)throw Error(result.error.message);
    if(previous?.photo_path&&photo&&previous.photo_path!==photo_path)await db.storage.from('glemi-employee-photos').remove([previous.photo_path]);
-   reset();msg('Employee saved. Suggested matches will appear on confirmed bookings with located addresses.');await refresh();
+   reset();msg('Employee saved. Available employees will be suggested for pending and confirmed bookings.');await refresh();
  }catch(e){msg(e.message)}finally{submit.disabled=false}
 });
 function km(a,b){const rad=x=>x*Math.PI/180,R=6371,dlat=rad*(b.lat-a.lat),dlon=rad*(b.lon-a.lon);
@@ -93,14 +93,19 @@ async function recommend(){
   const active=employees.filter(e=>e.active);
   for(const card of cards){
    const id=card.dataset.employeeBooking,p=locations[id]||autoLocations[id];card.replaceChildren();
+   const booking=bookings.find(b=>String(b.id)===id);
+   if(!booking){card.append(text('small','Loading booking information…'));continue}
+   const current=assignments.find(a=>String(a.appointment_id)===id);
+   const available=active.filter(e=>e.id===current?.employee_id||!assignments.some(a=>a.employee_id===e.id&&a.service_date===booking.appointment_date&&String(a.appointment_id)!==id));
    if(!active.length){card.append(text('small','No employees registered yet. Add an employee in Employees.'));continue}
+   if(!available.length){card.append(text('small','No employees available for this date.'));continue}
    const canCompare=bounds(p);
-   const ranked=canCompare?active.filter(bounds).map(e=>({e,d:km(p,e)})).sort((a,b)=>a.d-b.d):[];
+   const ranked=canCompare?available.filter(bounds).map(e=>({e,d:km(p,e)})).sort((a,b)=>a.d-b.d):[];
    // The nearest worker is a suggestion, never an automatic assignment.
    // The administrator can preview any other registered employee per booking.
-   const suggested=ranked[0]?.e||active[0];
+   const suggested=ranked[0]?.e||available[0];
    const selectedId=preferredEmployees.get(id);
-   const employee=active.find(e=>e.id===selectedId)||suggested;
+   const employee=available.find(e=>e.id===current?.employee_id)||available.find(e=>e.id===selectedId)||suggested;
    const distance=ranked.find(item=>item.e.id===employee.id);
    const best=distance||null;
    const line=document.createElement('div');line.className='glemi-nearby-line';
@@ -116,7 +121,7 @@ async function recommend(){
     details.append(text('small','Distance: '+best.d.toFixed(1)+' km (straight line).'+(autoLocations[id]&&!locations[id]?' · Suggested address, not verified.':'')));
     const estimate=Math.max(5,Math.round((best.d*1.4/25*60)/5)*5);
     details.append(text('small','Estimated arrival: ~'+estimate+' min by car (rough estimate, not a real route).'));
-    details.append(text('small','Availability not checked.'));
+    details.append(text('small',current?'Assigned to this booking.':'Available on this date · not assigned.'));
    }else if(!canCompare){
     details.append(text('small','Registered employee · not assigned.'));
     details.append(text('small',lookupPending.has(id)?'Finding the client address automatically…':lookupFailed.has(id)?'Could not confidently locate this address. Please verify it on Service Map.':'Looking up the client address…'));
@@ -128,7 +133,7 @@ async function recommend(){
    const controls=document.createElement('div');controls.className='glemi-employee-choice';
    const label=text('label','View another employee');label.htmlFor='employee-choice-'+id;
    const select=document.createElement('select');select.id='employee-choice-'+id;
-   for(const e of active){
+   for(const e of (ranked.length?[...ranked.map(x=>x.e),...available.filter(e=>!ranked.some(x=>x.e.id===e.id))]:available)){
     const option=document.createElement('option');option.value=e.id;
     const match=ranked.find(item=>item.e.id===e.id);
     option.textContent=e.full_name+(match?' · '+match.d.toFixed(1)+' km':' · location unavailable');
@@ -136,7 +141,24 @@ async function recommend(){
    }
    select.addEventListener('change',()=>{preferredEmployees.set(id,select.value);recommend()});
    controls.append(label,select);card.append(controls);
-   const note=text('small','Suggested only · No employee has been assigned.');
+   const action=document.createElement('button');action.type='button';
+   action.className='glemi-assignment-button';
+   action.textContent=current?'Remove assignment':'Assign employee';
+   action.addEventListener('click',async()=>{
+    action.disabled=true;
+    try{
+     if(current){
+      const result=await db.from('booking_employee_assignments').delete().eq('appointment_id',id);
+      if(result.error)throw result.error;
+     }else{
+      const result=await db.from('booking_employee_assignments').insert({appointment_id:id,employee_id:select.value,service_date:booking.appointment_date});
+      if(result.error)throw result.error;
+     }
+     await refresh();
+    }catch(err){alert('Could not update assignment: '+(err.code==='23505'?'Employee already booked for this date.':err.message));await refresh()}
+    finally{action.disabled=false}
+   });card.append(action);
+   const note=text('small',current?'Assigned · Not available for other bookings on this date.':'Available suggestion · Not assigned yet.');
    note.className='glemi-not-assigned';card.append(note);
   }
  }finally{rendering=false}
@@ -145,7 +167,7 @@ window.addEventListener('glemi:employees-open',refresh);
 window.addEventListener('glemi:recommendations-refresh',()=>{if(loaded)recommend();else refresh()});
 async function autoLocate(){
  if(!loaded||!bookings.length)return;
- const pending=bookings.filter(b=>b.status==='confirmed'&&b.address&&!bounds(locations[b.id])&&!bounds(autoLocations[b.id])&&!lookupPending.has(b.id)&&!lookupFailed.has(b.id)).slice(0,12);
+ const pending=bookings.filter(b=>['pending','confirmed'].includes(b.status)&&b.address&&!bounds(locations[b.id])&&!bounds(autoLocations[b.id])&&!lookupPending.has(b.id)&&!lookupFailed.has(b.id)).slice(0,12);
  for(const b of pending){
   lookupPending.add(b.id);recommend();
   try{
