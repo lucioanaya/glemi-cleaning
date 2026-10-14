@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex,nofollow">
   <title>GLEMI Admin</title>
-  <link rel="stylesheet" href="admin.css"><link rel="stylesheet" href="admin-executive.css?v=7">
+  <link rel="stylesheet" href="admin.css"><link rel="stylesheet" href="admin-executive.css?v=8">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" onerror="this.remove()">
+  <link rel="stylesheet" href="service-map.css?v=1">
 </head>
 <body>
   <main class="admin-shell">
@@ -42,6 +44,7 @@
           <button class="nav-btn active" data-view="dashboard">Dashboard</button>
           <button class="nav-btn" data-view="appointments">Appointments</button>
           <button class="nav-btn" data-view="schedule">Calendar</button>
+          <button class="nav-btn" data-view="service-map">Service Map</button>
           <button class="nav-btn" data-view="pricing">Pricing</button>
           <button class="nav-btn" data-view="content">Website</button>
           <button class="nav-btn" data-view="users">Users</button>
@@ -92,6 +95,17 @@
             <div class="card-head"><div><p class="eyebrow">AVAILABILITY</p><h3>Working hours</h3></div><button id="saveScheduleBtn" class="primary small">Save</button></div>
             <p class="muted">Enable or disable days and set available hours for new appointments.</p>
             <div id="scheduleGrid" class="schedule-grid"></div>
+          </div>
+        </section>
+
+        <section id="service-map" class="panel-view">
+          <div class="card glemi-map-card">
+            <div class="card-head"><div><p class="eyebrow">FIELD OPERATIONS</p><h3>Service Map</h3><p class="muted">Pending and confirmed bookings only. Customer addresses are visible to authorized staff.</p></div></div>
+            <div class="glemi-map-summary"><span id="mapPendingCount">0 pending</span><span id="mapConfirmedCount">0 confirmed</span><span id="mapLocatedCount">0 located</span></div>
+            <div class="glemi-map-layout">
+              <div class="glemi-map-main"><div id="glemiServiceMap" role="region" aria-label="Customer service locations map"></div><p class="glemi-map-credit">Map data © OpenStreetMap contributors · Approximate address matches; verify before travelling.</p></div>
+              <div class="glemi-map-sidebar"><div class="glemi-map-filter"><input id="mapBookingSearch" type="search" placeholder="Search bookings" aria-label="Search bookings"><select id="mapBookingStatus" aria-label="Filter booking status"><option value="all">Pending + Confirmed</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option></select></div><p id="mapMessage" class="glemi-map-message" role="status"></p><div id="mapBookingList" class="glemi-map-bookings"></div></div>
+            </div>
           </div>
         </section>
 
@@ -191,5 +205,7 @@
 <script src="supabase-config.js?v=20261001-glemi-new-key"></script>
 
 <script src="admin.js?v=20261013-notify-diagnostics2"></script><script src="admin-executive.js?v=2"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="service-map.js?v=1"></script>
 </body>
 </html>
