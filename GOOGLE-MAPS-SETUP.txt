@@ -1,0 +1,14 @@
+GLEMI SERVICE MAP - GOOGLE MAPS SETUP
+
+The integration code is installed but cannot display Google Maps until you supply your own Google Maps Platform browser API key.
+
+1. Visit https://console.cloud.google.com/google/maps-apis and create/select a project with billing enabled.
+2. Enable Maps JavaScript API and Geocoding API.
+3. Create an API key under APIs & Services > Credentials.
+4. Restrict the key to Websites (HTTP referrers): https://glemi.ca/* and https://www.glemi.ca/* . Add your exact Vercel preview domain only if needed.
+5. Restrict API usage to Maps JavaScript API and Geocoding API. Configure quotas and billing alerts.
+6. Edit google-maps-config.js and replace PASTE_YOUR_RESTRICTED_BROWSER_KEY_HERE with your browser key.
+7. Publish the project and open Admin > Service Map.
+
+Addresses: short addresses like 8418 152 St are searched in Metro Vancouver, BC, Canada. Only a unique precise street address is pinned automatically. Ambiguous/partial results ask for a city or postal code; no guessing.
+Pending and confirmed bookings only. Cached coordinates are browser-local and not shared across employees/devices. Google Maps Platform is a paid service subject to its current billing and terms. Do not use a secret server API key in this file.

@@ -1,0 +1,2 @@
+// Restricted Google Maps browser API key. See GOOGLE-MAPS-SETUP.txt.
+window.GLEMI_GOOGLE_MAPS_KEY = "PASTE_YOUR_RESTRICTED_BROWSER_KEY_HERE";
