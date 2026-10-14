@@ -9,6 +9,7 @@
   
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <link rel="stylesheet" href="service-map.css?v=1">
+<link rel="stylesheet" href="employees.css?v=1">
 </head>
 <body>
   <main class="admin-shell">
@@ -49,6 +50,7 @@
           <button class="nav-btn" data-view="pricing">Pricing</button>
           <button class="nav-btn" data-view="content">Website</button>
           <button class="nav-btn" data-view="users">Users</button>
+          <button class="nav-btn" data-view="employees">Employees</button>
         </nav>
         <button id="logoutBtn" class="ghost danger-text">Sign Out</button>
       </aside>
@@ -165,6 +167,18 @@
           </div>
         </section>
 
+        <section id="employees" class="panel-view"><div class="card">
+          <div class="card-head"><div><p class="eyebrow">TEAM MANAGEMENT</p><h3>Cleaning employees</h3><p class="muted">Register employees with a photo and home address. Nearby recommendations appear only on confirmed bookings.</p></div></div>
+          <form id="employeeForm" class="glemi-employee-form">
+            <input type="hidden" id="employeeId">
+            <label>Full name<input id="employeeName" required maxlength="120"></label>
+            <label>Email<input id="employeeEmail" type="email" required></label>
+            <label>Phone<input id="employeePhone" type="tel" required></label>
+            <label>Home address in Metro Vancouver<input id="employeeAddress" required placeholder="8418 152 St, Surrey, BC"></label>
+            <label>Employee photo (one image, max 2 MB)<input id="employeePhoto" type="file" accept="image/jpeg,image/png,image/webp"></label>
+            <div class="glemi-employee-buttons"><button type="submit" class="primary">Save employee</button><button id="employeeReset" type="button" class="secondary">Clear</button></div>
+          </form><p id="employeeMessage" class="muted" role="status"></p><div id="employeeList" class="glemi-employee-list"></div>
+        </div></section>
         <section id="users" class="panel-view">
           <div class="card">
             <div class="card-head"><div><p class="eyebrow">PRIVATE ACCESS</p><h3>Users</h3><p class="muted">This panel is limited to two accounts: Owner and Administrator.</p></div></div>
@@ -208,5 +222,6 @@
 <script src="admin.js?v=20261013-notify-diagnostics2"></script><script src="admin-executive.js?v=2"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="service-map.js?v=bc-google2"></script>
+<script src="employees.js?v=1"></script>
 </body>
 </html>
