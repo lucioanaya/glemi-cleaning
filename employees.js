@@ -169,7 +169,9 @@ async function recommend(){
    for(const e of (ranked.length?[...ranked.map(x=>x.e),...available.filter(e=>!ranked.some(x=>x.e.id===e.id))]:available)){
     const option=document.createElement('option');option.value=e.id;
     const match=ranked.find(item=>item.e.id===e.id);
-    option.textContent=e.full_name+(match?' · '+match.d.toFixed(1)+' km':' · location unavailable');
+    const optionRouteKey=canCompare&&bounds(e)?JSON.stringify([id,e.id,Number(p.lat),Number(p.lon),Number(e.lat),Number(e.lon)]):null;
+    const optionRoute=optionRouteKey?routeCache.get(optionRouteKey):null;
+    option.textContent=e.full_name+(optionRoute&&Number.isFinite(+optionRoute.distance_m)&&Number.isFinite(+optionRoute.time_s)?' · '+(optionRoute.distance_m/1000).toFixed(1)+' km · ~'+Math.ceil(optionRoute.time_s/60)+' min':match?' · '+match.d.toFixed(1)+' km (straight line)':' · location unavailable');
     option.selected=e.id===employee.id;select.append(option);
    }
    select.addEventListener('change',()=>{preferredEmployees.set(id,select.value);recommend()});
