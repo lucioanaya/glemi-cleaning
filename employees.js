@@ -103,7 +103,7 @@ async function recommend(){
   const cards=[...document.querySelectorAll('[data-employee-booking]')];
   const active=employees.filter(e=>e.active!==false);
   for(const card of cards){
-   const id=card.dataset.employeeBooking,p=locations[id]||autoLocations[id];card.replaceChildren();
+   const id=card.dataset.employeeBooking,shared=window.GLEMI_SERVICE_MAP_POINTS?.()||{},p=shared[id]||locations[id]||autoLocations[id];card.replaceChildren();
    const booking=bookings.find(b=>String(b.id)===id);
    if(!booking){card.append(text('small','Loading booking information…'));continue}
    const current=assignments.find(a=>String(a.appointment_id)===id);
