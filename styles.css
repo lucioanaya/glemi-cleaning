@@ -596,3 +596,15 @@ body>main,main,.page-shell,.site-main,.section,#how-it-works,#servicios,.home-lo
 .glemi-contact-fields .referral-input-row button{margin-top:7px;white-space:nowrap;padding:14px 17px}
 .glemi-contact-fields .referral-status{display:block;margin-top:7px;color:#4a607f;font-weight:500}
 @media(max-width:430px){.glemi-contact-fields .referral-input-row button{padding:13px 12px}}
+
+/* GLEMI booking layout 2026-10-15 */
+#how-it-works .glemi-journey{background:linear-gradient(145deg,#d3e5ff,#c5dcfb)!important;border:1px solid #98c3fb!important;border-radius:26px!important;padding:28px 22px 30px!important;box-shadow:0 14px 28px rgba(22,84,161,.12)!important;max-width:850px!important}
+#how-it-works .glemi-journey-title{color:#123b78!important;margin:0 0 5px!important;font-size:clamp(26px,4vw,36px)!important}
+#how-it-works .glemi-journey-subtitle{color:#234d83;text-align:center;font-size:clamp(15px,2.5vw,19px);font-weight:650;margin:0 0 29px}
+#how-it-works .glemi-journey-subtitle strong{color:#0864de;font-weight:850}
+#how-it-works .glemi-journey-track{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;margin:0!important}
+#how-it-works .glemi-journey-step{font-size:clamp(10px,1.6vw,14px)!important;line-height:1.3!important;color:#244a7b!important;gap:10px!important;min-width:0!important}
+#how-it-works .glemi-journey-step.active,#how-it-works .glemi-journey-step.complete{color:#123b78!important}
+#how-it-works .glemi-journey-number{height:56px;width:56px;font-size:23px;background:#e5ebf5;border:4px solid white}
+#how-it-works .glemi-journey-track:before,#how-it-works .glemi-journey-track:after{top:25px;left:12.5%;right:12.5%}
+@media(max-width:650px){#how-it-works .glemi-journey{margin:0 10px!important;padding:25px 10px!important}#how-it-works .glemi-journey-number{width:44px;height:44px;font-size:19px}#how-it-works .glemi-journey-track:before,#how-it-works .glemi-journey-track:after{top:20px}#how-it-works .glemi-journey-step{font-size:10px!important;overflow-wrap:break-word}}
