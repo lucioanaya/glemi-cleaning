@@ -175,7 +175,11 @@
             <label>Email<input id="employeeEmail" type="email" required></label>
             <label>Phone<input id="employeePhone" type="tel" required></label>
             <label>Employee role<select id="employeeRole" required>
-<option value="Cleaner">Cleaner</option><option value="Team Lead">Team Lead</option><option value="Supervisor">Supervisor</option><option value="Deep Cleaning Specialist">Deep Cleaning Specialist</option><option value="Commercial Cleaner">Commercial Cleaner</option><option value="Other">Other</option>
+<optgroup label="Ownership & Executive"><option value="Owner">Owner</option><option value="Co-Owner">Co-Owner</option><option value="Chief Executive Officer (CEO)">Chief Executive Officer (CEO)</option><option value="Chief Operating Officer (COO)">Chief Operating Officer (COO)</option><option value="General Manager">General Manager</option><option value="Operations Director">Operations Director</option></optgroup>
+<optgroup label="Administration & Management"><option value="Administrator">Administrator</option><option value="Administrative Manager">Administrative Manager</option><option value="Office Manager">Office Manager</option><option value="Finance Manager">Finance Manager</option><option value="Human Resources Manager">Human Resources Manager</option><option value="Customer Service Manager">Customer Service Manager</option><option value="Sales & Marketing Manager">Sales & Marketing Manager</option><option value="Operations Manager">Operations Manager</option><option value="Area Manager">Area Manager</option></optgroup>
+<optgroup label="Supervision & Coordination"><option value="Supervisor">Supervisor</option><option value="Site Supervisor">Site Supervisor</option><option value="Team Lead">Team Lead</option><option value="Cleaning Coordinator">Cleaning Coordinator</option><option value="Scheduling Coordinator">Scheduling Coordinator</option><option value="Quality Control Inspector">Quality Control Inspector</option></optgroup>
+<optgroup label="Cleaning & Field Team"><option value="Cleaner">Cleaner</option><option value="Senior Cleaner">Senior Cleaner</option><option value="Deep Cleaning Specialist">Deep Cleaning Specialist</option><option value="Commercial Cleaner">Commercial Cleaner</option><option value="Post-Construction Cleaner">Post-Construction Cleaner</option><option value="Residential Cleaner">Residential Cleaner</option><option value="Move-In / Move-Out Cleaner">Move-In / Move-Out Cleaner</option><option value="Window Cleaning Specialist">Window Cleaning Specialist</option><option value="Floor Care Specialist">Floor Care Specialist</option><option value="Cleaning Assistant">Cleaning Assistant</option><option value="Trainee">Trainee</option></optgroup>
+<optgroup label="Other"><option value="Other">Other</option></optgroup>
 </select></label>
             <label>Home address in Metro Vancouver<input id="employeeAddress" required placeholder="8418 152 St, Surrey, BC"></label>
             <label>Employee photo (one image, max 2 MB)<input id="employeePhoto" type="file" accept="image/jpeg,image/png,image/webp"></label>
@@ -225,6 +229,6 @@
 <script src="admin.js?v=20261014-stat-navigation17"></script><script src="admin-executive.js?v=2"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="service-map.js?v=20261014-view-pin-scroll17"></script>
-<script src="employees.js?v=20261014-welcome-retry13"></script>
+<script src="employees.js?v=20261014-roles-expanded14"></script>
 </body>
 </html>
