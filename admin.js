@@ -69,6 +69,23 @@ resetForm.addEventListener('submit',async e=>{
 el('logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
 document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>openFriw(b.dataset.view));
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openFriw(b.dataset.go));
+document.querySelectorAll('[data-stat-filter]').forEach(card=>{
+ const navigate=()=>{
+  const kind=card.dataset.statFilter;
+  openFriw('appointments');
+  const filter=el('appointmentFilter');
+  filter.value=kind==='pending'?'pending':kind==='confirmed'?'confirmed':'all';
+  el('appointmentSearch').value='';
+  renderAppointments();
+  if(kind==='today'){
+   const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Vancouver',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+   el('appointmentSearch').value=today;
+   renderAppointments();
+  }
+ };
+ card.addEventListener('click',navigate);
+ card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();navigate()}});
+});
 function openFriw(id){document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x.dataset.view===id));document.querySelectorAll('.panel-view').forEach(x=>x.classList.toggle('active',x.id===id));el('pageTitle').textContent=({dashboard:'Dashboard',appointments:'Appointments',schedule:'Calendario',pricing:'Pricing',content:'Website',users:'Users','service-map':'Service Map',employees:'Employees'})[id]||id;if(id==='content')setTimeout(initWebsiteEditor,0);if(id==='service-map')window.dispatchEvent(new Event('glemi:map-open'));if(id==='employees')window.dispatchEvent(new Event('glemi:employees-open'))}
 let dashboardAssignments=[],dashboardEmployees=[];
 async function loadAll(){
