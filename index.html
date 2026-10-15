@@ -134,6 +134,14 @@
 #how-it-works .glemi-journey-step.complete{color:#175eae!important}
 #how-it-works .glemi-journey-step.complete .glemi-journey-number{background:#1779bb!important;color:#fff!important}
 @media(max-width:650px){#how-it-works .glemi-journey{padding:5px 0 10px!important}#how-it-works .glemi-journey-step{font-size:10px!important}#how-it-works .glemi-journey-subtitle{margin-bottom:12px!important}}
+@media(max-width:650px){
+  /* Compact header without altering the original logo or menu behavior */
+  .header{padding-top:4px!important;padding-bottom:4px!important;min-height:0!important}
+  .brand-logo img{max-height:48px!important;width:auto!important;object-fit:contain!important}
+  .header-contact{gap:12px!important}
+  /* Reduce only the Metro Vancouver heading; booking journey remains untouched */
+  .home-logo-first .why-home-title{font-size:clamp(26px,6.8vw,35px)!important;line-height:1.16!important}
+}
 </style>
 <script defer src="glemi-mobile-refinements.js"></script>
 <style>
