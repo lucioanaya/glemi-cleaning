@@ -247,6 +247,26 @@ body[data-page="residential"] .residential-promo-section img{
 .residential-journey-step b{width:36px!important;height:36px!important;border-width:4px!important;font-size:16px!important}
 .residential-journey-track:before{top:17px!important;height:3px!important}
 }
+</style><style id="residential-calendar-reference">
+body[data-page="residential"] .calendar-section{background:#fff;border:1px solid #e6e9ee;border-radius:22px;padding:clamp(12px,3vw,24px);overflow:hidden}
+body[data-page="residential"] .calendar-header{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin:0!important;padding:13px 12px 19px!important;background:#f7f8fa!important;border:1px solid #e9ecf0!important;border-radius:17px 17px 0 0!important}
+body[data-page="residential"] .calendar-header strong{font-size:clamp(19px,4.7vw,30px)!important;font-weight:800!important;color:#364152!important;line-height:1.3!important}
+body[data-page="residential"] .calendar-header button{width:48px!important;height:48px!important;min-width:48px!important;border:1px solid #e2e5e9!important;border-radius:12px!important;background:#fff!important;color:#606b7c!important;font-size:34px!important;line-height:1!important;display:grid!important;place-items:center!important}
+body[data-page="residential"] .calendar-week{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:0!important;background:#f7f8fa!important;border-left:1px solid #e9ecf0!important;border-right:1px solid #e9ecf0!important}
+body[data-page="residential"] .calendar-week span{font-size:clamp(10px,2.4vw,15px)!important;color:#9ba3ae!important;font-weight:800!important;text-align:center!important;padding:13px 0!important}
+body[data-page="residential"] .calendar{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:0!important;border-top:1px solid #e9ecf0!important;border-left:1px solid #e9ecf0!important;border-radius:0 0 16px 16px!important;overflow:hidden!important}
+body[data-page="residential"] .calendar .day{display:flex!important;align-items:center!important;justify-content:center!important;position:relative!important;min-width:0!important;min-height:clamp(48px,11vw,82px)!important;padding:0!important;margin:0!important;border:0!important;border-right:1px solid #edf0f3!important;border-bottom:1px solid #edf0f3!important;border-radius:0!important;background:#fff!important;color:#344054!important;font-size:clamp(16px,3.7vw,25px)!important;font-weight:700!important;box-shadow:none!important}
+body[data-page="residential"] .calendar .day.empty{background:#fff!important}
+body[data-page="residential"] .calendar .day.past{color:#d8dce2!important;background:#fafbfc!important;opacity:1!important;cursor:not-allowed!important}
+body[data-page="residential"] .calendar .day.past .dot{display:none!important}
+body[data-page="residential"] .calendar .day.blocked:not(.past){color:#9da6b2!important;background:#f5f7f9!important;opacity:1!important}
+body[data-page="residential"] .calendar .day.blocked:not(.past) .dot{background:#9da6b2!important}
+body[data-page="residential"] .calendar .day.available:hover{background:#edf4ff!important}
+body[data-page="residential"] .calendar .day.selected{background:#e7f0ff!important;color:#075ee9!important;box-shadow:inset 0 0 0 2px #1267ee!important}
+body[data-page="residential"] .calendar .day.today:not(.past){box-shadow:inset 0 0 0 2px rgba(23,101,232,.22)!important}
+body[data-page="residential"] .calendar .day .dot{width:4px!important;height:4px!important;bottom:7px!important}
+body[data-page="residential"] .legend{font-size:11px!important;margin:14px 0 18px!important}
+@media(max-width:420px){body[data-page="residential"] .calendar-section{padding:10px!important}body[data-page="residential"] .calendar-header{padding:11px 9px 15px!important}body[data-page="residential"] .calendar-header button{width:40px!important;height:40px!important;min-width:40px!important}}
 </style></head>
 <body data-page="residential">
 <header class="header"><a class="brand-logo" href="index.html"><img src="glemi-logo.png" alt="GLEMI"></a><nav class="nav" id="nav"><a href="index.html">Home</a><a href="residential.html" class="active-link">Home Cleaning</a><a href="commercial.html">Commercial</a><a href="post-construction.html">Post-Construction</a></nav><a class="btn btn-secondary header-cta" href="index.html#servicios">Change service</a><button class="menu-btn" id="menuBtn">☰</button></header>
