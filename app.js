@@ -8,7 +8,7 @@ const contactForm=document.getElementById('contactForm');
 if(contactForm){contactForm.addEventListener('submit',e=>{e.preventDefault();e.target.reset();toast('Request sent. Thank you for contacting GLEMI.')})}
 
 const commercialForm=document.getElementById('commercialForm');
-if(commercialForm){commercialForm.addEventListener('submit',e=>{e.preventDefault();toast('Thank you. Your commercial request is ready for review.');e.target.reset()})}
+if(commercialForm){commercialForm.addEventListener('submit',e=>{e.preventDefault();const get=id=>document.getElementById(id)?.value?.trim()||'Not provided';const body=['Hello GLEMI,','','I would like a commercial cleaning estimate.','','Name / company: '+get('businessName'),'Email: '+get('businessEmail'),'Phone / WhatsApp: '+get('businessPhone'),'Space type: '+get('businessType'),'Approximate size: '+get('businessSize'),'Cleaning frequency: '+get('businessFrequency'),'','Project address / city: ','Preferred cleaning schedule: ','','Areas to clean / special requirements:',''+get('businessNotes'),'','I can attach photos of the space.','','Thank you!'].join('\n');window.location.href='mailto:Glemiservices@gmail.com?subject='+encodeURIComponent('Commercial Cleaning — Project Details')+'&body='+encodeURIComponent(body)})}
 
 const bookingForm=document.getElementById('bookingForm');
 if(bookingForm){
