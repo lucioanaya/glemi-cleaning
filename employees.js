@@ -206,7 +206,7 @@ async function recommend(){
       const result=await db.from('booking_employee_assignments').insert({appointment_id:id,employee_id:select.value,service_date:booking.appointment_date});
       if(result.error)throw result.error;
      }
-     await refresh();
+     await refresh();window.dispatchEvent(new Event('glemi:assignment-updated'));
     }catch(err){alert('Could not update assignment: '+(err.code==='23505'?'Employee already booked for this date.':err.message));await refresh()}
     finally{action.disabled=false}
    });card.append(action);
