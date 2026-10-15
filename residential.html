@@ -384,6 +384,20 @@ body[data-page="residential"] .cleaning-mode-grid .cleaning-mode:focus-visible{o
 </style><style id="glemi-quote-outer-border-removal">
 /* Remove the strong blue outline around the residential quote panel. */
 body[data-page="residential"] .booking-layout .booking-card{border:0!important;outline:0!important;box-shadow:0 10px 30px rgba(7,69,148,.07)!important}
+</style><style id="glemi-city-black-underline">
+/* Minimal city selector: only a black underline, no surrounding box. */
+body[data-page="residential"] .glemi-city-field #serviceCity{
+  display:block!important;width:100%!important;box-sizing:border-box!important;
+  background:transparent!important;background-color:transparent!important;
+  border:0!important;border-bottom:2px solid #111111!important;
+  border-radius:0!important;outline:0!important;
+  box-shadow:none!important;padding:14px 32px 12px 12px!important;
+  color:#17365e!important;-webkit-appearance:none!important;appearance:none!important;
+}
+body[data-page="residential"] .glemi-city-field{position:relative!important}
+body[data-page="residential"] .glemi-city-field #serviceCity:focus{
+  border-bottom-color:#111111!important;box-shadow:none!important;outline:0!important
+}
 </style></head>
 <body data-page="residential">
 <header class="header"><a class="brand-logo" href="index.html"><img src="glemi-logo.png" alt="GLEMI"></a><nav class="nav" id="nav"><a href="index.html">Home</a><a href="residential.html" class="active-link">Home Cleaning</a><a href="commercial.html">Commercial</a><a href="post-construction.html">Post-Construction</a></nav><a class="btn btn-secondary header-cta" href="index.html#servicios">Change service</a><button class="menu-btn" id="menuBtn">☰</button></header>
