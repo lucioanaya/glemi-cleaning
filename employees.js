@@ -51,6 +51,12 @@ async function refresh(){
  }));
  loaded=true;drawEmployees();recommend();autoLocate();
 }
+async function sendWelcome(employeeId){
+ const {data,error}=await db.functions.invoke('send-employee-welcome',{body:{employee_id:employeeId}});
+ if(error){let detail=error.message;try{const response=await error.context?.json();detail=response?.error||response?.message||detail;if(response?.details)detail+=': '+JSON.stringify(response.details)}catch{}throw Error(detail)}
+ if(data?.error||!data?.ok)throw Error(data?.error||'Email service did not confirm acceptance');
+ return data;
+}
 function drawEmployees(){
  const list=$('employeeList');list.replaceChildren();
  if(!employees.length){list.append(text('p','No employees registered yet.'));return}
@@ -75,7 +81,12 @@ function drawEmployees(){
      if(e.photo_path)await db.storage.from('glemi-employee-photos').remove([e.photo_path]);
      msg('Employee removed.');await refresh();
    };
-   const actions=document.createElement('div');actions.className='glemi-employee-actions';actions.append(edit,remove);card.append(actions);list.append(card);
+   const resend=text('button','Send welcome email');resend.type='button';resend.onclick=async()=>{
+ if(!confirm('Send the welcome email to '+e.full_name+' and a copy to GLEMI?'))return;
+ resend.disabled=true;msg('Sending welcome email…');
+ try{await sendWelcome(e.id);msg('Welcome email accepted by email provider for '+e.full_name+' and GLEMI.')}catch(err){msg('Welcome email failed: '+err.message)}finally{resend.disabled=false}
+ };
+ const actions=document.createElement('div');actions.className='glemi-employee-actions';actions.append(edit,resend,remove);card.append(actions);list.append(card);
  }
 }
 $('employeeForm').addEventListener('submit',async ev=>{
@@ -101,8 +112,8 @@ $('employeeForm').addEventListener('submit',async ev=>{
    let welcomeStatus='';
    if(!id){
     try{
-     const {data:mail,error:mailError}=await db.functions.invoke('send-employee-welcome',{body:{employee_id:result.data.id}});
-     welcomeStatus=mailError||mail?.error?' Employee saved, but welcome email could not be sent: '+(mail?.error||mailError?.message||'Unknown error'):' Welcome email sent to employee and GLEMI.';
+     await sendWelcome(result.data.id);
+     welcomeStatus=' Welcome email accepted by provider for employee and GLEMI.';
     }catch(mailError){welcomeStatus=' Employee saved, but welcome email could not be sent: '+mailError.message;}
    }
    if(previous?.photo_path&&photo&&previous.photo_path!==photo_path)await db.storage.from('glemi-employee-photos').remove([previous.photo_path]);
