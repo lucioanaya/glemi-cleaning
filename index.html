@@ -109,12 +109,11 @@
 .about{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)!important}
 @media(max-width:650px){.about{grid-template-columns:1fr!important}}
 </style>
-
-
-
-
-
-
+<style id="glemi-mobile-refinements">
+@media(max-width:650px){.header{min-height:0!important}.header-inner{min-height:68px!important}.brand-logo img{max-height:55px!important}.glemi-book-banner-inner{padding-top:20px!important;padding-bottom:22px!important}.glemi-book-banner h2{font-size:clamp(27px,7vw,36px)!important;line-height:1.15!important}.glemi-book-cta{min-height:64px!important;padding:16px!important}.home-logo-first .why-home-title{font-size:clamp(29px,7.5vw,39px)!important;line-height:1.14!important}.glemi-home-city-grid:not(.is-expanded) span:nth-child(n+7){display:none}.glemi-cities-toggle{display:block;width:100%;margin-top:10px;padding:10px;border:1px solid #bcd4f4;border-radius:10px;background:white;color:#1558b8;font:700 14px Inter,Arial,sans-serif;cursor:pointer}}
+@media(min-width:651px){.glemi-cities-toggle{display:none}}
+</style>
+<script defer src="glemi-mobile-refinements.js"></script>
 <style>
 .service-card[href="deep.html"] .service-media{
   position:relative!important;
@@ -280,7 +279,7 @@
         <h1 class="why-home-title">Professional Cleaning Services in Metro Vancouver, BC</h1>
         <div class="glemi-home-cities" aria-label="Cities We Serve in Metro Vancouver">
           <h2>Cities We Serve in Metro Vancouver</h2>
-          <div class="glemi-home-city-grid"><span>Vancouver</span><span>Burnaby</span><span>Surrey</span><span>Richmond</span><span>Coquitlam</span><span>North Vancouver</span><span>West Vancouver</span><span>Delta</span><span>Maple Ridge</span><span>New Westminster</span><span>Port Coquitlam</span><span>Port Moody</span><span>White Rock</span><span>Langley</span></div>
+          <div class="glemi-home-city-grid" id="glemiCityGrid"><span>Vancouver</span><span>Burnaby</span><span>Surrey</span><span>Richmond</span><span>Coquitlam</span><span>North Vancouver</span><span>West Vancouver</span><span>Delta</span><span>Maple Ridge</span><span>New Westminster</span><span>Port Coquitlam</span><span>Port Moody</span><span>White Rock</span><span>Langley</span></div><button type="button" class="glemi-cities-toggle" aria-expanded="false" aria-controls="glemiCityGrid">View All Service Areas ↓</button>
         </div>
         <section class="section glemi-seo-section" id="how-it-works"><div class="glemi-journey" aria-label="GLEMI booking steps"><div class="glemi-journey-calendar" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="14" width="44" height="42" rx="7"/><path d="M21 8v12M43 8v12M10 27h44"/><path d="M21 37h3M32 37h3M43 37h1M21 46h3M32 46h3"/></svg></div><h2 class="glemi-journey-title">Book Your Clean</h2><p class="glemi-journey-subtitle">Booking takes just <strong>60 seconds</strong></p><div class="glemi-journey-track" id="glemiJourneyTrack"><div class="glemi-journey-step active"><span class="glemi-journey-number">1</span><span>Choose service</span></div><div class="glemi-journey-step"><span class="glemi-journey-number">2</span><span>Get a free quote</span></div><div class="glemi-journey-step"><span class="glemi-journey-number">3</span><span>Your details</span></div><div class="glemi-journey-step"><span class="glemi-journey-number">4</span><span>Booking summary</span></div></div></div></section>
         <div class="glemi-quick-services" id="servicios" aria-label="Choose your cleaning service">
