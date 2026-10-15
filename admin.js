@@ -70,14 +70,32 @@ el('logoutBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
 document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>openFriw(b.dataset.view));
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>openFriw(b.dataset.go));
 function openFriw(id){document.querySelectorAll('.nav-btn').forEach(x=>x.classList.toggle('active',x.dataset.view===id));document.querySelectorAll('.panel-view').forEach(x=>x.classList.toggle('active',x.id===id));el('pageTitle').textContent=({dashboard:'Dashboard',appointments:'Appointments',schedule:'Calendario',pricing:'Pricing',content:'Website',users:'Users','service-map':'Service Map',employees:'Employees'})[id]||id;if(id==='content')setTimeout(initWebsiteEditor,0);if(id==='service-map')window.dispatchEvent(new Event('glemi:map-open'));if(id==='employees')window.dispatchEvent(new Event('glemi:employees-open'))}
+let dashboardAssignments=[],dashboardEmployees=[];
 async function loadAll(){
  el('roleBadge').textContent=profile.role==='owner'?'Owner':'Admin';el('currentUserName').textContent=profile.display_name||profile.email;el('currentUserRole').textContent=profile.role==='owner'?'Owner':'Administrator';
- const [a,s,p,c]=await Promise.all([sb.from('appointments').select('*').order('appointment_date'),sb.from('schedule_settings').select('*'),sb.from('pricing_settings').select('*').order('id'),sb.from('site_settings').select('*')]);
+ const [a,s,p,c,assigned,staff]=await Promise.all([sb.from('appointments').select('*').order('appointment_date'),sb.from('schedule_settings').select('*'),sb.from('pricing_settings').select('*').order('id'),sb.from('site_settings').select('*'),sb.from('booking_employee_assignments').select('appointment_id,employee_id'),sb.from('cleaning_employees').select('id,full_name')]);
+ dashboardAssignments=assigned.data||[];dashboardEmployees=staff.data||[];
  appointments=a.data||[];schedule=Object.fromEntries((s.data||[]).map(x=>[x.day_key,x]));pricing=p.data||[];settings=Object.fromEntries((c.data||[]).map(x=>[x.key,x.value]));
  renderAppointments();renderStats();renderSchedule();renderPricing();renderContent();window.dispatchEvent(new CustomEvent('glemi:appointments-loaded',{detail:appointments.filter(a=>a.status==='pending'||a.status==='confirmed').map(a=>({id:a.id,client_name:a.client_name,service:a.service,appointment_date:a.appointment_date,appointment_time:a.appointment_time,address:a.address,status:a.status}))}));await renderUsers();
 }
 function appointmentHTML(a){return `<div class="appointment-item"><div><h4>${esc(a.client_name)}</h4><p>${esc(a.service)}</p></div><div><b>${esc(a.appointment_date)}</b><small>${esc(a.appointment_time?.slice(0,5)||'')}</small></div><div><span class="status ${a.status}">${a.status}</span><small>${a.total_cad?`$${Number(a.total_cad).toFixed(2)} CAD`:''}</small></div>${a.status==='confirmed'?`<div class="glemi-employee-suggestion" data-employee-booking="${esc(a.id)}">Finding nearby employees…</div>`:''}<div class="actions"><button data-edit="${a.id}">Edit</button>${a.status!=='confirmed'?`<button data-confirm="${a.id}">Confirm</button>`:''}${a.status!=='cancelled'?`<button data-cancel="${a.id}">Cancel</button>`:''}</div></div>`}
-function renderStats(){el('statPending').textContent=appointments.filter(x=>x.status==='pending').length;el('statConfirmed').textContent=appointments.filter(x=>x.status==='confirmed').length;el('statToday').textContent=appointments.filter(x=>!['cancelled','canceled'].includes(x.status)&&x.appointment_date===new Date().toISOString().slice(0,10)).length;el('statTotal').textContent=appointments.filter(x=>!['cancelled','canceled'].includes(x.status)).length;el('dashboardAppointments').innerHTML=appointments.filter(x=>!['cancelled','canceled'].includes(x.status)).slice(0,5).map(appointmentHTML).join('')||'<p class="muted">No appointments.</p>';bindAppointmentActions(el('dashboardAppointments'));window.dispatchEvent(new Event('glemi:recommendations-refresh'))}
+function renderStats(){
+ const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Vancouver',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+ const todays=appointments.filter(a=>!['cancelled','canceled'].includes(a.status)&&a.appointment_date===today).sort((a,b)=>(a.appointment_time||'').localeCompare(b.appointment_time||''));
+ el('statPending').textContent=appointments.filter(a=>a.status==='pending').length;
+ el('statConfirmed').textContent=appointments.filter(a=>a.status==='confirmed').length;
+ el('statToday').textContent=todays.length;
+ el('statTotal').textContent=appointments.filter(a=>!['cancelled','canceled'].includes(a.status)).length;
+ el('dashboardAppointments').innerHTML=todays.map(a=>{
+ const assigned=dashboardAssignments.find(x=>String(x.appointment_id)===String(a.id));
+ const employee=assigned&&dashboardEmployees.find(x=>String(x.id)===String(assigned.employee_id));
+ const name=assigned?(employee?.full_name||'Employee assigned'):'Not assigned';
+ return '<div class="appointment-item"><div><h4>'+esc(a.client_name)+'</h4><p>'+esc(a.service)+'</p><p><b>'+esc(name)+'</b></p></div><div><b>'+esc((a.appointment_time||'').slice(0,5))+'</b><small>'+esc(a.appointment_date)+'</small></div><div><span class="status '+esc(a.status)+'">'+esc(a.status)+'</span></div><div class="actions"><button data-edit="'+esc(a.id)+'">View / edit</button></div></div>';
+ }).join('')||'<p class="muted">No appointments scheduled for today.</p>';
+ bindAppointmentActions(el('dashboardAppointments'));
+}
+window.addEventListener('glemi:assignment-updated',async()=>{const [a,e]=await Promise.all([sb.from('booking_employee_assignments').select('appointment_id,employee_id'),sb.from('cleaning_employees').select('id,full_name')]);if(!a.error)dashboardAssignments=a.data||[];if(!e.error)dashboardEmployees=e.data||[];renderStats()});
+
 function bindAppointmentActions(root){root.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editAppointment(b.dataset.edit));root.querySelectorAll('[data-confirm]').forEach(b=>b.onclick=()=>setStatus(b.dataset.confirm,'confirmed'));root.querySelectorAll('[data-cancel]').forEach(b=>b.onclick=()=>setStatus(b.dataset.cancel,'cancelled'))}
 function renderAppointments(){const q=(el('appointmentSearch').value||'').toLowerCase(),f=el('appointmentFilter').value;const arr=appointments.filter(a=>(f==='all'?!['cancelled','canceled'].includes(a.status):a.status===f)&&`${a.client_name} ${a.service} ${a.appointment_date}`.toLowerCase().includes(q));el('appointmentList').innerHTML=arr.map(appointmentHTML).join('')||'<p class="muted">No results found.</p>';bindAppointmentActions(el('appointmentList'));window.dispatchEvent(new Event('glemi:recommendations-refresh'))}
 el('appointmentSearch').oninput=renderAppointments;el('appointmentFilter').onchange=renderAppointments;el('newAppointmentBtn').onclick=()=>openAppointment();
