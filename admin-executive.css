@@ -161,3 +161,17 @@ body:has(#appFriw:not(.hidden)){background:#edf3fa;color:var(--glemi-ink)}
  #appFriw .glemi-bottom-nav button{min-width:0;min-height:55px;gap:5px;padding:6px 1px;font-size:clamp(9px,2.5vw,12px);line-height:1.2;white-space:nowrap}
  #appFriw .glemi-bottom-nav button .nav-symbol{font-size:clamp(21px,6vw,27px);line-height:1.1;display:block}
 }
+
+/* Mobile working hours: each day, active toggle and time inputs stay aligned */
+#appFriw .schedule-time-field{display:flex;flex-direction:column;gap:5px;min-width:0;font-weight:600;color:#526581;font-size:12px}
+#appFriw .schedule-time-field input[type=time]{width:100%;min-width:0;max-width:100%;box-sizing:border-box;font-size:16px}
+@media(max-width:700px){
+ #appFriw #scheduleGrid .schedule-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:center;padding:14px;border-radius:15px}
+ #appFriw #scheduleGrid .schedule-row>b{grid-column:1;grid-row:1;font-size:16px}
+ #appFriw #scheduleGrid .schedule-row>label:has(input[type=checkbox]){grid-column:2;grid-row:1;display:flex;align-items:center;justify-content:flex-end;gap:7px;font-size:13px;white-space:nowrap}
+ #appFriw #scheduleGrid .schedule-row>label:has(input[type=checkbox]) input{width:20px;height:20px;flex:none;margin:0}
+ #appFriw #scheduleGrid .schedule-time-field{grid-row:2;min-width:0;max-width:100%;overflow:hidden}
+ #appFriw #scheduleGrid .schedule-time-field:nth-of-type(2){grid-column:1}
+ #appFriw #scheduleGrid .schedule-time-field:nth-of-type(3){grid-column:2}
+ #appFriw #scheduleGrid .schedule-time-field input[type=time]{padding:11px 5px;font-size:16px;min-height:44px;border-radius:10px}
+}
