@@ -44,7 +44,7 @@
         </div>
         <nav id="sideNav">
           <button class="nav-btn active" data-view="dashboard">Dashboard</button>
-          <button class="nav-btn" data-view="appointments">Appointments</button>
+          <button class="nav-btn" data-view="appointments">Appointments</button><button class="nav-btn" data-view="complaints">Complaints <span id="complaintsNavCount"></span></button>
           <button class="nav-btn" data-view="schedule">Calendar</button>
           <button class="nav-btn" data-view="service-map">Service Map</button>
           <button class="nav-btn" data-view="pricing">Pricing</button>
@@ -73,7 +73,7 @@
         </header>
 
         <section id="dashboard" class="panel-view active">
-          <div class="stats">
+          <div class="stats"><article class="glemi-stat-link" role="button" tabindex="0" id="complaintsStatLink" aria-label="View customer complaints"><span>New complaints</span><strong id="complaintsStatCount">0</strong></article>
             <article class="glemi-stat-link" role="button" tabindex="0" data-stat-filter="pending" aria-label="View Appointments pendientes appointments"><span>Appointments pendientes</span><strong id="statPending">0</strong></article>
             <article class="glemi-stat-link" role="button" tabindex="0" data-stat-filter="confirmed" aria-label="View Confirmed appointments"><span>Confirmed</span><strong id="statConfirmed">0</strong></article>
             <article class="glemi-stat-link" role="button" tabindex="0" data-stat-filter="today" aria-label="View Hoy appointments"><span>Hoy</span><strong id="statToday">0</strong></article>
@@ -85,7 +85,7 @@
           </div>
         </section>
 
-        <section id="appointments" class="panel-view">
+        <section id="complaints" class="panel-view"><div class="card"><div class="card-head"><div><p class="eyebrow">CUSTOMER CARE</p><h3>Customer Complaints</h3></div><button class="secondary" id="refreshComplaints" type="button">Refresh</button></div><p class="muted">New customer concerns are listed here for authorized staff. Review each case before offering a resolution.</p><div id="complaintsList">Loading complaints…</div></div></section><section id="appointments" class="panel-view">
           <div class="card">
             <div class="card-head"><div><p class="eyebrow">MANAGEMENT</p><h3>Appointments</h3></div><button id="newAppointmentBtn" class="primary small">+ New appointment</button></div>
             <div class="filters"><input id="appointmentSearch" placeholder="Search client, service, or date"><select id="appointmentFilter"><option value="all">All</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="cancelled">Cancelled</option></select></div>
@@ -230,5 +230,5 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="service-map.js?v=20261014-view-pin-scroll17"></script>
 <script src="employees.js?v=20261014-roles-expanded14"></script>
-</body>
+<script defer src="admin-complaints.js?v=1"></script></body>
 </html>
