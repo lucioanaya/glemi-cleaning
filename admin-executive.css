@@ -175,3 +175,14 @@ body:has(#appFriw:not(.hidden)){background:#edf3fa;color:var(--glemi-ink)}
  #appFriw #scheduleGrid .schedule-time-field:nth-of-type(3){grid-column:2}
  #appFriw #scheduleGrid .schedule-time-field input[type=time]{padding:11px 5px;font-size:16px;min-height:44px;border-radius:10px}
 }
+
+/* Mobile: Active, Start and End on one horizontal row below day name */
+@media(max-width:700px){
+ #appFriw #scheduleGrid .schedule-row{grid-template-columns:minmax(0,.8fr) minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important;align-items:end!important}
+ #appFriw #scheduleGrid .schedule-row>b{grid-column:1/-1!important;grid-row:1!important}
+ #appFriw #scheduleGrid .schedule-row>label:has(input[type=checkbox]){grid-column:1!important;grid-row:2!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:end!important;gap:5px!important;font-size:12px!important;min-height:72px}
+ #appFriw #scheduleGrid .schedule-time-field:nth-of-type(2){grid-column:2!important;grid-row:2!important}
+ #appFriw #scheduleGrid .schedule-time-field:nth-of-type(3){grid-column:3!important;grid-row:2!important}
+ #appFriw #scheduleGrid .schedule-time-field{overflow:visible!important;min-width:0!important}
+ #appFriw #scheduleGrid .schedule-time-field input[type=time]{font-size:13px!important;padding:9px 2px!important;min-height:44px!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
+}
