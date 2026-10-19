@@ -443,8 +443,8 @@ body[data-page="residential"] #modal .modal-close{position:absolute!important;ri
   <div id="promoCodeMessage" class="promo-code-message" aria-live="polite"></div>
 </div></div>
 <label class="full-field"><span class="icon-label"><i class="field-icon">♙</i>Full name *</span><input required id="name" autocomplete="name" placeholder="Jane Smith"></label>
-<label class="full-field"><span class="icon-label"><i class="field-icon">✉</i>Email *</span><input required id="email" type="email" autocomplete="email" placeholder="jane@email.com"></label>
-<label class="full-field"><span class="icon-label"><i class="field-icon">☎</i>Phone *</span><span class="canada-phone"><span class="canada-flag">🇨🇦</span><input required id="phone" type="tel" autocomplete="tel" placeholder="604-555-0100"></span></label>
+<label class="full-field"><span class="icon-label"><i class="field-icon">✉</i>Email <small>(email or phone required)</small></span><input id="email" type="email" autocomplete="email" placeholder="jane@email.com"></label>
+<label class="full-field"><span class="icon-label"><i class="field-icon">☎</i>Phone <small>(email or phone required)</small></span><span class="canada-phone"><span class="canada-flag">🇨🇦</span><input id="phone" type="tel" inputmode="tel" maxlength="18" autocomplete="tel" placeholder="604-555-0100"></span></label>
 <label class="full-field"><span class="icon-label"><i class="field-icon">⌖</i>Street address *</span><input required id="address" autocomplete="street-address" placeholder="Start typing your street address..."></label>
 <label class="full-field"><span class="icon-label"><i class="field-icon">⌂</i>Unit / Apt number <small>(if applicable)</small></span><input id="unitApt" autocomplete="off" placeholder="e.g. 204, Suite 5"></label>
 <label class="full-field"><span class="icon-label"><i class="field-icon">✎</i>Special instructions <small>(optional)</small></span><textarea id="specialInstructions" rows="3" placeholder="Buzzer, pets, notes..."></textarea></label>
