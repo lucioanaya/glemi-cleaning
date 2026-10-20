@@ -17,3 +17,16 @@
  main>.glemi-quick-services .glemi-quick-photo{height:125px!important}
  main>.glemi-quick-services .glemi-quick-info{padding:10px!important}
 }
+
+/* Keep each illustrated category icon attached to its photo edge on desktop. */
+@media(min-width:1025px){
+ main>.glemi-quick-services .glemi-quick-service{overflow:hidden!important;position:relative!important}
+ main>.glemi-quick-services .glemi-card-icon{position:absolute!important;left:17px!important;top:132px!important;bottom:auto!important;transform:none!important;display:grid!important;place-items:center!important;width:44px!important;height:44px!important;border-radius:13px!important;background:#fff!important;border:1px solid #dbe8f6!important;box-shadow:0 5px 14px #1b4e7a22!important;z-index:3!important}
+ main>.glemi-quick-services .glemi-card-icon svg{width:25px!important;height:25px!important}
+ main>.glemi-quick-services .glemi-quick-info{padding-top:25px!important;min-height:94px!important;align-items:center!important}
+ main>.glemi-quick-services .glemi-quick-arrow{align-self:center!important;flex:none!important}
+}
+@media(min-width:1025px) and (max-width:1160px){
+ main>.glemi-quick-services .glemi-card-icon{top:104px!important;left:12px!important;width:40px!important;height:40px!important}
+ main>.glemi-quick-services .glemi-quick-info{padding-top:24px!important}
+}
