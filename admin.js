@@ -21,7 +21,7 @@ async function init(){
   if(session){
     me=session.user;
     profile=await profileFor(me.id);
-    if(profile?.active){show('appFriw');await loadAll();return}
+    if(profile?.active && ['owner','admin'].includes(profile.role)){show('appFriw');await loadAll();return}
     await sb.auth.signOut();
   }
   show('loginFriw');
@@ -40,7 +40,7 @@ el('loginForm').addEventListener('submit',async e=>{
  }
  me=data.user;profile=await profileFor(me.id);
  if(profile?.__error){await sb.auth.signOut();el('loginError').textContent='Sign-in succeeded, but the admin profile could not be loaded. Run GLEMI-COMPLETE-SETUP.sql in Supabase and try again.';return}
- if(!profile?.active){await sb.auth.signOut();el('loginError').textContent='Sign-in succeeded, but this account is not authorized for the admin panel.';return}
+ if(!profile?.active || !['owner','admin'].includes(profile.role)){await sb.auth.signOut();el('loginError').textContent='Sign-in succeeded, but this account is not authorized for the admin panel.';return}
  show('appFriw');await loadAll();
 });
 const allowedAdminEmails=['glemiservices@gmail.com','baltazaranaya@outlook.com'];
