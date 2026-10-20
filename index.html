@@ -292,7 +292,7 @@
 .glemi-included-toggle .ghi-category:not([open]) .ghi-body{display:none}
 @media(min-width:1025px){main>.glemi-included-toggle{margin:0 auto 34px;width:min(100% - 64px,1000px)}}
 @media(max-width:650px){.glemi-included-toggle{margin:12px 0 22px}.glemi-included-toggle>summary{min-height:59px}}
-</style></head>
+</style><style id="glemi-journey-desktop-placement">@media(min-width:1025px){main>#how-it-works{display:block!important;width:min(100% - 64px,1260px)!important;max-width:1260px!important;margin:28px auto 8px!important;padding:20px 24px!important;border-radius:24px!important;background:#e9f3ff!important}main>#how-it-works .glemi-journey{margin:0 auto!important;max-width:1100px!important}main>.glemi-quick-services.glemi-desktop-first-services{margin-top:14px!important}}</style></head>
 <body>
   <header class="header">
     <a class="brand-logo" href="index.html" aria-label="GLEMI home"><img src="glemi-logo.png" alt="GLEMI Cleaning & Property Services Ltd."></a>
@@ -459,7 +459,9 @@ function placeDesktopCategories(){
  if(window.matchMedia('(min-width:1025px)').matches){
   const included=document.getElementById('glemiIncludedToggle');
   cards.classList.add('glemi-desktop-first-services');
+  const journey=hero.querySelector('#how-it-works');
   main.insertBefore(cards,banner);
+  if(journey)main.insertBefore(journey,cards);
   if(included)banner.insertAdjacentElement('afterend',included);
  }else{
   cards.classList.remove('glemi-desktop-first-services');
@@ -467,6 +469,7 @@ function placeDesktopCategories(){
   const copy=hero.querySelector('.why-home-copy');
   const cities=copy?.querySelector('.glemi-home-cities');
   const journey=copy?.querySelector('#how-it-works');
+  if(journey&&cities)cities.insertAdjacentElement('afterend',journey);
   if(journey)journey.insertAdjacentElement('afterend',cards);
   else if(cities)cities.insertAdjacentElement('afterend',cards);
   if(included)cards.insertAdjacentElement('afterend',included);
