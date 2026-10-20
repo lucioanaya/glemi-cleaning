@@ -1,0 +1,52 @@
+/* GLEMI Studio — polished, illustrated admin experience. Scoped to private panel. */
+#appFriw{--studio-ink:#153455;--studio-blue:#0876cf;--studio-cyan:#19c4da;--studio-border:#dceaf7}
+body:has(#appFriw:not(.hidden)){background:radial-gradient(circle at 95% 12%,#d6f7ff 0,transparent 28%),linear-gradient(145deg,#eef5ff,#f7fbff 56%,#eaf5fd)}
+#appFriw .sidebar{background:linear-gradient(160deg,#0b2446,#102e5b 60%,#07385b);border-right:1px solid #58c9f022}
+#appFriw .brand-row{padding:14px 6px 18px;position:relative}
+#appFriw .brand-row:after{content:'CLEANING OPERATIONS';font-size:9px;letter-spacing:.17em;color:#9be5f8}
+#appFriw .brand-row img{box-shadow:0 12px 34px #00d8ff35;border:2px solid #ffffff55}
+#appFriw #sideNav{gap:5px}
+#appFriw #sideNav .nav-btn{display:flex;align-items:center;gap:12px;border:1px solid transparent;transition:transform .2s,background .2s,border-color .2s}
+#appFriw #sideNav .nav-btn .studio-nav-icon{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:11px;background:#ffffff12;color:#9de8ff}
+#appFriw #sideNav .nav-btn .studio-nav-icon svg{width:19px;height:19px;stroke-width:1.8}
+#appFriw #sideNav .nav-btn.active{background:linear-gradient(110deg,#157bdb,#0badd2);box-shadow:0 9px 20px #031e4338;border-color:#ffffff2a}
+#appFriw #sideNav .nav-btn.active .studio-nav-icon{background:#ffffff2b;color:#fff}
+#appFriw #sideNav .nav-btn:hover{transform:translateX(3px)}
+#appFriw .glemi-admin-hero{isolation:isolate;overflow:hidden;min-height:218px}
+#appFriw .glemi-admin-hero:after{content:'✦';position:absolute;right:8%;top:14%;font-size:110px;color:#c3f8ff55;text-shadow:0 0 70px #74e3ff;z-index:0;pointer-events:none}
+#appFriw .glemi-admin-hero-content{position:relative;z-index:1}
+#appFriw .topbar{border-radius:23px!important;box-shadow:0 16px 36px #173e6715!important}
+#appFriw .topbar .eyebrow{color:#088dc1;letter-spacing:.19em}
+#appFriw .topbar h2{font-weight:850;letter-spacing:-.035em}
+#appFriw .panel-view>.card,#appFriw .panel-view>.stats,#appFriw .panel-view>.glemi-finance-overview{animation:studioRise .4s ease both}
+@keyframes studioRise{from{opacity:.75;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+#appFriw .card{border:1px solid #deebf8;border-radius:23px;box-shadow:0 10px 35px #1346780c}
+#appFriw .card-head{gap:12px}
+#appFriw .card-head h3{letter-spacing:-.025em}
+#appFriw .card-head .studio-section-icon{display:inline-grid;place-items:center;vertical-align:middle;width:39px;height:39px;margin-right:9px;border-radius:12px;background:linear-gradient(135deg,#e1f5ff,#e5eaff);color:#097dc3}
+#appFriw .card-head .studio-section-icon svg{width:22px;height:22px}
+#appFriw .stats article{background:linear-gradient(145deg,#fff,#f8fcff);border:1px solid #e0edfa!important;transition:transform .2s,box-shadow .2s}
+#appFriw .stats article:hover{transform:translateY(-3px);box-shadow:0 15px 35px #145f9d16}
+#appFriw .stats article:before{border-radius:15px!important;width:46px!important;height:46px!important}
+#appFriw .stats article strong{letter-spacing:-.05em}
+#appFriw .primary{background:linear-gradient(110deg,#0979d9,#05a7d3);box-shadow:0 8px 20px #0879d025;transition:filter .2s,transform .2s}
+#appFriw .primary:hover{filter:brightness(1.07);transform:translateY(-1px)}
+#appFriw .secondary{border:1px solid #d5e7f8;background:#eaf5ff;color:#155a97}
+#appFriw .panel-view input:focus-visible,#appFriw .panel-view select:focus-visible,#appFriw .panel-view textarea:focus-visible{outline:3px solid #52c3ff77;outline-offset:1px;border-color:#168ad0}
+#appFriw .studio-illustration{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:120px;padding:18px 22px;margin-bottom:17px;border:1px solid #cfe6fa;border-radius:23px;background:linear-gradient(110deg,#f4fbff,#e7f5ff 55%,#e8eeff);position:relative;overflow:hidden}
+#appFriw .studio-illustration:before{content:'';position:absolute;width:170px;height:170px;border-radius:50%;right:-35px;top:-80px;background:#b9e9ff88}
+#appFriw .studio-illustration-copy{position:relative;z-index:1}
+#appFriw .studio-illustration-copy small{display:block;font-size:10px;font-weight:850;letter-spacing:.14em;color:#158bb6;margin-bottom:8px}
+#appFriw .studio-illustration-copy strong{display:block;font-size:clamp(18px,2.6vw,24px);color:#123e71;letter-spacing:-.035em}
+#appFriw .studio-illustration-copy p{margin:6px 0 0;font-size:12px;color:#5a7c9b;line-height:1.5}
+#appFriw .studio-illustration-art{flex:0 0 112px;width:112px;height:92px;display:grid;place-items:center;position:relative;z-index:1;color:#137cc7}
+#appFriw .studio-illustration-art svg{width:94px;height:94px;filter:drop-shadow(0 8px 10px #1c7fba24)}
+#appFriw .studio-illustration-art:after{content:'✧';position:absolute;right:0;top:-5px;font-size:25px;color:#15bdd1}
+#appFriw .glemi-finance-overview{box-shadow:0 15px 42px #1355a018!important}
+#appFriw .glemi-finance-tile{transition:transform .2s}
+#appFriw .glemi-finance-tile:hover{transform:translateY(-2px)}
+#appFriw .glemi-bottom-nav{background:linear-gradient(110deg,#08294c,#0d3b6b)}
+#appFriw .glemi-bottom-nav button{transition:background .2s}
+#appFriw .glemi-bottom-nav .nav-symbol{filter:drop-shadow(0 3px 4px #0002)}
+@media(max-width:680px){#appFriw .studio-illustration{padding:15px;min-height:105px;gap:8px}#appFriw .studio-illustration-art{flex-basis:76px;width:76px;height:75px}#appFriw .studio-illustration-art svg{width:75px;height:75px}#appFriw .studio-illustration-copy p{font-size:11px}#appFriw .glemi-admin-hero:after{right:-10px;font-size:72px;top:22%}#appFriw .stats article:hover{transform:none}}
+@media(prefers-reduced-motion:reduce){#appFriw *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
