@@ -1,0 +1,19 @@
+/* GLEMI Mobile Navigation — bright editorial command center */
+@media(max-width:900px){
+ #appFriw .sidebar{background:#f8fbff!important;color:#173b61!important;border:1px solid #d9e8f5!important;border-radius:24px 24px 0 0!important;box-shadow:0 -14px 44px #061e3c38!important;padding:14px 15px calc(95px + env(safe-area-inset-bottom))!important;gap:14px!important;max-height:min(79dvh,740px)!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+ #appFriw .sidebar .brand-row{display:flex!important;gap:12px!important;align-items:center!important;padding:8px 8px 13px!important;border-bottom:1px solid #dce9f5!important}
+ #appFriw .sidebar .brand-row img{width:45px!important;height:45px!important;object-fit:contain!important;background:white!important;border:1px solid #dce9f5!important;box-shadow:none!important}
+ #appFriw .sidebar .brand-row b{color:#123b68!important;font-size:15px!important}
+ #appFriw .sidebar .brand-row span{color:#6986a0!important}
+ #appFriw .sidebar .brand-row:after{display:none!important}
+ #appFriw #sideNav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ #appFriw #sideNav .nav-btn{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;min-width:0!important;min-height:105px!important;padding:13px!important;gap:8px!important;background:#fff!important;color:#224769!important;border:1px solid #dfebf6!important;border-radius:17px!important;box-shadow:0 4px 12px #1c548509!important;text-align:left!important;font-size:13px!important;line-height:1.2!important;font-weight:750!important;white-space:normal!important;overflow-wrap:anywhere!important;transform:none!important}
+ #appFriw #sideNav .nav-btn .studio-nav-icon{width:39px!important;height:39px!important;flex:0 0 39px!important;background:#eaf5ff!important;border-radius:12px!important;color:#1475b6!important}
+ #appFriw #sideNav .nav-btn .studio-nav-icon svg{width:21px!important;height:21px!important}
+ #appFriw #sideNav .nav-btn.active{background:linear-gradient(130deg,#0d6dcc,#0aa8d3)!important;border-color:#138bcb!important;color:#fff!important;box-shadow:0 9px 19px #1172b633!important}
+ #appFriw #sideNav .nav-btn.active .studio-nav-icon{background:#ffffff29!important;color:#fff!important}
+ #appFriw #sideNav .nav-btn:active{transform:scale(.97)!important}
+ #appFriw .sidebar #logoutBtn{width:100%!important;min-height:46px!important;margin-top:7px!important;background:#fff4f4!important;color:#aa3347!important;border:1px solid #ffdfe3!important;border-radius:13px!important}
+ #appFriw .glemi-bottom-nav{z-index:110!important}
+}
+@media(max-width:430px){#appFriw #sideNav .nav-btn{min-height:96px!important;padding:11px!important;font-size:12px!important}}
