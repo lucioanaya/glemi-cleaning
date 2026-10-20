@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="desktop-refinement.css?v=20261019-desktop1" />
+  <link rel="stylesheet" href="desktop-categories-first.css?v=20261019-categories1" />
 
 <style>
 .home-logo-first .home-main-logo {
@@ -437,6 +438,26 @@ panels.forEach(panel=>panel.addEventListener('toggle',()=>{if(panel.open)panels.
  // Returning to the four service cards always means step one.
  sessionStorage.setItem('glemiBookingStage','1');
  update();
+})();
+</script><script>
+(function(){
+function placeDesktopCategories(){
+ const main=document.querySelector('main'),cards=document.getElementById('servicios'),banner=main?.querySelector(':scope > .glemi-book-banner'),hero=main?.querySelector(':scope > .hero.home-logo-first');
+ if(!main||!cards||!banner||!hero)return;
+ if(window.matchMedia('(min-width:1025px)').matches){
+  cards.classList.add('glemi-desktop-first-services');
+  main.insertBefore(cards,banner);
+ }else{
+  cards.classList.remove('glemi-desktop-first-services');
+  const copy=hero.querySelector('.why-home-copy');
+  const cities=copy?.querySelector('.glemi-home-cities');
+  const journey=copy?.querySelector('#how-it-works');
+  if(journey)journey.insertAdjacentElement('afterend',cards);
+  else if(cities)cities.insertAdjacentElement('afterend',cards);
+ }
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',placeDesktopCategories);else placeDesktopCategories();
+window.addEventListener('resize',placeDesktopCategories);
 })();
 </script></body>
 </html>
