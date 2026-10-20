@@ -1,0 +1,19 @@
+/* Desktop-only order: four service categories first, then booking button, then intro. */
+@media(min-width:1025px){
+ main>.glemi-quick-services.glemi-desktop-first-services{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px!important;max-width:1260px;width:calc(100% - 72px);margin:38px auto 18px!important}
+ main>.glemi-quick-services .glemi-quick-service{min-height:235px!important;border-radius:20px!important;box-shadow:0 12px 28px #133f7512!important;border:1px solid #dbe9f7!important}
+ main>.glemi-quick-services .glemi-quick-photo{height:154px!important;width:100%;object-fit:cover}
+ main>.glemi-quick-services .glemi-quick-info{padding:15px!important}
+ main>.glemi-quick-services .glemi-quick-service strong{font-size:16px!important}
+ main>.glemi-quick-services .glemi-quick-service small{font-size:12px!important}
+ main>.glemi-quick-services .glemi-quick-service:hover{transform:translateY(-4px)!important;box-shadow:0 18px 35px #133f7524!important}
+ main>.glemi-book-banner{padding:22px 24px 38px!important;background:#fff!important;border-bottom:1px solid #e9f1f9!important}
+ main>.glemi-book-banner .glemi-book-kicker,main>.glemi-book-banner h2,main>.glemi-book-banner .glemi-book-no-payment{display:none!important}
+ main>.glemi-book-banner .glemi-book-cta{min-height:62px!important}
+ main>.hero.section.home-logo-first{padding-top:48px!important}
+}
+@media(min-width:1025px) and (max-width:1160px){
+ main>.glemi-quick-services.glemi-desktop-first-services{gap:10px!important;width:calc(100% - 32px)}
+ main>.glemi-quick-services .glemi-quick-photo{height:125px!important}
+ main>.glemi-quick-services .glemi-quick-info{padding:10px!important}
+}
