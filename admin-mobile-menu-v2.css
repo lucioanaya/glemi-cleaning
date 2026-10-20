@@ -1,0 +1,20 @@
+/* GLEMI mobile navigation v2 — calm, polished and genuinely usable */
+@media(max-width:700px){
+ #appFriw .sidebar{position:fixed!important;left:12px!important;right:12px!important;bottom:calc(78px + env(safe-area-inset-bottom))!important;top:auto!important;width:auto!important;height:auto!important;max-height:min(74dvh,640px)!important;padding:0 0 14px!important;gap:0!important;overflow:hidden!important;border-radius:25px!important;background:#f7faff!important;border:1px solid #cbdff3!important;box-shadow:0 0 0 100vmax #071c35a3,0 22px 65px #061b3760!important;z-index:89!important;color:#163b65!important}
+ #appFriw.glemi-menu-open .sidebar{display:flex!important}
+ #appFriw .sidebar .brand-row{display:none!important}
+ #appFriw .sidebar .glemi-mobile-menu-head{display:flex!important;align-items:center;justify-content:space-between;gap:12px;padding:21px 21px 15px;border-bottom:1px solid #e1ecf6;background:linear-gradient(115deg,#fff,#eef7ff)}
+ #appFriw .glemi-mobile-menu-head .glemi-menu-overline{display:block;font-size:10px;letter-spacing:.16em;color:#2187ba;font-weight:850;margin-bottom:4px}
+ #appFriw .glemi-mobile-menu-head strong{display:block;font-size:21px;letter-spacing:-.035em;color:#143b66}
+ #appFriw .glemi-mobile-menu-close{border:1px solid #d8e7f5;background:#fff;border-radius:13px;width:41px;height:41px;display:grid;place-items:center;color:#34668f;font-size:23px;cursor:pointer}
+ #appFriw .sidebar #sideNav{display:grid!important;grid-template-columns:1fr!important;gap:3px!important;overflow-y:auto!important;overscroll-behavior:contain!important;min-height:0!important;padding:12px 14px!important;align-content:start!important;scrollbar-width:thin}
+ #appFriw .sidebar #sideNav .nav-btn{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:14px!important;min-height:53px!important;width:100%!important;padding:9px 13px!important;border-radius:13px!important;text-align:left!important;background:transparent!important;border:1px solid transparent!important;color:#385773!important;font-size:14px!important;line-height:1.25!important;font-weight:750!important;box-shadow:none!important;transform:none!important}
+ #appFriw .sidebar #sideNav .nav-btn .studio-nav-icon{flex:0 0 35px!important;width:35px!important;height:35px!important;display:grid!important;place-items:center!important;background:#e8f2fc!important;border-radius:11px!important;color:#2c80b8!important}
+ #appFriw .sidebar #sideNav .nav-btn .studio-nav-icon svg{width:19px!important;height:19px!important}
+ #appFriw .sidebar #sideNav .nav-btn.active{background:linear-gradient(110deg,#e1f1ff,#eaf8ff)!important;border-color:#b6dafa!important;color:#095aa2!important}
+ #appFriw .sidebar #sideNav .nav-btn.active .studio-nav-icon{background:linear-gradient(135deg,#1778cc,#0ba9c5)!important;color:white!important}
+ #appFriw .sidebar #sideNav .nav-btn:active{background:#d9edff!important}
+ #appFriw .sidebar #logoutBtn{margin:0 18px!important;min-height:44px!important;flex:none!important;border-radius:12px!important;border:1px solid #f4d9d9!important;background:#fff7f7!important;color:#b44b50!important;font-size:13px!important;font-weight:750!important}
+ #appFriw .glemi-bottom-nav .glemi-more-tab.active{background:#185998!important}
+}
+@media(min-width:701px){#appFriw .glemi-mobile-menu-head{display:none!important}}
