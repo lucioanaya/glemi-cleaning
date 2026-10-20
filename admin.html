@@ -287,5 +287,15 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="service-map.js?v=20261014-view-pin-scroll17"></script>
 <script src="employees.js?v=20261014-roles-expanded14"></script>
-<script defer src="admin-complaints.js?v=1"></script><script defer src="admin-ceo-profile.js?v=3"></script><script defer src="admin-rewards.js?v=20261019-promo-images1"></script><script defer src="admin-inventory.js?v=20261019-inventory1"></script><script defer src="admin-taxes.js?v=20261019-taxes2"></script></body>
+<script defer src="admin-complaints.js?v=1"></script><script defer src="admin-ceo-profile.js?v=3"></script><script defer src="admin-rewards.js?v=20261019-promo-images1"></script><script defer src="admin-inventory.js?v=20261019-inventory1"></script><script defer src="admin-taxes.js?v=20261019-taxes3-fixed"></script><script id="glemi-tax-tab-controller">
+(function(){
+ function switchTaxTab(tab){
+  var root=document.getElementById('taxes');if(!root)return;
+  root.querySelectorAll('[data-tax-tab]').forEach(function(btn){var active=btn.getAttribute('data-tax-tab')===tab;btn.classList.toggle('active',active);btn.setAttribute('aria-selected',String(active));});
+  root.querySelectorAll('[data-tax-pane]').forEach(function(pane){var active=pane.getAttribute('data-tax-pane')===tab;pane.hidden=!active;pane.style.setProperty('display',active?(tab==='records'?'block':'grid'):'none','important');});
+ }
+ document.addEventListener('click',function(event){var button=event.target.closest('#taxes [data-tax-tab]');if(!button)return;event.preventDefault();switchTaxTab(button.getAttribute('data-tax-tab'));});
+ document.addEventListener('DOMContentLoaded',function(){switchTaxTab('expenses')});
+})();
+</script></body>
 </html>
