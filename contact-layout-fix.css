@@ -24,3 +24,8 @@
  #contacto .contact-form input{grid-column:1!important}
  #contacto .contact-form button{width:100%!important;justify-self:stretch!important}
 }
+
+/* Contact headline final override: prominent desktop display title. */
+@media(min-width:721px){#contacto.contact{grid-template-columns:minmax(300px,1fr) minmax(360px,1.35fr) minmax(180px,.8fr)!important}#contacto .contact-info h2{font-size:clamp(46px,4.8vw,72px)!important;line-height:1.02!important;letter-spacing:-.055em!important;max-width:650px!important}#contacto .contact-info{align-self:start!important}}
+@media(min-width:721px) and (max-width:1120px){#contacto.contact{grid-template-columns:minmax(270px,.9fr) minmax(350px,1.2fr)!important}}
+#contacto .contact-info .contact-line a[href^="mailto:"]{color:#126db7!important;text-decoration:underline!important;text-underline-offset:3px!important;font-weight:700!important;overflow-wrap:anywhere!important}
