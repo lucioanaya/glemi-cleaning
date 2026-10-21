@@ -1,0 +1,26 @@
+/* GLEMI Contact: responsive, balanced three-panel layout. */
+#contacto.contact{display:grid!important;grid-template-columns:minmax(220px,.85fr) minmax(370px,1.35fr) minmax(220px,.9fr)!important;align-items:start!important;gap:clamp(18px,2.3vw,38px)!important;max-width:1400px!important;margin-left:auto!important;margin-right:auto!important}
+#contacto .contact-info,#contacto .contact-form,#contacto .map-placeholder{min-width:0!important}
+#contacto .contact-form{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px!important;align-content:start!important;align-items:start!important}
+#contacto .contact-form input,#contacto .contact-form textarea{box-sizing:border-box!important;min-width:0!important;width:100%!important;margin:0!important;border-radius:13px!important}
+#contacto .contact-form textarea{grid-column:1/-1!important;min-height:145px!important;resize:vertical!important}
+#contacto .contact-form .glemi-privacy-notice{grid-column:1/-1!important;grid-row:auto!important;display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:2px 0!important;font-size:12px!important;line-height:1.65!important;color:#60748b!important;overflow-wrap:anywhere!important}
+#contacto .contact-form .glemi-privacy-notice a{overflow-wrap:anywhere!important}
+#contacto .contact-form button{grid-column:1/-1!important;grid-row:auto!important;justify-self:start!important;align-self:start!important;width:auto!important;min-width:185px!important;min-height:48px!important;height:auto!important;padding:13px 25px!important;border-radius:12px!important;white-space:nowrap!important;font-size:15px!important}
+#contacto .map-placeholder{width:100%!important;min-height:290px!important;max-height:420px!important;border-radius:22px!important;overflow:hidden!important;display:grid!important;place-items:center!important}
+#contacto .map-placeholder img{max-width:78%!important;max-height:280px!important;width:auto!important;height:auto!important;object-fit:contain!important}
+@media(max-width:1120px){
+ #contacto.contact{grid-template-columns:minmax(210px,.75fr) minmax(0,1.25fr)!important}
+ #contacto .map-placeholder{grid-column:1/-1!important;min-height:220px!important;max-height:260px!important}
+ #contacto .map-placeholder img{max-height:190px!important}
+}
+@media(max-width:720px){
+ #contacto.contact{grid-template-columns:minmax(0,1fr)!important;gap:20px!important}
+ #contacto .contact-form{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #contacto .map-placeholder{grid-column:1!important}
+}
+@media(max-width:480px){
+ #contacto .contact-form{grid-template-columns:minmax(0,1fr)!important}
+ #contacto .contact-form input{grid-column:1!important}
+ #contacto .contact-form button{width:100%!important;justify-self:stretch!important}
+}
