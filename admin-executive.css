@@ -186,3 +186,9 @@ body:has(#appFriw:not(.hidden)){background:#edf3fa;color:var(--glemi-ink)}
  #appFriw #scheduleGrid .schedule-time-field{overflow:visible!important;min-width:0!important}
  #appFriw #scheduleGrid .schedule-time-field input[type=time]{font-size:13px!important;padding:9px 2px!important;min-height:44px!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important}
 }
+
+/* Keep the desktop navigation independently scrollable when its links exceed the viewport. */
+@media (min-width: 901px){
+ #appFriw .sidebar{height:100vh;height:100dvh;max-height:100dvh;overflow-y:auto!important;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#5b9dd4 transparent;min-height:0;}
+ #appFriw .sidebar nav{flex-shrink:0;}
+}
