@@ -1,0 +1,24 @@
+/* Desktop menu is anchored directly under the MENU/X button, not below the location strip. */
+@media(min-width:1025px){
+ .header.glemi-header-v2{position:relative!important}
+ .header.glemi-header-v2 .nav{
+  position:absolute!important;top:78px!important;right:clamp(16px,4vw,58px)!important;
+  left:auto!important;bottom:auto!important;width:390px!important;max-width:calc(100vw - 32px)!important;
+  max-height:min(72vh,650px)!important;overflow-y:auto!important;box-sizing:border-box!important;
+  z-index:99999!important;margin:0!important;padding:14px!important;
+  border:1px solid #d6e6f6!important;border-radius:17px!important;
+  background:#f8fbff!important;box-shadow:0 20px 45px #15395a30!important
+ }
+ .header.glemi-header-v2 .nav.open{display:flex!important}
+ .header.glemi-header-v2 .glemi-masthead-bottom{z-index:0!important}
+}
+@media(min-width:769px) and (max-width:1024px){
+ .header.glemi-header-v2{position:relative!important}
+ .header.glemi-header-v2 .nav{
+  position:absolute!important;top:78px!important;right:14px!important;left:auto!important;
+  bottom:auto!important;width:390px!important;max-width:calc(100vw - 28px)!important;
+  max-height:72vh!important;overflow-y:auto!important;z-index:99999!important;
+  margin:0!important;border-radius:17px!important
+ }
+ .header.glemi-header-v2 .nav.open{display:flex!important}
+}
