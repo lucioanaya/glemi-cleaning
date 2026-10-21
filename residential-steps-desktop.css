@@ -48,3 +48,25 @@
   background:#fff!important;color:#4a4fd0!important;border:2px solid #e2e6ff!important
  }
 }
+
+/* v2: correct oversize progress panel on laptop/tablet landscape. Keep all 4 cards inside quote width. */
+@media(min-width:1025px){
+ body[data-page="residential"] .residential-journey{width:min(100%,900px,calc(100vw - 56px))!important;max-width:900px!important;margin:0 auto 14px!important;padding:12px 14px 14px!important;overflow:hidden!important}
+ body[data-page="residential"] .residential-journey-track{width:100%!important;min-width:0!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important}
+ body[data-page="residential"] .residential-journey-step{min-width:0!important;min-height:55px!important;padding:8px 7px!important;gap:7px!important;font-size:12px!important;overflow:hidden!important}
+ body[data-page="residential"] .residential-journey-step span{min-width:0!important;overflow-wrap:anywhere!important;line-height:1.25!important}
+ body[data-page="residential"] .residential-journey-step b{flex:0 0 27px!important;width:27px!important;height:27px!important;min-width:27px!important;min-height:27px!important}
+ body[data-page="residential"] .residential-journey h2{font-size:20px!important;margin-bottom:10px!important}
+}
+@media(min-width:769px) and (max-width:1024px){
+ body[data-page="residential"] .residential-journey{width:calc(100% - 28px)!important;max-width:900px!important;box-sizing:border-box!important;margin:0 auto 14px!important;padding:12px!important;overflow:hidden!important}
+ body[data-page="residential"] .residential-journey-track{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+ body[data-page="residential"] .residential-journey-track:before{display:none!important}
+ body[data-page="residential"] .residential-journey-step{min-width:0!important;display:flex!important;flex-direction:row!important;justify-content:center!important;align-items:center!important;gap:6px!important;padding:8px 5px!important;min-height:52px!important;background:#fff!important;border:1px solid #dce8f4!important;border-radius:11px!important;font-size:11px!important;line-height:1.2!important}
+ body[data-page="residential"] .residential-journey-step span{min-width:0!important;overflow-wrap:anywhere!important}
+ body[data-page="residential"] .residential-journey-step b{flex:0 0 27px!important;width:27px!important;height:27px!important;min-width:27px!important;min-height:27px!important;border-width:2px!important;font-size:13px!important}
+ body[data-page="residential"] .residential-journey-step.active{background:linear-gradient(112deg,#175ac9,#5a44d4)!important;color:#fff!important;border-color:#554dd2!important}
+ body[data-page="residential"] .residential-journey-step.active b{background:#fff!important;color:#4a4fd0!important}
+ body[data-page="residential"] .residential-journey-step.complete{background:#f1faf8!important;color:#276d66!important}
+ body[data-page="residential"] .residential-journey-step.complete b{background:#2e987c!important;color:#fff!important}
+}
