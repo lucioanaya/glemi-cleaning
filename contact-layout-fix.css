@@ -29,3 +29,9 @@
 @media(min-width:721px){#contacto.contact{grid-template-columns:minmax(300px,1fr) minmax(360px,1.35fr) minmax(180px,.8fr)!important}#contacto .contact-info h2{font-size:clamp(46px,4.8vw,72px)!important;line-height:1.02!important;letter-spacing:-.055em!important;max-width:650px!important}#contacto .contact-info{align-self:start!important}}
 @media(min-width:721px) and (max-width:1120px){#contacto.contact{grid-template-columns:minmax(270px,.9fr) minmax(350px,1.2fr)!important}}
 #contacto .contact-info .contact-line a[href^="mailto:"]{color:#126db7!important;text-decoration:underline!important;text-underline-offset:3px!important;font-weight:700!important;overflow-wrap:anywhere!important}
+
+/* Readable contact supporting copy and contact methods */
+#contacto .contact-info>p{font-size:clamp(19px,1.65vw,24px)!important;line-height:1.55!important;color:#3c5875!important;margin:16px 0 26px!important}
+#contacto .contact-info .contact-line{font-size:clamp(17px,1.35vw,21px)!important;line-height:1.5!important;gap:12px!important;margin:17px 0!important;align-items:center!important;overflow-wrap:anywhere!important}
+#contacto .contact-info .contact-line a{font-size:inherit!important}
+@media(max-width:720px){#contacto .contact-info>p{font-size:19px!important}#contacto .contact-info .contact-line{font-size:17px!important}}
