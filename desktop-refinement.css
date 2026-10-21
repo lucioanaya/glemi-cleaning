@@ -32,3 +32,16 @@
  .header .header-contact{gap:5px}
  .header .header-contact a{width:34px;height:34px;font-size:17px}
 }
+
+/* Desktop: place all navigation links inside the three-line dropdown, as individual buttons. */
+@media(min-width:1025px){
+ .header{position:relative!important;justify-content:space-between!important;overflow:visible!important}
+ .header .nav{display:none!important;position:absolute!important;top:calc(100% - 2px)!important;right:22px!important;left:auto!important;flex:none!important;width:min(410px,calc(100vw - 44px))!important;max-height:min(75vh,680px)!important;overflow-y:auto!important;padding:17px!important;margin:0!important;flex-direction:column!important;flex-wrap:nowrap!important;align-items:stretch!important;justify-content:flex-start!important;gap:9px!important;border:1px solid #d6e6f6!important;border-radius:0 0 22px 22px!important;background:#f8fbff!important;box-shadow:0 22px 55px #14385b2e!important;z-index:9999!important}
+ .header .nav.open{display:flex!important}
+ .header .nav::before{content:'GLEMI MENU';font-size:11px;font-weight:850;letter-spacing:.16em;color:#6c91b1;padding:2px 7px 6px}
+ .header .nav a{display:flex!important;align-items:center!important;width:100%!important;min-height:46px!important;padding:12px 15px!important;text-align:left!important;white-space:normal!important;font-size:14px!important;font-weight:750!important;line-height:1.35!important;color:#16446e!important;background:white!important;border:1px solid #e0eaf5!important;border-radius:12px!important;transition:background .15s,transform .15s!important}
+ .header .nav a:hover,.header .nav a:focus-visible{background:#e6f4ff!important;color:#086bc0!important;transform:translateX(3px)!important}
+ .header .nav a.login-nav-link{background:#e8f5ff!important;color:#056db8!important;border-color:#c6e6fc!important}
+ .header .menu-btn{display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 52px!important;width:52px!important;height:52px!important;min-width:52px!important;min-height:52px!important;margin:0!important;padding:0!important;border:1px solid #d8e9f7!important;border-radius:14px!important;background:#edf7ff!important;color:#086cb9!important;font-size:31px!important;cursor:pointer!important}
+ .header .header-contact{margin-left:auto!important;margin-right:10px!important}
+}
