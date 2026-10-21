@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="desktop-refinement.css?v=20261019-desktop1" />
+  <link rel="stylesheet" href="desktop-refinement.css?v=20261020-hamburger2" />
   <link rel="stylesheet" href="desktop-categories-first.css?v=20261019-categories3-grid" />
 
 <style>
@@ -307,7 +307,7 @@
       <a href="admin.html" class="login-nav-link">Sign In</a>
     </nav>
     <div class="header-contact"><a class="header-email" href="mailto:Glemiservices@gmail.com" aria-label="Enviar correo a GLEMI" title="Enviar correo a GLEMI">✉️</a><a class="header-phone" href="tel:+12369986275" aria-label="Llamar a GLEMI al 236-998-6275" title="Llamar a GLEMI">📞</a></div>
-    <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nav">☰</button>
   </header>
 
   <main>
@@ -477,6 +477,15 @@ function placeDesktopCategories(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',placeDesktopCategories);else placeDesktopCategories();
 window.addEventListener('resize',placeDesktopCategories);
+})();
+</script><script id="glemi-desktop-menu">
+(function(){
+ const button=document.getElementById('menuBtn'),nav=document.getElementById('nav');if(!button||!nav)return;
+ function sync(){button.setAttribute('aria-expanded',nav.classList.contains('open')?'true':'false')}
+ button.addEventListener('click',()=>setTimeout(sync,0));
+ document.addEventListener('click',e=>{if(!nav.contains(e.target)&&!button.contains(e.target)&&nav.classList.contains('open')){nav.classList.remove('open');sync()}});
+ nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');sync()}));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav.classList.contains('open')){nav.classList.remove('open');sync();button.focus()}});
 })();
 </script></body>
 </html>
