@@ -205,6 +205,17 @@ async function recommend(){
      }else{
       const result=await db.from('booking_employee_assignments').insert({appointment_id:id,employee_id:select.value,service_date:booking.appointment_date});
       if(result.error)throw result.error;
+      try{
+       const notice=await db.functions.invoke('notify-employee-assignment',{body:{appointment_id:id}});
+       if(notice.error)throw notice.error;
+       const n=notice.data||{};
+       const info=['Assignment saved.'];
+       info.push(n.email_sent?'Email sent to employee.':'Email not sent: '+(n.email_error||'Check employee email.'));
+       info.push(n.whatsapp_sent?'WhatsApp sent automatically.':'Automatic WhatsApp not sent: '+(n.whatsapp_error||'Provider not configured.'));
+       if(n.whatsapp_link&&!n.whatsapp_sent){
+        if(confirm(info.join('\n')+'\n\nOpen WhatsApp with the assignment details ready to send?'))window.open(n.whatsapp_link,'_blank','noopener,noreferrer');
+       }else alert(info.join('\n'));
+      }catch(notifyError){alert('Assignment saved, but employee notification failed: '+notifyError.message)}
      }
      await refresh();window.dispatchEvent(new Event('glemi:assignment-updated'));
     }catch(err){alert('Could not update assignment: '+(err.code==='23505'?'Employee already booked for this date.':err.message));await refresh()}
