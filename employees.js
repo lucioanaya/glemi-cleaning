@@ -209,12 +209,7 @@ async function recommend(){
        const notice=await db.functions.invoke('notify-employee-assignment',{body:{appointment_id:id}});
        if(notice.error)throw notice.error;
        const n=notice.data||{};
-       const info=['Assignment saved.'];
-       info.push(n.email_sent?'Email sent to employee.':'Email not sent: '+(n.email_error||'Check employee email.'));
-       info.push(n.whatsapp_sent?'WhatsApp sent automatically.':'Automatic WhatsApp not sent: '+(n.whatsapp_error||'Provider not configured.'));
-       if(n.whatsapp_link&&!n.whatsapp_sent){
-        if(confirm(info.join('\n')+'\n\nOpen WhatsApp with the assignment details ready to send?'))window.open(n.whatsapp_link,'_blank','noopener,noreferrer');
-       }else alert(info.join('\n'));
+       alert(n.email_sent?'Employee assigned. Assignment email accepted by email provider.':'Employee assigned, but email was not sent: '+(n.email_error||'Check email settings.'));
       }catch(notifyError){alert('Assignment saved, but employee notification failed: '+notifyError.message)}
      }
      await refresh();window.dispatchEvent(new Event('glemi:assignment-updated'));
