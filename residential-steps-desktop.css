@@ -1,0 +1,50 @@
+/* Desktop only: match homepage's compact four-card booking progress. */
+@media (min-width:1025px){
+ body[data-page="residential"] #cotizar.section{padding-top:14px!important}
+ body[data-page="residential"] .residential-journey{
+  box-sizing:border-box!important;width:min(100%,1240px)!important;max-width:1240px!important;
+  margin:0 auto 16px!important;padding:14px 22px 17px!important;
+  border:1px solid #dce9f6!important;border-radius:16px!important;
+  background:linear-gradient(105deg,#f5faff,#edf7ff)!important;
+  box-shadow:none!important;text-align:center!important;
+ }
+ body[data-page="residential"] .residential-journey h2{
+  margin:0 0 12px!important;font-size:clamp(18px,1.7vw,23px)!important;
+  line-height:1.25!important;font-weight:800!important;color:#184675!important
+ }
+ body[data-page="residential"] .residential-journey-track{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  align-items:stretch!important;gap:9px!important
+ }
+ body[data-page="residential"] .residential-journey-track:before{display:none!important}
+ body[data-page="residential"] .residential-journey-step{
+  display:flex!important;flex-direction:row!important;align-items:center!important;
+  justify-content:center!important;gap:10px!important;min-height:59px!important;
+  padding:10px 11px!important;box-sizing:border-box!important;
+  background:#fff!important;border:1px solid #dce8f4!important;
+  border-radius:12px!important;box-shadow:none!important;color:#526d88!important;
+  font-size:clamp(11px,1.05vw,14px)!important;font-weight:750!important;
+  line-height:1.25!important;text-align:left!important
+ }
+ body[data-page="residential"] .residential-journey-step b{
+  display:grid!important;place-items:center!important;flex:0 0 30px!important;
+  width:30px!important;height:30px!important;min-width:30px!important;
+  min-height:30px!important;margin:0!important;border:2px solid #fff!important;
+  border-radius:50%!important;background:#e7eff9!important;color:#6a8199!important;
+  box-shadow:none!important;font-size:13px!important;font-weight:850!important
+ }
+ body[data-page="residential"] .residential-journey-step.complete{
+  background:#f1faf8!important;border-color:#cde8df!important;color:#276d66!important
+ }
+ body[data-page="residential"] .residential-journey-step.complete b{
+  background:#2e987c!important;color:white!important
+ }
+ body[data-page="residential"] .residential-journey-step.active{
+  background:linear-gradient(112deg,#175ac9 0%,#5a44d4 100%)!important;
+  border:1px solid #554dd2!important;color:#fff!important;
+  box-shadow:0 5px 14px rgba(60,74,190,.22)!important;font-weight:850!important
+ }
+ body[data-page="residential"] .residential-journey-step.active b{
+  background:#fff!important;color:#4a4fd0!important;border:2px solid #e2e6ff!important
+ }
+}
